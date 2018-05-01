@@ -7,6 +7,9 @@
 	<!-- Here goes your main HTML code. -->
 	{{if auth.user is not None:}}
 	<div id="grid"></div>
+	<div id="popup-event">
+		fdsafdsa
+	</div>
 	<script src="{{=URL('static', 'js/exploration.js')}}"></script>
 	<script src="{{=URL('static', 'js/resource_management.js')}}"></script>
 	{{else:}}
@@ -19,7 +22,6 @@
 	<div class="login_button">
 		<a href="{{=URL('default', 'user')}}" class="btn">Login</a>
 	</div>
-
 
 	<!-- end of if auth.user is not None: -->
 	{{pass}}
