@@ -76,3 +76,14 @@ success!
 timestamp: 2018-04-21T20:52:39.210524
 ALTER TABLE "checklist" ADD "is_public" CHAR(1);
 success!
+timestamp: 2018-04-30T18:33:56.124565
+CREATE TABLE "web2py_session_mercenary_game"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "locked" CHAR(1),
+    "client_ip" CHAR(64),
+    "created_datetime" TIMESTAMP,
+    "modified_datetime" TIMESTAMP,
+    "unique_key" CHAR(64),
+    "session_data" BLOB
+);
+success!

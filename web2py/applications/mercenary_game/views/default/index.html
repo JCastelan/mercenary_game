@@ -7,103 +7,17 @@
 	<!-- Here goes your main HTML code. -->
 	{{if auth.user is not None:}}
 
-	<div class="add_btn">
-		<a class="btn red rounded" href="{{=URL('default', 'add')}}">
-			<i class="fa fa-plus"></i> Add</a>
-	</div>
-
-	{{for cl in checklists:}}
-	<!-- if we own this memo -->
-	{{if cl.user_email == auth.user.email:}}
-	<div class="memo">
-		<div class="memo_text">
-			<div class="memo_title">{{=cl.title}}</div>
-			<div class="memo_content">{{=cl.memo}}</div>
-		</div>
-		<div>
-			<div class="button_list">
-				<div class="buttons">
-					<a class="btn rounded" href="{{=URL('default', 'edit', args=[cl.id])}}">
-						<i class="fa fa-edit fa-lg"></i>
-					</a>
-					<a class="btn rounded red" href="{{=URL('default', 'delete', args=[cl.id], user_signature=True)}}">
-						<i class="fa fa-trash fa-lg"></i>
-					</a>
-					<a class="btn rounded black" href="{{=URL('default', 'toggle_public', args=[cl.id], user_signature=True)}}">
-						{{if cl.is_public:}}
-						<i class="fa fa-users"></i>
-						{{else:}}
-						<i class="fa fa-user"></i>
-						{{pass}}
-					</a>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- if we dont own this memo, but its public -->
-	{{elif cl.is_public:}}
-	<div class="memo">
-		<div class="memo_text">
-			<div class="memo_title">{{=cl.title}}</div>
-			<div class="memo_content">{{=cl.memo}}</div>
-		</div>
-		<div>
-			<div class="button_list">
-				<div class="buttons">
-					<!-- <a class="btn rounded gray no-click">
-						<i class="fa fa-edit fa-lg"></i>
-					</a>
-					<a class="btn rounded gray no-click">
-						<i class="fa fa-trash fa-lg"></i>
-					</a> -->
-					<a class="btn rounded gray no-click">
-						<i class="fa fa-users"></i>
-					</a>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- one pass for the if, one pass for the for -->
-	{{pass}}
-	{{pass}}
-	{{if not checklists:}}
-
-	<p>You don't have any checklist. Press on the Add button above to create one.</p>
-
-	{{pass}}
 	{{else:}}
 	<!-- if auth.user is None: -->
 
 	<h1 class="main_title">Welcome!</h1>
 
-	<p class="explanation">This site will help you organize your life by storing your checklists. Please log in to use it.</p>
+	<p class="explanation">This game is about managing a mercenary band. Please log in to use it.</p>
 
 	<div class="login_button">
 		<a href="{{=URL('default', 'user')}}" class="btn">Login</a>
 	</div>
 
-	{{if checklists:}}
-	{{for cl in checklists:}}
-	{{if cl.is_public:}}
-	<div class="memo">
-		<div class="memo_text">
-			<div class="memo_title">{{=cl.title}}</div>
-			<div class="memo_content">{{=cl.memo}}</div>
-		</div>
-		<div>
-			<div class="button_list">
-				<div class="buttons">
-					<a class="btn rounded gray no-click">
-						<i class="fa fa-users"></i>
-					</a>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- two pass for the two ifs, one pass for the for -->
-	{{pass}}
-	{{pass}}
-	{{pass}}
 
 	<!-- end of if auth.user is not None: -->
 	{{pass}}
