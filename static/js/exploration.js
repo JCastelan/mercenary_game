@@ -75,18 +75,29 @@ document.addEventListener("keydown", function(event) {
 	if(popupEventElem.style.visibility == "visible") {
 		return;
 	}
+	var moved = false;
 	if(event.keyCode == 87 || event.keyCode == 38) {
 		playerPos.y--;
+		moved = true;
 	}
 	if(event.keyCode == 65 || event.keyCode == 37) {
 		playerPos.x--;
+		moved = true;
 	}
 	if(event.keyCode == 83 || event.keyCode == 40) {
 		playerPos.y++;
+		moved = true;
 	}
 	if(event.keyCode == 68 || event.keyCode == 39) {
 		playerPos.x++;
+		moved = true;
 	}
-	onPlayerMove();
-	displayGrid();
+	if(moved) {
+		displayGrid();
+		onPlayerMove();
+	}
 });
+
+function closePopup() {
+	popupEventElem.style.visibility = "hidden";
+}
