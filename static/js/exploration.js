@@ -73,8 +73,13 @@ function onPlayerMove() {
 
 document.addEventListener("keydown", function(event) {
 	if(popupEventElem.style.visibility == "visible") {
+		// close if escape key pressed
+		if(event.keyCode == 27) {
+			popupEventElem.style.visibility = "hidden";
+		}
 		return;
 	}
+	// WASD or arrow key movement
 	var moved = false;
 	if(event.keyCode == 87 || event.keyCode == 38) {
 		playerPos.y--;
