@@ -16,15 +16,16 @@ var app = function() {
 
     // generic counter functions (for debugging purposes)
     self.loadCounter = function(){ 
-        console.log("getting the stored counter")
+        console.log("getting the stored counter");
+        console.log( self.vue.counter);
         $.getJSON(load_counter_url, function (data) {
             console.log("Loaded "+data.counter+" as the counter value" );
             self.vue.counter = data.counter;
         });
-    }
+    };
 
     self.saveCounter = function(){
-        console.log("saving the counter")
+        console.log("saving the counter");
         $.post(save_counter_url,
             { 
                 counter: self.vue.counter
@@ -32,16 +33,16 @@ var app = function() {
             function (result) {
                 console.log( result )
             });
-    }
+    };
 
     // real stuff
-    self.loadResources(){
+    self.loadResources = function(){
         console.log( "loading all stored vals")
-    }
+    };
 
-    self.saveResources(){
+    self.saveResources = function(){
         console.log( "saving all resources")
-    }
+    };
 
     // Complete as needed.
     self.vue = new Vue({
@@ -54,7 +55,7 @@ var app = function() {
 
         },
         methods: {
-            loadCounter: self.getCounter,
+            loadCounter: self.loadCounter,
             saveCounter: self.saveCounter,
             // real stuff
             loadResources: self.loadResources,
