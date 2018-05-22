@@ -29,6 +29,15 @@ db.checklist.id.writable = db.checklist.id.readable = False
 db.checklist.is_public.writable = False
 db.checklist.is_public.readable = False
 
+"""THIS TABLE WAS CREATED FOR THE PROJECT"""
+db.define_table('userdb',
+				Field( 'user_email' default=get_user_email()),
+				Field( 'counter', 'integer', default=0),
+				Field('updated_on', 'datetime', update=datetime.datetime.utcnow())
+				)
+#the only db val that we want to be able to edit is the counter
+db.userdb.user_email.writable = db.userdb.user_email.readable = False
+db.checklist.updated_on.writable = db.checklist.updated_on.readable = False
 
 # after defining tables, uncomment below to enable auditing
 # auth.enable_record_versioning(db)

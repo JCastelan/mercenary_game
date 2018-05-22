@@ -13,14 +13,25 @@ var app = function() {
         }
     };
 
+    self.getCounter = function(){
+        console.log("getting the stored counter")
+    }
+
+    self.saveCounter = function(){
+        console.log("saving the counter")
+    }
+
     // Complete as needed.
     self.vue = new Vue({
         el: "#vue-div",
         delimiters: ['${', '}'],
         unsafeDelimiters: ['!{', '}'],
         data: {
+            current_counter: 0
         },
         methods: {
+            saveCounter: self.saveCounter
+            getCounter: self.getCounter
         }
 
     });
