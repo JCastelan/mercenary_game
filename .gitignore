@@ -1,3 +1,4 @@
-databases/*.sqlite
+*.sqlite
+*/*.sqlite
 *.DS_Store
 */*.DS_Store
