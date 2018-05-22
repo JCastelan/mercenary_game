@@ -13,12 +13,22 @@ var app = function() {
         }
     };
 
-    self.getCounter = function(){
+    // generic counter functions
+    self.getCounter = function(){ 
         console.log("getting the stored counter")
     }
 
     self.saveCounter = function(){
         console.log("saving the counter")
+    }
+
+    // 
+    self.loadResources(){
+        console.log( "loading all stored vals")
+    }
+
+    self.saveResources(){
+        console.log( "saving all resources")
     }
 
     // Complete as needed.
@@ -28,15 +38,22 @@ var app = function() {
         unsafeDelimiters: ['!{', '}'],
         data: {
             current_counter: 0
+            //real stuff 
+
         },
         methods: {
-            saveCounter: self.saveCounter
-            getCounter: self.getCounter
+            saveCounter: self.saveCounter,
+            getCounter: self.getCounter,
+            // real stuff
+            loadResources: self.loadResources,
+            saveResources: self.saveResources
         }
 
     });
 
-
+    self.getCounter();
+    self.loadResources();
+    $("#vue-div").show();
     return self;
 };
 
