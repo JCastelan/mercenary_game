@@ -106,3 +106,16 @@ document.addEventListener("keydown", function(event) {
 function closePopup() {
 	popupEventElem.style.visibility = "hidden";
 }
+
+function meleeAttack() {
+	alert("punch attacc");
+}
+
+function magicAttack() {
+	alert("Blast attacc");
+}
+
+function rangedAttack() {
+	alert("Arrow attacc");
+	
+}

@@ -14,11 +14,27 @@
 
 			<br><br>
 			
-			<div class="container padded blue battle_scene"> <br><br><br><br><br>
+			<div id="battle-scene">
+				<div class="container padded">
+				<br>
+ 				<br>&nbsp;&nbsp;&nbsp;&nbsp;  _██_
+				<br>&nbsp;&nbsp;&nbsp; ‹(•¿•)›
+				<br>&nbsp;&nbsp;&nbsp; ..(█)
+				<br>&nbsp;&nbsp;&nbsp;.../ I
+				<br>
+				
+				</div>
 			</div>
 
 			<br><br>
-			<a class="navy btn" href='javascript:closePopup()'><tt>Attack</tt></a>
+			<div class="container center combat_buttons">
+				<a class="navy btn" href='javascript:meleeAttack()'><tt>Melee</tt></a>
+				<a class="navy btn" href='javascript:rangedAttack()'><tt>Ranged</tt></a>
+				<a class="navy btn" href='javascript:magicAttack()'><tt>Magic</tt></a>
+			</div>
+
+
+			
 		</div>
 	</div>
 	<script src="{{=URL('static', 'js/exploration.js')}}"></script>

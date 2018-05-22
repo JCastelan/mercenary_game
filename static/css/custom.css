@@ -27,3 +27,15 @@ a:not(.btn):not(.noeffect):after {background-color:#26a69a}
 	top: 0;
 	bottom: 0;
 }
+
+#battle-scene{
+	font-size:10px;
+	font-family: monospace;
+	background-color: white;
+	border: 1px solid black;
+	width: 100%;
+	margin-right:20px;
+		
+}
+
+
