@@ -19,7 +19,28 @@
                     <button class = "padded btn save_bon_fire">
                         Bon Fire
                     </button>
-                    <div>
+                    <div class="resources">
+                        <button v-if="!gathering_wood" class = "padded btn gather_wood" v-on:click="get_wood()">
+                            Gather Wood
+                        </button>
+                        <button v-if="gathering_wood" class = "padded btn gather_wood" v-on:click="get_wood()">
+                            Gather Wood
+                        </button>
+                        <button v-if="!gathering_iron" class = "padded btn gather_iron" v-on:click="get_iron()">
+                            Gather iron
+                        </button>
+                        <button v-if="gathering_iron" class = "padded btn gather_iron" v-on:click="get_iron()">
+                            Gather iron
+                        </button>
+                        <button v-if="!gathering_coal" class = "padded btn gather_coal" v-on:click="get_coal()">
+                            Gather coal
+                        </button>
+                        <button v-if="gathering_coal" class = "padded btn gather_coal" v-on:click="get_coal()">
+                            Gather coal
+                        </button>
+                    </div>
+                    <div class="Build">
+                        Build:
                         <button v-if="!gathering_wood" class = "padded btn gather_wood" v-on:click="get_wood()">
                             Gather Wood
                         </button>

@@ -12,9 +12,22 @@ var app = function() {
             a.push(b[i]);
         }
     };
+
     self.get_wood = function() {
         console.log("Wood increased!");
         self.vue.gathering_wood = !self.vue.gathering_wood;
+        // self.vue.edit_id = memo_id;
+    };
+
+    self.get_iron = function() {
+        console.log("iron increased!");
+        self.vue.gathering_iron = !self.vue.gathering_iron;
+        // self.vue.edit_id = memo_id;
+    };
+
+    self.get_coal = function() {
+        console.log("coal increased!");
+        self.vue.gathering_coal = !self.vue.gathering_coal;
         // self.vue.edit_id = memo_id;
     };
 
@@ -29,10 +42,13 @@ var app = function() {
             resource_iron: null,
             resource_coal: null,
             gathering_wood: false,
+            gathering_iron: false,
+            gathering_coal: false,
         },
         methods: {
             get_wood: self.get_wood,
-
+            get_iron: self.get_iron,
+            get_coal: self.get_coal,
         }
 
     });
