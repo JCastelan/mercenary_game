@@ -1,5 +1,6 @@
 // This is the js for the default/index.html view.
 
+//the generic counter is used for debugging purposes
 var app = function() {
 
     var self = {};
@@ -13,16 +14,27 @@ var app = function() {
         }
     };
 
-    // generic counter functions
-    self.getCounter = function(){ 
+    // generic counter functions (for debugging purposes)
+    self.loadCounter = function(){ 
         console.log("getting the stored counter")
+        $.getJSON(load_counter_url, function (data) {
+            console.log("Loaded "+data.counter+" as the counter value" );
+            self.vue.counter = data.counter;
+        });
     }
 
     self.saveCounter = function(){
         console.log("saving the counter")
+        $.post(save_counter_url,
+            { 
+                counter: self.vue.counter
+            },
+            function (result) {
+                console.log( result )
+            });
     }
 
-    // 
+    // real stuff
     self.loadResources(){
         console.log( "loading all stored vals")
     }
@@ -42,8 +54,8 @@ var app = function() {
 
         },
         methods: {
+            loadCounter: self.getCounter,
             saveCounter: self.saveCounter,
-            getCounter: self.getCounter,
             // real stuff
             loadResources: self.loadResources,
             saveResources: self.saveResources
@@ -51,7 +63,7 @@ var app = function() {
 
     });
 
-    self.getCounter();
+    self.loadCounter(); 
     self.loadResources();
     $("#vue-div").show();
     return self;
