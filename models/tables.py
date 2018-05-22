@@ -31,7 +31,7 @@ db.checklist.is_public.readable = False
 
 """THIS TABLE WAS CREATED FOR THE PROJECT"""
 db.define_table('userdb',
-				Field( 'user_email' default=get_user_email()),
+				Field( 'user_email', default=get_user_email()),
 				Field( 'counter', 'integer', default=0),
 				Field('updated_on', 'datetime', update=datetime.datetime.utcnow())
 				)
