@@ -3,30 +3,70 @@ var gridWidth = 0;
 var gridHeight = 0;
 
 var popupEventElem = document.getElementById("popup-event");
+var popupEventTitleElem = document.getElementById("popup-event-title");
+var popupEventButtonsElem = document.getElementById("popup-event-buttons");
 
 var obstacleChar = '#';
 var emptyChar = ',';
-var playerChar = 'p';
+var playerChar = 'P';
 var houseChar = 'H';
+var enemyChar = 'E';
+var bossChar = 'B';
 
+var lastPlayerPos = {x: 0, y: 0};
 var playerPos = {x: 0, y: 0};
 
-function initGrid(width, height) {
+function initStartingAreaGrid() {
+	grid = [];
+	gridWidth = 50;
+	gridHeight = 25;
+	// TODO: scale the text based on the width and height to fill the grid div
+	// initialize everything to be an obstacle
+	for(var y = 0; y < gridHeight; y++) {
+		grid.push([]);
+		for(var x = 0; x < gridWidth; x++) {
+			grid[y].push(obstacleChar);
+		}
+	}
+	playerPos.x = Math.floor(gridWidth / 2);
+	playerPos.y = Math.floor(gridHeight / 2);
+	lastPlayerPos.x = playerPos.x;
+	lastPlayerPos.y = playerPos.y;
+
+	// clear the player's position
+	grid[playerPos.y][playerPos.x] = emptyChar;
+	// make path to boss with 2 enemies along the way
+	for(var y = playerPos.y - 1; y > playerPos.y - 5; y -= 2) {
+		grid[y][playerPos.x] = emptyChar;
+		grid[y - 1][playerPos.x] = enemyChar;
+	}
+	// make the path to the boss
+	grid[y][playerPos.x] = emptyChar;
+	grid[y - 1][playerPos.x] = bossChar;
+}
+
+function initHubWorldGrid(width, height) {
+	grid = [];
 	gridWidth = width;
 	gridHeight = height;
+	// TODO: scale the text based on the width and height to fill the grid div
 	for(var y = 0; y < gridHeight; y++) {
 		grid.push([]);
 		for(var x = 0; x < gridWidth; x++) {
 			var chance = Math.random();
 			if(chance < 0.01) {
 				grid[y].push(houseChar);
+			} else if(chance < 0.05) {
+				grid[y].push(enemyChar);
 			} else {
 				grid[y].push(emptyChar);
 			}
 		}
 	}
-	playerPos.x = gridWidth / 2;
-	playerPos.y = gridHeight / 2;
+	playerPos.x = Math.floor(gridWidth / 2);
+	playerPos.y = Math.floor(gridHeight / 2);
+	lastPlayerPos.x = playerPos.x;
+	lastPlayerPos.y = playerPos.y;
 }
 
 function displayGrid() {
@@ -36,16 +76,19 @@ function displayGrid() {
 		for(var x = 0; x < gridWidth; x++) {
 			if(x == playerPos.x && y == playerPos.y) {
 				gridString += playerChar;
+			} else if(grid[y][x] == enemyChar) {
+				gridString += emptyChar;
 			} else {
 				gridString += grid[y][x];
 			}
 		}
 		gridString += "<br>";
 	}
+
 	gridElem.innerHTML = gridString;
 }
 
-initGrid(100,40);
+initStartingAreaGrid();
 displayGrid();
 
 // if player moves off the map, we put him back on
@@ -66,7 +109,21 @@ function playerBounds() {
 
 function onPlayerMove() {
 	playerBounds();
+	if(grid[playerPos.y][playerPos.x] == obstacleChar) {
+		playerPos.x = lastPlayerPos.x;
+		playerPos.y = lastPlayerPos.y;
+		return;
+	}
 	if(grid[playerPos.y][playerPos.x] == houseChar) {
+		popupEventTitleElem.innerHTML = "House";
+		popupEventElem.style.visibility = "visible";
+	}
+	if(grid[playerPos.y][playerPos.x] == enemyChar) {
+		popupEventTitleElem.innerHTML = "Enemy Battle";
+		popupEventElem.style.visibility = "visible";
+	}
+	if(grid[playerPos.y][playerPos.x] == bossChar) {
+		popupEventTitleElem.innerHTML = "Boss Battle";
 		popupEventElem.style.visibility = "visible";
 	}
 }
@@ -75,12 +132,14 @@ document.addEventListener("keydown", function(event) {
 	if(popupEventElem.style.visibility == "visible") {
 		// close if escape key pressed
 		if(event.keyCode == 27) {
-			popupEventElem.style.visibility = "hidden";
+			closePopup();
 		}
 		return;
 	}
 	// WASD or arrow key movement
 	var moved = false;
+	lastPlayerPos.x = playerPos.x;
+	lastPlayerPos.y = playerPos.y;
 	if(event.keyCode == 87 || event.keyCode == 38) {
 		playerPos.y--;
 		moved = true;
@@ -98,11 +157,15 @@ document.addEventListener("keydown", function(event) {
 		moved = true;
 	}
 	if(moved) {
-		displayGrid();
 		onPlayerMove();
+		displayGrid();
 	}
 });
 
 function closePopup() {
+	if(grid[playerPos.y][playerPos.x] == bossChar) {
+		initHubWorldGrid(100, 40);
+		displayGrid();
+	}
 	popupEventElem.style.visibility = "hidden";
 }
