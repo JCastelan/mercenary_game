@@ -45,7 +45,7 @@ function initStartingAreaGrid() {
 	grid[y - 1][playerPos.x] = bossChar;
 }
 
-function initGrid(width, height) {
+function initHubWorldGrid(width, height) {
 	grid = [];
 	gridWidth = width;
 	gridHeight = height;
@@ -56,6 +56,8 @@ function initGrid(width, height) {
 			var chance = Math.random();
 			if(chance < 0.01) {
 				grid[y].push(houseChar);
+			} else if(chance < 0.05) {
+				grid[y].push(enemyChar);
 			} else {
 				grid[y].push(emptyChar);
 			}
@@ -74,6 +76,8 @@ function displayGrid() {
 		for(var x = 0; x < gridWidth; x++) {
 			if(x == playerPos.x && y == playerPos.y) {
 				gridString += playerChar;
+			} else if(grid[y][x] == enemyChar) {
+				gridString += emptyChar;
 			} else {
 				gridString += grid[y][x];
 			}
@@ -117,12 +121,10 @@ function onPlayerMove() {
 	if(grid[playerPos.y][playerPos.x] == enemyChar) {
 		popupEventTitleElem.innerHTML = "Enemy Battle";
 		popupEventElem.style.visibility = "visible";
-		// TODO: battle buttons
 	}
 	if(grid[playerPos.y][playerPos.x] == bossChar) {
 		popupEventTitleElem.innerHTML = "Boss Battle";
 		popupEventElem.style.visibility = "visible";
-		// TODO: upon dying to the boss, send them to the main world
 	}
 }
 
@@ -130,7 +132,7 @@ document.addEventListener("keydown", function(event) {
 	if(popupEventElem.style.visibility == "visible") {
 		// close if escape key pressed
 		if(event.keyCode == 27) {
-			popupEventElem.style.visibility = "hidden";
+			closePopup();
 		}
 		return;
 	}
@@ -161,5 +163,9 @@ document.addEventListener("keydown", function(event) {
 });
 
 function closePopup() {
+	if(grid[playerPos.y][playerPos.x] == bossChar) {
+		initHubWorldGrid(100, 40);
+		displayGrid();
+	}
 	popupEventElem.style.visibility = "hidden";
 }
