@@ -32,10 +32,21 @@ db.checklist.is_public.readable = False
 """THIS TABLE WAS CREATED FOR THE PROJECT"""
 db.define_table('userdb',
 				Field( 'user_email', default=get_user_email()),
+				Field('updated_on', 'datetime', update=datetime.datetime.utcnow()),
+				#some kind of basic counter 
 				Field( 'counter', 'integer', default=0),
-				Field('updated_on', 'datetime', update=datetime.datetime.utcnow())
+				#resources
+				Field( 'wood', 'integer', default=0),
+				Field( 'iron', 'integer', default=0),
+				Field( 'coal', 'integer', default=0),
+				#buildings
+				Field( 'houses', 'integer', default=0),
+				#human units
+				Field( 'workers', 'integer', default=0),
+				Field( 'fighters', 'integer', default=0)
 				)
-#the only db val that we want to be able to edit is the counter
+
+#some db entries we might need: wood, iron, coal, worker, armyUnit, houses, etc.
 db.userdb.user_email.writable = db.userdb.user_email.readable = False
 db.checklist.updated_on.writable = db.checklist.updated_on.readable = False
 
