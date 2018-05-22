@@ -1,45 +1,81 @@
 {{extend 'layout.html'}}
 {{block head}}
 {{end}}
-
+<script src="{{=URL('static', 'js/vue.js')}}"></script>
 <div class="main_content">
+    <div id="vue-div" class="display:none">
 
-	<!-- Here goes your main HTML code. -->
-	{{if auth.user is not None:}}
-	<div id="grid"></div>
-	<div id="popup-event">
-		<div id="popup-event-title"></div>
-		<div id="popup-event-buttons"></div>
-	</div>
-	<script src="{{=URL('static', 'js/exploration.js')}}"></script>
-	<script src="{{=URL('static', 'js/resource_management.js')}}"></script>
-	<script src="{{=URL('static', 'js/button_stuff.js')}}"></script>
+        <!-- Here goes your main HTML code. -->
+        {{if auth.user is not None:}}
+        <div class = "container" >
+            <div class = "third container">
+
+                <div class="third storyline">
+                    <div class = "padded">
+                        You wake up with Donavan
+                    </div>
+                </div>
+                <div class="third">
+                    <button class = "padded btn save_bon_fire">
+                        Bon Fire
+                    </button>
+                    <div>
+                        <button v-if="!gathering_wood" class = "padded btn gather_wood" v-on:click="get_wood()">
+                            Gather Wood
+                        </button>
+                        <button v-if="gathering_wood" class = "padded btn gather_wood" v-on:click="get_wood()">
+                            Gather Wood
+                        </button>
+                    </div>
+
+                </div>
+                <div class="third resources">
+                    <div class = "padded">
+                        <ul>
+                            <li>
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class = "twothirds" id="grid"></div>
+        </div>
+        <div id="popup-event">
+            <div id="popup-event-title"></div>
+            <div id="popup-event-buttons"></div>
+        </div>
+        <script src="{{=URL('static', 'js/exploration.js')}}"></script>
+        <script src="{{=URL('static', 'js/resource_management.js')}}"></script>
+        <script src="{{=URL('static', 'js/button_stuff.js')}}"></script>
 
 
-	<div class="container padded center">
-		<div class="quarter">
-			<h2>Click the button to increment the counter</h2>
-			<a class="center btn large" href='javascript:clicked()'><tt>Click Me</tt></a>
-		</div>
-		<div class="threequarters">
-			<h1 class="right" id="counter">0</h1>
-		</div>
-	</div>
-	
+        <div class="container padded center">
+            <div class="quarter">
+                <h2>Click the button to increment the counter</h2>
+                <a class="center btn large" href='javascript:clicked()'><tt>Click Me</tt></a>
+            </div>
+            <div class="threequarters">
+                <h1 class="right" id="counter">0</h1>
+            </div>
+        </div>
 
 
-	{{else:}}
-	<!-- if auth.user is None: -->
 
-	<h1 class="main_title">Welcome!</h1>
+        {{else:}}
+        <!-- if auth.user is None: -->
 
-	<p class="explanation">This game is about managing a mercenary band. Please log in to use it.</p>
+        <h1 class="main_title">Welcome!</h1>
 
-	<div class="login_button">
-		<a href="{{=URL('default', 'user')}}" class="btn">Login</a>
-	</div>
+        <p class="explanation">This game is about managing a mercenary band. Please log in to use it.</p>
 
-	<!-- end of if auth.user is not None: -->
-	{{pass}}
+        <div class="login_button">
+            <a href="{{=URL('default', 'user')}}" class="btn">Login</a>
+        </div>
 
+        <!-- end of if auth.user is not None: -->
+        {{pass}}
+    </div>
 </div>
+
+<script src="{{=URL('static', 'js/default_index.js')}}"></script>

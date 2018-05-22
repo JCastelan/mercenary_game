@@ -12,6 +12,11 @@ var app = function() {
             a.push(b[i]);
         }
     };
+    self.get_wood = function() {
+        console.log("Wood increased!");
+        self.vue.gathering_wood = !self.vue.gathering_wood;
+        // self.vue.edit_id = memo_id;
+    };
 
     // Complete as needed.
     self.vue = new Vue({
@@ -19,8 +24,15 @@ var app = function() {
         delimiters: ['${', '}'],
         unsafeDelimiters: ['!{', '}'],
         data: {
+            resource: [],
+            resource_wood: null,
+            resource_iron: null,
+            resource_coal: null,
+            gathering_wood: false,
         },
         methods: {
+            get_wood: self.get_wood,
+
         }
 
     });
