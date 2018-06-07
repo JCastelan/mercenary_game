@@ -14,21 +14,31 @@ var app = function() {
         }
     };
 
+    //function for incrementing the counter
+    self.incrementCounter = function(){
+        self.vue.current_counter++;
+        console.log(self.vue.current_counter)
+        //var x = document.getElementById("counter");
+        //x.innerHTML= self.vue.current_counter;
+    }
+
     // generic counter functions (for debugging purposes)
     self.loadCounter = function(){ 
         console.log("getting the stored counter");
-        console.log( self.vue.counter);
+        console.log( self.vue.current_counter);
         $.getJSON(load_counter_url, function (data) {
             console.log("Loaded "+data.counter+" as the counter value" );
-            self.vue.counter = data.counter;
+            self.vue.current_counter = data.counter;
         });
+        //var x = document.getElementById("counter");
+        //x.innerHTML= self.vue.current_counter;
     };
 
     self.saveCounter = function(){
-        console.log("saving the counter");
+        console.log("saving the counter: ", self.vue.current_counter);
         $.post(save_counter_url,
             { 
-                counter: self.vue.counter
+                counter: self.vue.current_counter
             },
             function (result) {
                 console.log( result )
@@ -55,6 +65,7 @@ var app = function() {
 
         },
         methods: {
+            incrementCounter: self.incrementCounter,
             loadCounter: self.loadCounter,
             saveCounter: self.saveCounter,
             // real stuff

@@ -1,55 +1,68 @@
 {{extend 'layout.html'}}
 {{block head}}
+<script src="{{=URL('static', 'js/vue.js')}}"></script>
+<script>
+	var load_counter_url = "{{=URL('api', 'load_counter')}}";
+	var save_counter_url = "{{=URL('api', 'save_counter')}}";
+</script>
 {{end}}
 
 <div class="main_content">
 
-	<!-- Here goes your main HTML code. -->
-	{{if auth.user is not None:}}
-	<div id="grid"></div>
-	<div id="popup-event">
-		<a class="left btn" href='javascript:closePopup()'><tt>Close</tt></a>
-		<div id="popup-event-title"></div>
-		<div id="popup-event-buttons">
+	<div id="vue-div" class="display:none">
+		{{if auth.user is not None:}}
+		<div id="grid"></div>
+		<div id="popup-event">
+			<a class="left btn" href='javascript:closePopup()'><tt>Close</tt></a>
+			<div id="popup-event-title"></div>
+			<div id="popup-event-buttons">
 
-			<br><br>
-			
-			<div class="container padded blue battle_scene"> <br><br><br><br><br>
+				<br><br>
+				
+				<div class="container padded blue battle_scene"> <br><br><br><br><br>
+				</div>
+
+				<br><br>
+				<a class="navy btn" href='javascript:closePopup()'><tt>Attack</tt></a>
 			</div>
-
-			<br><br>
-			<a class="navy btn" href='javascript:closePopup()'><tt>Attack</tt></a>
 		</div>
+		<script src="{{=URL('static', 'js/exploration.js')}}"></script>
+		<script src="{{=URL('static', 'js/resource_management.js')}}"></script>
+		<script src="{{=URL('static', 'js/button_stuff.js')}}"></script>
+
+
+		<div class="container padded center">
+			<div class="quarter">
+				<h2>Click the button to increment the counter</h2>
+				<a class="center btn large" v-on:click="incrementCounter()"><tt>Click Me</tt></a>
+				<a class="center btn large" v-on:click="saveCounter()" ><tt>Save Progress</tt></a>
+			</div>
+			<div class="threequarters">
+				<h1 class="right" id="counter" >${current_counter}</h1>
+			</div>
+		</div>
+		
+
+
+		{{else:}}
+		<!-- if auth.user is None: -->
+
+		<h1 class="main_title">Welcome!</h1>
+
+		<p class="explanation">This game is about managing a mercenary band. Please log in to use it.</p>
+
+		<div class="login_button">
+			<a href="{{=URL('default', 'user')}}" class="btn">Login</a>
+		</div>
+
+		<!-- end of if auth.user is not None: -->
+		{{pass}}
+
 	</div>
-	<script src="{{=URL('static', 'js/exploration.js')}}"></script>
-	<script src="{{=URL('static', 'js/resource_management.js')}}"></script>
-	<script src="{{=URL('static', 'js/button_stuff.js')}}"></script>
-
-
-	<div class="container padded center">
-		<div class="quarter">
-			<h2>Click the button to increment the counter</h2>
-			<a class="center btn large" href='javascript:clicked()'><tt>Click Me</tt></a>
-		</div>
-		<div class="threequarters">
-			<h1 class="right" id="counter">0</h1>
-		</div>
 	</div>
+
+
+
 	
 
-
-	{{else:}}
-	<!-- if auth.user is None: -->
-
-	<h1 class="main_title">Welcome!</h1>
-
-	<p class="explanation">This game is about managing a mercenary band. Please log in to use it.</p>
-
-	<div class="login_button">
-		<a href="{{=URL('default', 'user')}}" class="btn">Login</a>
-	</div>
-
-	<!-- end of if auth.user is not None: -->
-	{{pass}}
-
-</div>
+<script src="{{=URL('static', 'js/default_index.js')}}"></script>
