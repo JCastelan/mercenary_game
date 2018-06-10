@@ -4,6 +4,7 @@ var gridHeight = 0;
 
 var popupEventElem = document.getElementById("popup-event");
 var popupEventTitleElem = document.getElementById("popup-event-title");
+var popupEventDescElem = document.getElementById("popup-event-desc");
 var popupEventButtonsElem = document.getElementById("popup-event-buttons");
 
 var obstacleChar = '#';
@@ -11,6 +12,8 @@ var emptyChar = ',';
 var playerChar = 'P';
 var houseChar = 'H';
 var enemyChar = 'E';
+var hiddenEnemyChar = 'Q';
+var itemChar = 'I';
 var bossChar = 'B';
 
 var lastPlayerPos = {x: 0, y: 0};
@@ -25,7 +28,7 @@ function initStartingAreaGrid() {
 	for(var y = 0; y < gridHeight; y++) {
 		grid.push([]);
 		for(var x = 0; x < gridWidth; x++) {
-			grid[y].push(obstacleChar);
+			grid[y].push({char: obstacleChar});
 		}
 	}
 	playerPos.x = Math.floor(gridWidth / 2);
@@ -34,15 +37,36 @@ function initStartingAreaGrid() {
 	lastPlayerPos.y = playerPos.y;
 
 	// clear the player's position
-	grid[playerPos.y][playerPos.x] = emptyChar;
-	// make path to boss with 2 enemies along the way
-	for(var y = playerPos.y - 1; y > playerPos.y - 5; y -= 2) {
-		grid[y][playerPos.x] = emptyChar;
-		grid[y - 1][playerPos.x] = enemyChar;
-	}
+	grid[playerPos.y][playerPos.x].char = emptyChar;
+	// make path to boss with an iron sword and an enemy along the way
+	grid[playerPos.y - 1][playerPos.x].char = emptyChar;
+	
+	grid[playerPos.y - 2][playerPos.x].char = itemChar;
+	grid[playerPos.y - 2][playerPos.x].title = "Iron Sword";
+	grid[playerPos.y - 2][playerPos.x].desc = "You found an iron sword on the ground. Would you like to pick it up?";
+	grid[playerPos.y - 2][playerPos.x].buttons = [
+		{name: "(1) Pick Up", onClick: function(){
+			APP.vue.inventory.weapon = "iron sword";
+			grid[playerPos.y][playerPos.x].desc = "You picked up the iron sword.";
+			APP.vue.popup_desc = grid[playerPos.y][playerPos.x].desc;
+			grid[playerPos.y][playerPos.x].buttons = [];
+			APP.vue.popup_buttons = [];
+		}},
+		{name: "(2) Leave it", onClick: function(){
+			APP.closePopup();
+		}}
+	];
+
+	grid[playerPos.y - 3][playerPos.x].char = emptyChar;
+
+	grid[playerPos.y - 4][playerPos.x].char = enemyChar;
+	grid[playerPos.y - 4][playerPos.x].title = "1337 hacker boi";
+	grid[playerPos.y - 4][playerPos.x].desc = "oi 1v1 m8 I\'ll rek u i swer on me mum";
+	grid[playerPos.y - 4][playerPos.x].battle = true;
 	// make the path to the boss
-	grid[y][playerPos.x] = emptyChar;
-	grid[y - 1][playerPos.x] = bossChar;
+	grid[playerPos.y - 5][playerPos.x].char = emptyChar;
+	grid[playerPos.y - 6][playerPos.x].char = bossChar;
+	grid[playerPos.y - 6][playerPos.x].battle = true;
 }
 
 function initHubWorldGrid(width, height) {
@@ -55,11 +79,11 @@ function initHubWorldGrid(width, height) {
 		for(var x = 0; x < gridWidth; x++) {
 			var chance = Math.random();
 			if(chance < 0.01) {
-				grid[y].push(houseChar);
+				grid[y].push({char: houseChar});
 			} else if(chance < 0.05) {
-				grid[y].push(enemyChar);
+				grid[y].push({char: hiddenEnemyChar, battle: true});
 			} else {
-				grid[y].push(emptyChar);
+				grid[y].push({char: emptyChar});
 			}
 		}
 	}
@@ -76,10 +100,10 @@ function displayGrid() {
 		for(var x = 0; x < gridWidth; x++) {
 			if(x == playerPos.x && y == playerPos.y) {
 				gridString += playerChar;
-			} else if(grid[y][x] == enemyChar) {
+			} else if(grid[y][x].char == hiddenEnemyChar) {
 				gridString += emptyChar;
 			} else {
-				gridString += grid[y][x];
+				gridString += grid[y][x].char;
 			}
 		}
 		gridString += "<br>";
@@ -109,30 +133,92 @@ function playerBounds() {
 
 function onPlayerMove() {
 	playerBounds();
-	if(grid[playerPos.y][playerPos.x] == obstacleChar) {
+	if(grid[playerPos.y][playerPos.x].char == obstacleChar) {
 		playerPos.x = lastPlayerPos.x;
 		playerPos.y = lastPlayerPos.y;
 		return;
 	}
-	if(grid[playerPos.y][playerPos.x] == houseChar) {
-		popupEventTitleElem.innerHTML = "House";
-		popupEventElem.style.visibility = "visible";
+
+	// display generic defaults
+	if(grid[playerPos.y][playerPos.x].char == houseChar) {
+		APP.vue.popup_title = "House";
+		APP.vue.popup_desc = "You\'ve encountered a generic house.";
+		APP.vue.show_popup = true;
 	}
-	if(grid[playerPos.y][playerPos.x] == enemyChar) {
-		popupEventTitleElem.innerHTML = "Enemy Battle";
-		popupEventElem.style.visibility = "visible";
+	if(grid[playerPos.y][playerPos.x].char == enemyChar) {
+		APP.vue.popup_title = "Enemy Battle";
+		APP.vue.popup_desc = "You\'ve encountered a generic enemy battle.";
+		APP.vue.show_popup = true;
 	}
-	if(grid[playerPos.y][playerPos.x] == bossChar) {
-		popupEventTitleElem.innerHTML = "Boss Battle";
-		popupEventElem.style.visibility = "visible";
+	if(grid[playerPos.y][playerPos.x].char == hiddenEnemyChar) {
+		APP.vue.popup_title = "Hidden Enemy Battle";
+		APP.vue.popup_desc = "You\'ve encountered a generic hidden enemy battle.";
+		APP.vue.show_popup = true;
+	}
+	if(grid[playerPos.y][playerPos.x].char == bossChar) {
+		APP.vue.popup_title = "Boss Battle";
+		APP.vue.popup_desc = "You\'ve encountered a generic boss battle.";
+		APP.vue.show_popup = true;
+	}
+
+	// if there are specific details specified on the grid space, set the popup to display those
+	APP.vue.popup_buttons = [];
+	if(grid[playerPos.y][playerPos.x].buttons) {
+		APP.vue.popup_buttons = grid[playerPos.y][playerPos.x].buttons;
+		APP.vue.show_popup = true;
+	}
+	if(grid[playerPos.y][playerPos.x].title) {
+		APP.vue.popup_title = grid[playerPos.y][playerPos.x].title;
+		APP.vue.show_popup = true;
+	}
+	if(grid[playerPos.y][playerPos.x].desc) {
+		APP.vue.popup_desc = grid[playerPos.y][playerPos.x].desc;
+		APP.vue.show_popup = true;
+	}
+
+	// spawn battle buttons
+	if(grid[playerPos.y][playerPos.x].battle) {
+		APP.vue.in_battle = true;
+		APP.vue.player_health = 10;
+		APP.vue.enemy_health = 10;
+		APP.vue.popup_buttons = [
+			{name: "(1) Attacc", onClick: function() {
+				// TODO: add cooldowns to yours and your enemies' attacks
+				if(APP.vue.inventory.weapon == "fists") {
+					APP.vue.enemy_health--;
+				}
+				if(APP.vue.inventory.weapon == "iron sword") {
+					APP.vue.enemy_health -= 2;
+				}
+				if(APP.vue.enemy_health <= 0) {
+					APP.vue.enemy_health = 0;
+
+					grid[playerPos.y][playerPos.x].desc = "You\'ve defeated this enemy";
+					APP.vue.popup_desc = grid[playerPos.y][playerPos.x].desc;
+
+					grid[playerPos.y][playerPos.x].buttons = [];
+					APP.vue.popup_buttons = [];
+
+					grid[playerPos.y][playerPos.x].battle = false;
+					APP.vue.in_battle = false;
+				}
+			}}
+		];
 	}
 }
 
 document.addEventListener("keydown", function(event) {
-	if(popupEventElem.style.visibility == "visible") {
+	if(APP.vue.show_popup) {
 		// close if escape key pressed
 		if(event.keyCode == 27) {
-			closePopup();
+			APP.closePopup();
+		}
+		// let number keys work as clicking on popup event buttons
+		if(event.keyCode >= 49 && event.keyCode <= 57) {
+			// we pressed a number between 1 and 9 (1 being keyCode 49)
+			if(APP.vue.popup_buttons.length > 0 && event.keyCode - 49 < APP.vue.popup_buttons.length) {
+				APP.vue.popup_buttons[event.keyCode - 49].onClick();
+			}
 		}
 		return;
 	}
@@ -156,16 +242,9 @@ document.addEventListener("keydown", function(event) {
 		playerPos.x++;
 		moved = true;
 	}
+
 	if(moved) {
 		onPlayerMove();
 		displayGrid();
 	}
 });
-
-function closePopup() {
-	if(grid[playerPos.y][playerPos.x] == bossChar) {
-		initHubWorldGrid(100, 40);
-		displayGrid();
-	}
-	popupEventElem.style.visibility = "hidden";
-}

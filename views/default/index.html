@@ -1,55 +1,60 @@
 {{extend 'layout.html'}}
 {{block head}}
+<script src="{{=URL('static', 'js/vue.js')}}"></script>
+<script>
+	// Define your URLs here.
+	var check_logged_in_url = "{{=URL('api', 'check_logged_in', user_signature=True)}}";
+</script>
 {{end}}
 
 <div class="main_content">
-
-	<!-- Here goes your main HTML code. -->
-	{{if auth.user is not None:}}
-	<div id="grid"></div>
-	<div id="popup-event">
-		<a class="left btn" href='javascript:closePopup()'><tt>Close</tt></a>
-		<div id="popup-event-title"></div>
-		<div id="popup-event-buttons">
-
-			<br><br>
-			
-			<div class="container padded blue battle_scene"> <br><br><br><br><br>
+	<div id="vue-div" style="display:none">
+		<div v-if="logged_in">
+			<div class="container">
+				<div class="quarter">
+					Weapon: ${inventory.weapon}
+				</div>
+				<div class="threequarters" id="grid">this is a grid boi</div>
 			</div>
-
-			<br><br>
-			<a class="navy btn" href='javascript:closePopup()'><tt>Attack</tt></a>
-		</div>
-	</div>
-	<script src="{{=URL('static', 'js/exploration.js')}}"></script>
-	<script src="{{=URL('static', 'js/resource_management.js')}}"></script>
-	<script src="{{=URL('static', 'js/button_stuff.js')}}"></script>
-
-
-	<div class="container padded center">
-		<div class="quarter">
-			<h2>Click the button to increment the counter</h2>
-			<a class="center btn large" href='javascript:clicked()'><tt>Click Me</tt></a>
-		</div>
-		<div class="threequarters">
-			<h1 class="right" id="counter">0</h1>
-		</div>
-	</div>
+			<div id="popup-event" v-if="show_popup">
+				<a class="left btn" v-on:click="closePopup()">(Esc) Close</a>
+				<input style="width:500px" class="not_padded center" :disabled="true" v-model="popup_title"></input>
+				<input style="width:594px" class="not_padded" :disabled="true" v-model="popup_desc"></input>
+				<br><br>
+				<div v-for="button in popup_buttons">
+					<a class="btn" v-on:click="button.onClick()">${button.name}</a>
+				</div>
+				<br>
+				<div v-if="in_battle">
+					Your HP: ${player_health}
+				</div>
+				<br>
+				<div v-if="in_battle">
+					Enemy HP: ${enemy_health}
+				</div>
+			</div>
+			<script src="{{=URL('static', 'js/exploration.js')}}"></script>
+			<script src="{{=URL('static', 'js/resource_management.js')}}"></script>
+			<script src="{{=URL('static', 'js/button_stuff.js')}}"></script>
 	
-
-
-	{{else:}}
-	<!-- if auth.user is None: -->
-
-	<h1 class="main_title">Welcome!</h1>
-
-	<p class="explanation">This game is about managing a mercenary band. Please log in to use it.</p>
-
-	<div class="login_button">
-		<a href="{{=URL('default', 'user')}}" class="btn">Login</a>
+			<div class="container padded center">
+				<div class="quarter">
+					<h2>Click the button to increment the counter</h2>
+					<a class="center btn large" href='javascript:clicked()'><tt>Click Me</tt></a>
+				</div>
+				<div class="threequarters">
+					<h1 class="right" id="counter">0</h1>
+				</div>
+			</div>
+		</div>
+		<div v-if="!logged_in">
+			<h1 class="main_title">Welcome!</h1>
+			<p class="explanation">This game is about managing a mercenary band. Please log in to use it.</p>
+			<div class="login_button">
+				<a href="{{=URL('default', 'user')}}" class="btn">Login</a>
+			</div>
+		</div>
 	</div>
-
-	<!-- end of if auth.user is not None: -->
-	{{pass}}
-
 </div>
+
+<script src="{{=URL('static', 'js/default_index.js')}}"></script>
