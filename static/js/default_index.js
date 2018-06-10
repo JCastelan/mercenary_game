@@ -26,6 +26,10 @@ var app = function() {
 		}
 		return health;
 	};
+	
+	self.toggle_view_pane = function() {
+		self.vue.viewing_resources = !self.vue.viewing_resources;
+	};
 
     // Complete as needed.
     self.vue = new Vue({
@@ -40,6 +44,7 @@ var app = function() {
 			logged_in: false,
 			band: [
 				{ // index 0 is you
+					name: "You",
 					health: 10,
 					inventory: {
 						weapon: {
@@ -50,11 +55,14 @@ var app = function() {
 				} // any more is people you've recruited
 			],
 			enemy_health: 10,
-			in_battle: false
+			in_battle: false,
+			player_attack_time: 16, // used for limiting player attacks
+			viewing_resources: false
         },
         methods: {
 			closePopup: self.closePopup,
-			get_band_health: self.get_band_health
+			get_band_health: self.get_band_health,
+			toggle_view_pane: self.toggle_view_pane
         }
     });
 

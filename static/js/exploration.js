@@ -47,10 +47,13 @@ function initStartingAreaGrid() {
 	grid[playerPos.y - 2][playerPos.x].buttons = [
 		{name: "(1) Pick Up", onClick: function(){
 			APP.vue.band[0].inventory.weapon = {name: "iron sword", damage: 2};
-			grid[playerPos.y][playerPos.x].desc = "You picked up the iron sword.";
-			APP.vue.popup_desc = grid[playerPos.y][playerPos.x].desc;
-			grid[playerPos.y][playerPos.x].buttons = [];
+			APP.vue.popup_desc = "You picked up the iron sword.";
 			APP.vue.popup_buttons = [];
+
+			grid[playerPos.y][playerPos.x].title = null;
+			grid[playerPos.y][playerPos.x].desc = null;
+			grid[playerPos.y][playerPos.x].buttons = null;
+			grid[playerPos.y][playerPos.x].char = emptyChar;
 		}},
 		{name: "(2) Leave it", onClick: function(){
 			APP.closePopup();
@@ -63,6 +66,35 @@ function initStartingAreaGrid() {
 	grid[playerPos.y - 4][playerPos.x].title = "1337 hacker boi";
 	grid[playerPos.y - 4][playerPos.x].desc = "oi 1v1 m8 I\'ll rek u i swer on me mum";
 	grid[playerPos.y - 4][playerPos.x].battle = true;
+	grid[playerPos.y - 4][playerPos.x].damage = 1;
+	grid[playerPos.y - 4][playerPos.x].cooldown = 60;
+	grid[playerPos.y - 4][playerPos.x].onDeath = function() {
+		grid[playerPos.y][playerPos.x].desc = "ur not too shabby m8, can I join u?";
+		APP.vue.popup_desc = grid[playerPos.y][playerPos.x].desc;
+		grid[playerPos.y][playerPos.x].buttons =  [
+			{name: "(1) Sure m8", onClick: function() {
+				grid[playerPos.y][playerPos.x].title = null;
+				grid[playerPos.y][playerPos.x].desc = null;
+				grid[playerPos.y][playerPos.x].buttons = null;
+				grid[playerPos.y][playerPos.x].char = emptyChar;
+				APP.vue.band.push({
+					name: "1337 hacker boi",
+					health: 10,
+					inventory: {
+						weapon: {
+							name: "fists",
+							damage: 1
+						}
+					}
+				});
+				APP.vue.show_popup = false;
+			}},
+			{name: "(2) Nah man, I aint about that life", onClick: function() {
+				APP.closePopup();
+			}}
+		];
+		APP.vue.popup_buttons = grid[playerPos.y][playerPos.x].buttons;
+	};
 	// make the path to the boss
 	grid[playerPos.y - 5][playerPos.x].char = emptyChar;
 	grid[playerPos.y - 6][playerPos.x].char = bossChar;
@@ -179,33 +211,143 @@ function onPlayerMove() {
 	// spawn battle buttons
 	if(grid[playerPos.y][playerPos.x].battle) {
 		APP.vue.in_battle = true;
+		once = false; // used to make sure we call start_enemy_attacks once
 		for(var i = 0; i < APP.vue.band.length; i++) {
-			APP.vue.band[i].health = 10;
+			if(APP.vue.band[i].health > 0) {
+				// TODO: maybe have food and remove this auto-heal feature
+				APP.vue.band[i].health = 10; // reset the health of all recruits including you
+			}
 		}
 		APP.vue.enemy_health = 10;
+		once_again = false; // used to make sure we start an interval for player attacks once
+		can_attacc = false;
+		APP.vue.player_attack_time = 60;
+		start_player_attacks();
 		APP.vue.popup_buttons = [
 			{name: "(1) Attacc", onClick: function() {
-				// TODO: add cooldowns to yours and your enemies' attacks
+				if(!can_attacc) return;
+				can_attacc = false;
+				APP.vue.player_attack_time = 0;
+				var damage = 1;
+				var cooldown = 60;
+				if(grid[playerPos.y][playerPos.x].damage) {
+					damage = grid[playerPos.y][playerPos.x].damage;
+				}
+				if(grid[playerPos.y][playerPos.x].cooldown) {
+					cooldown = grid[playerPos.y][playerPos.x].cooldown;
+				}
+				start_enemy_attacks(damage, cooldown);
 				var damage = 0;
 				for(var i = 0; i < APP.vue.band.length; i++) {
-					damage += APP.vue.band[i].inventory.weapon.damage;
+					if(APP.vue.band[i].health > 0) {
+						damage += APP.vue.band[i].inventory.weapon.damage;
+					}
 				}
 				APP.vue.enemy_health -= damage;
 				if(APP.vue.enemy_health <= 0) {
 					APP.vue.enemy_health = 0;
+					grid[playerPos.y][playerPos.x].battle = false;
+					APP.vue.in_battle = false;
 
+					if(grid[playerPos.y][playerPos.x].onDeath) {
+						grid[playerPos.y][playerPos.x].onDeath();
+						return;
+					}
 					grid[playerPos.y][playerPos.x].desc = "You\'ve defeated this enemy";
 					APP.vue.popup_desc = grid[playerPos.y][playerPos.x].desc;
 
 					grid[playerPos.y][playerPos.x].buttons = [];
 					APP.vue.popup_buttons = [];
-
-					grid[playerPos.y][playerPos.x].battle = false;
-					APP.vue.in_battle = false;
 				}
 			}}
 		];
 	}
+}
+
+var once_again = false;
+var can_attacc = true;
+
+function start_player_attacks() {
+	if(once_again) return;
+	once_again = true;
+
+	limit_player_attacks();
+}
+
+function limit_player_attacks() {
+	if(APP.vue.enemy_health <= 0) return;
+	if(APP.vue.band[0].health <= 0) return;
+
+	APP.vue.player_attack_time++;
+	if(!can_attacc && document.getElementsByClassName("option_buttons").length > 0) {
+		document.getElementsByClassName("option_buttons")[0].style.opacity = APP.vue.player_attack_time / 60;
+	}
+	if(APP.vue.player_attack_time > 60) {
+		can_attacc = true;
+	}
+
+	requestAnimationFrame(limit_player_attacks);
+}
+
+var enemy_attack_ticks = 0;
+var enemy_attack_cooldown_ticks = 0;
+var enemy_damage = 1;
+var cur_band_member_being_attacked = 0;
+var once = false;
+
+function start_enemy_attacks(damage, cooldown) {
+	if(once) return;
+	once = true;
+	enemy_attack_ticks = 0;
+	enemy_attack_cooldown_ticks = cooldown;
+	enemy_damage = damage;
+	for(var i = APP.vue.band.length - 1; i >= 0; i--) {
+		if(APP.vue.band[i].health > 0) {
+			cur_band_member_being_attacked = i;
+			break;
+		}
+	}
+	simulate_enemy_attacks();
+}
+
+// TODO: ressurection, but you have to get a negative stat every time you revive a band member
+	// for now we'll just have perma death
+
+function simulate_enemy_attacks() {
+	enemy_attack_ticks++;
+	if(APP.vue.enemy_health == 0) return;
+	if(enemy_attack_ticks % enemy_attack_cooldown_ticks == 0) {
+		APP.vue.band[cur_band_member_being_attacked].health -= enemy_damage;
+		if(APP.vue.band[cur_band_member_being_attacked].health <= 0) {
+			APP.vue.band.splice(APP.vue.band.length - 1, 1);
+			cur_band_member_being_attacked--;
+			if(cur_band_member_being_attacked == -1) {
+				APP.vue.popup_title = "You died!";
+				APP.vue.popup_desc = "u ded boyo";
+				APP.vue.popup_buttons = [
+					{name: "(1) Revive", onClick: function() {
+						initStartingAreaGrid();
+						displayGrid();
+						APP.vue.band = [
+							{ // index 0 is you
+								health: 10,
+								inventory: {
+									weapon: {
+										name: "fists",
+										damage: 1
+									}
+								}
+							} // any more is people you've recruited
+						];
+						APP.vue.in_battle = false;
+						APP.vue.show_popup = false;
+					}}
+				];
+				return;
+			}
+		}
+	}
+	requestAnimationFrame(simulate_enemy_attacks);
 }
 
 document.addEventListener("keydown", function(event) {

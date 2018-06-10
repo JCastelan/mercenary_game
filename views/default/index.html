@@ -12,7 +12,13 @@
 		<div v-if="logged_in">
 			<div class="container">
 				<div class="quarter">
-					Weapon: ${band[0].inventory.weapon.name}
+					<a v-if="viewing_resources" class="btn" v-on:click="toggle_view_pane()">Resources</a>
+					<a v-if="!viewing_resources" class="btn" v-on:click="toggle_view_pane()">Band</a>
+					<div v-if="!viewing_resources" v-for="member in band">
+						Name: ${member.name}<br>
+						Health: ${member.health}<br>
+						Weapon: ${member.inventory.weapon.name}<br><br>
+					</div>
 				</div>
 				<div class="threequarters" id="grid">this is a grid boi</div>
 			</div>
@@ -22,7 +28,7 @@
 				<input style="width:594px" class="not_padded" :disabled="true" v-model="popup_desc"></input>
 				<br><br>
 				<div v-for="button in popup_buttons">
-					<a class="btn" v-on:click="button.onClick()">${button.name}</a>
+					<a class="btn option_buttons" v-on:click="button.onClick()">${button.name}</a>
 				</div>
 				<br>
 				<div v-if="in_battle">
