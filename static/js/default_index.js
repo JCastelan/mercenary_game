@@ -18,6 +18,14 @@ var app = function() {
 		}
 		self.vue.show_popup = false;
 	};
+	
+	self.get_band_health = function() {
+		var health = 0;
+		for(var i = 0; i < self.vue.band.length; i++) {
+			health += self.vue.band[i].health;
+		}
+		return health;
+	};
 
     // Complete as needed.
     self.vue = new Vue({
@@ -30,15 +38,23 @@ var app = function() {
 			popup_desc: "test desc",
 			popup_buttons: [],
 			logged_in: false,
-			inventory: {
-				weapon: "fists"
-			},
-			player_health: 10,
+			band: [
+				{ // index 0 is you
+					health: 10,
+					inventory: {
+						weapon: {
+							name: "fists",
+							damage: 1
+						}
+					}
+				} // any more is people you've recruited
+			],
 			enemy_health: 10,
 			in_battle: false
         },
         methods: {
-			closePopup: self.closePopup
+			closePopup: self.closePopup,
+			get_band_health: self.get_band_health
         }
     });
 

@@ -46,7 +46,7 @@ function initStartingAreaGrid() {
 	grid[playerPos.y - 2][playerPos.x].desc = "You found an iron sword on the ground. Would you like to pick it up?";
 	grid[playerPos.y - 2][playerPos.x].buttons = [
 		{name: "(1) Pick Up", onClick: function(){
-			APP.vue.inventory.weapon = "iron sword";
+			APP.vue.band[0].inventory.weapon = {name: "iron sword", damage: 2};
 			grid[playerPos.y][playerPos.x].desc = "You picked up the iron sword.";
 			APP.vue.popup_desc = grid[playerPos.y][playerPos.x].desc;
 			grid[playerPos.y][playerPos.x].buttons = [];
@@ -179,17 +179,18 @@ function onPlayerMove() {
 	// spawn battle buttons
 	if(grid[playerPos.y][playerPos.x].battle) {
 		APP.vue.in_battle = true;
-		APP.vue.player_health = 10;
+		for(var i = 0; i < APP.vue.band.length; i++) {
+			APP.vue.band[i].health = 10;
+		}
 		APP.vue.enemy_health = 10;
 		APP.vue.popup_buttons = [
 			{name: "(1) Attacc", onClick: function() {
 				// TODO: add cooldowns to yours and your enemies' attacks
-				if(APP.vue.inventory.weapon == "fists") {
-					APP.vue.enemy_health--;
+				var damage = 0;
+				for(var i = 0; i < APP.vue.band.length; i++) {
+					damage += APP.vue.band[i].inventory.weapon.damage;
 				}
-				if(APP.vue.inventory.weapon == "iron sword") {
-					APP.vue.enemy_health -= 2;
-				}
+				APP.vue.enemy_health -= damage;
 				if(APP.vue.enemy_health <= 0) {
 					APP.vue.enemy_health = 0;
 

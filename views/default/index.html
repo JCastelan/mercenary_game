@@ -12,7 +12,7 @@
 		<div v-if="logged_in">
 			<div class="container">
 				<div class="quarter">
-					Weapon: ${inventory.weapon}
+					Weapon: ${band[0].inventory.weapon.name}
 				</div>
 				<div class="threequarters" id="grid">this is a grid boi</div>
 			</div>
@@ -26,7 +26,7 @@
 				</div>
 				<br>
 				<div v-if="in_battle">
-					Your HP: ${player_health}
+					Your HP: ${get_band_health()}
 				</div>
 				<br>
 				<div v-if="in_battle">
