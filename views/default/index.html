@@ -25,6 +25,8 @@
 						Name: ${member.name}<br>
 						Health: ${member.health}<br>
 						Weapon: ${member.weapon.name}
+						<a v-if="can_eat_food(member)">Eat fud</a>
+						<a v-if="can_equip_weapon(member)">Equip weapon</a>
 						<br>
 						______________________________
 						<br><br>

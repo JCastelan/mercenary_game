@@ -27,6 +27,26 @@ var app = function() {
 		self.vue.viewing_resources = !self.vue.viewing_resources;
 	};
 
+	self.can_eat_food = function(member) {
+		// TODO: change this when we change max health due to armor and stuff
+		if(member.health >= 10) return false; // cant heal if full health
+		for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
+			if(self.vue.band[0].inventory[i].name == "food" && self.vue.band[0].inventory[i].num > 0) {
+				return true;
+			}
+		}
+		return false;
+	};
+
+	self.can_equip_weapon = function(member) {
+		for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
+			if(self.vue.band[0].inventory[i].is_weapon) {
+				return true;
+			}
+		}
+		return false;
+	};
+
     // Complete as needed.
     self.vue = new Vue({
         el: "#vue-div",
@@ -57,7 +77,9 @@ var app = function() {
         methods: {
 			closePopup: self.closePopup,
 			get_band_health: self.get_band_health,
-			toggle_view_pane: self.toggle_view_pane
+			toggle_view_pane: self.toggle_view_pane,
+			can_eat_food: self.can_eat_food,
+			can_equip_weapon: self.can_equip_weapon
         }
     });
 
