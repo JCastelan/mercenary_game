@@ -34,7 +34,7 @@ db.define_table('userdb',
 				Field( 'user_email', default=get_user_email()),
 				Field('updated_on', 'datetime', update=datetime.datetime.utcnow()),
 				#user info
-				Field( 'user_name', "string"),
+				# Field( 'user_name', "string"),
 				#some kind of basic counter 
 				Field( 'counter', 'integer', default=0),
 				#resources

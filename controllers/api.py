@@ -5,21 +5,28 @@ def check_logged_in():
 
 # @auth.requires_signature() # TODO: need to fix this
 def load_counter():
-	print("load_counter!!!!!!!!!!!!!!!!!")
+	if auth.user is None:
+		return
+	# print("load_counter!!!!!!!!!!!!!!!!!")
 	q=(db.userdb.user_email ==auth.user.email)
 	row=db(q).select().first()
-	#row=db().select(q).first()
 	if row is None:
-		print( "\tdne")
+		# print( "\tdne")
 		return response.json(dict(counter=0))
 	else:
-		print("\texists")
+		# print("\texists")
 		return response.json(dict(counter=row.counter))
 
 # @auth.requires_signature()
 def save_counter():
-	print "save_counter!!!!!!!!!!!!!!!!!"
+	if auth.user is None:
+		return
+	# print "save_counter!!!!!!!!!!!!!!!!!"
 	q=(db.userdb.user_email ==auth.user.email)
 	row=db(q).select().first()
-	result = row.update_record(counter=request.vars.counter)
-	return result
+	if row is not None:
+		result = row.update_record(counter=request.vars.counter)
+		return
+	else:
+		result = db.userdb.insert()
+		return

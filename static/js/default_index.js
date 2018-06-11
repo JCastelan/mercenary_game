@@ -46,8 +46,12 @@ var app = function() {
 				if(member.health > 10) {
 					member.health = 10;
 				}
-				// TODO: if we have more than 1 num then don't splice
-				self.vue.band[0].inventory.splice(i, 1);
+				if(self.vue.band[0].inventory[i].num > 1) {
+					self.vue.band[0].inventory[i].num--;
+				}
+				else {
+					self.vue.band[0].inventory.splice(i, 1);
+				}
 				return;
 			}
 		}
@@ -71,40 +75,49 @@ var app = function() {
 					is_weapon: self.vue.band[0].inventory[i].is_weapon,
 					damage: self.vue.band[0].inventory[i].damage
 				};
-				// TODO: if we have more than 1 num then don't splice
-				self.vue.band[0].inventory.splice(i, 1);
+				if(self.vue.band[0].inventory[i].num > 1) {
+					self.vue.band[0].inventory[i].num--;
+				}
+				else {
+					self.vue.band[0].inventory.splice(i, 1);
+				}
 				return;
 			}
 		}
 	};
+
     // generic counter functions (for debugging purposes)
     self.loadCounter = function(){ 
-        console.log("getting the stored counter");
-        console.log( self.vue.counter);
+        // console.log("getting the stored counter");
+        // console.log( self.vue.counter);
         $.getJSON(load_counter_url, function (data) {
-            console.log("Loaded "+data.counter+" as the counter value" );
+            // console.log("Loaded " + data.counter + " as the counter value" );
             self.vue.counter = data.counter;
         });
     };
 
     self.saveCounter = function(){
-        console.log("saving the counter");
+        // console.log("saving the counter");
         $.post(save_counter_url,
             { 
                 counter: self.vue.counter
             },
             function (result) {
-                console.log( result )
+                // console.log( result )
             });
-    };
+	};
+	
+	self.clicked = function () {
+		self.vue.counter++;
+	}
 
     // real stuff
     self.loadResources = function(){
-        console.log( "loading all stored vals")
+        // console.log( "loading all stored vals")
     };
 
     self.saveResources = function(){
-        console.log( "saving all resources")
+        // console.log( "saving all resources")
     };
 
     // Complete as needed.
@@ -145,6 +158,7 @@ var app = function() {
 			eat_food: self.eat_food,
 			equip_weapon: self.equip_weapon,
 
+			clicked: self.clicked,
             loadCounter: self.loadCounter,
             saveCounter: self.saveCounter,
             // real stuff
