@@ -39,10 +39,10 @@ function makeLootBag(bagY, bagX, items) {
 		grid[bagY][bagX].buttons[grid[bagY][bagX].buttons.length - 1].name = "Take " + items[i].name;
 		grid[bagY][bagX].buttons[grid[bagY][bagX].buttons.length - 1].onClick = function() {
 			// auto equip weapon if it does more damage
-			if(this.is_weapon && APP.vue.band[0].weapon.damage < this.damage) {
-				APP.vue.band[0].weapon = {name: this.item_name, damage: this.damage, num: 1, is_weapon: true};
-			}
-			else { // otherwise add it to the inventory
+			// if(this.is_weapon && APP.vue.band[0].weapon.damage < this.damage) {
+			// 	APP.vue.band[0].weapon = {name: this.item_name, damage: this.damage, num: 1, is_weapon: true};
+			// }
+			{ // otherwise add it to the inventory
 				// check if we already have 1 of that item
 				var found = false;
 				for(var j = 0; j < APP.vue.band[0].inventory.length; j++) {
@@ -54,6 +54,7 @@ function makeLootBag(bagY, bagX, items) {
 				}
 				// if we dont already have it, then add it
 				if(!found) {
+					console.log("hit");
 					APP.vue.band[0].inventory.push({name: this.item_name, damage: this.damage, num: 1, is_weapon: this.is_weapon});
 				}
 			}
@@ -140,7 +141,7 @@ function initStartingAreaGrid() {
 		grid[playerPos.y][playerPos.x].buttons = [
 			{name: "Search body", onClick: function() {
 				makeLootBag(playerPos.y, playerPos.x, [
-					{name: "iron sword", is_weapon: true, damage: 2},
+					{name: "iron sword", is_weapon: true, damage: 3},
 					{name: "food"}
 				]);
 				grid[playerPos.y][playerPos.x].buttons.push({name: "Go to hub world", onClick: function() {

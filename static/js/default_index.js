@@ -60,7 +60,6 @@ var app = function() {
 	self.can_equip_weapon = function(member) {
 		if(!self.vue) return false;
 		for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
-			// console.log(self.vue.band[0].inventory[i].damage);
 			if(self.vue.band[0].inventory[i].is_weapon && self.vue.band[0].inventory[i].damage > member.weapon.damage) {
 				return true;
 			}
@@ -71,6 +70,21 @@ var app = function() {
 	self.equip_weapon = function(member) {
 		for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
 			if(self.vue.band[0].inventory[i].is_weapon && self.vue.band[0].inventory[i].damage > member.weapon.damage) {
+				if(member.weapon.name != "fists") {
+					var weapon_num = 1;
+					for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
+						if(self.vue.band[0].inventory[i].name == member.weapon.name) {
+							weapon_num = self.vue.band[0].inventory[i].num;
+							break;
+						}
+					}
+					self.vue.band[0].inventory.push({
+						name: member.weapon.name,
+						is_weapon: member.weapon.is_weapon,
+						damage: member.weapon.damage,
+						num: weapon_num
+					});
+				}
 				member.weapon = {
 					name: self.vue.band[0].inventory[i].name,
 					is_weapon: self.vue.band[0].inventory[i].is_weapon,
