@@ -1,5 +1,6 @@
 // This is the js for the default/index.html view.
 
+//the generic counter is used for debugging purposes
 var app = function() {
     var self = {};
     Vue.config.silent = false; // show all warnings
@@ -43,7 +44,7 @@ var app = function() {
 	};
 
 	self.can_equip_weapon = function(member) {
-		if(!self.vue) return;
+		if(!self.vue) return false;
 		for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
 			if(self.vue.band[0].inventory[i].is_weapon) {
 				return true;
@@ -55,6 +56,35 @@ var app = function() {
 	self.equip_weapon = function(member) {
 
 	};
+    // generic counter functions (for debugging purposes)
+    self.loadCounter = function(){ 
+        console.log("getting the stored counter");
+        console.log( self.vue.counter);
+        $.getJSON(load_counter_url, function (data) {
+            console.log("Loaded "+data.counter+" as the counter value" );
+            self.vue.counter = data.counter;
+        });
+    };
+
+    self.saveCounter = function(){
+        console.log("saving the counter");
+        $.post(save_counter_url,
+            { 
+                counter: self.vue.counter
+            },
+            function (result) {
+                console.log( result )
+            });
+    };
+
+    // real stuff
+    self.loadResources = function(){
+        console.log( "loading all stored vals")
+    };
+
+    self.saveResources = function(){
+        console.log( "saving all resources")
+    };
 
     // Complete as needed.
     self.vue = new Vue({
@@ -81,7 +111,9 @@ var app = function() {
 			enemy_health: 10,
 			in_battle: false,
 			player_attack_time: 16, // used for limiting player attacks
-			viewing_resources: false
+			viewing_resources: false,
+
+            counter: 0
         },
         methods: {
 			closePopup: self.closePopup,
@@ -90,7 +122,13 @@ var app = function() {
 			can_eat_food: self.can_eat_food,
 			can_equip_weapon: self.can_equip_weapon,
 			eat_food: self.eat_food,
-			equip_weapon: self.equip_weapon
+			equip_weapon: self.equip_weapon,
+
+            loadCounter: self.loadCounter,
+            saveCounter: self.saveCounter,
+            // real stuff
+            loadResources: self.loadResources,
+            saveResources: self.saveResources
         }
     });
 
@@ -103,6 +141,9 @@ var app = function() {
 	self.check_logged_in();
 	$("#vue-div").show();
 
+
+    self.loadCounter(); 
+    self.loadResources();
     return self;
 };
 
