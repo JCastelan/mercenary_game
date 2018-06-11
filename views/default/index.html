@@ -4,6 +4,8 @@
 <script>
 	// Define your URLs here.
 	var check_logged_in_url = "{{=URL('api', 'check_logged_in', user_signature=True)}}";
+	var load_counter_url = "{{=URL('api', 'load_counter', user_signature=True)}}";
+	var save_counter_url = "{{=URL('api', 'save_counter', user_signature=True)}}";
 </script>
 {{end}}
 
@@ -23,10 +25,11 @@
 					<a v-if="!viewing_resources" class="btn" v-on:click="toggle_view_pane()">Band</a>
 					<div v-if="!viewing_resources" v-for="member in band">
 						Name: ${member.name}<br>
-						Health: ${member.health}<br>
+						Health: ${member.health}
+						<a class="btn" v-if="can_eat_food(member)" v-on:click="eat_food(member)">Eat fud</a>
+						<br>
 						Weapon: ${member.weapon.name}
-						<a v-if="can_eat_food(member)">Eat fud</a>
-						<a v-if="can_equip_weapon(member)">Equip weapon</a>
+						<a class="btn" v-if="can_equip_weapon(member)" v-on:click="equip_weapon(member)">Equip weapon</a>
 						<br>
 						______________________________
 						<br><br>

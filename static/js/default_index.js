@@ -38,13 +38,22 @@ var app = function() {
 		return false;
 	};
 
+	self.eat_food = function(member) {
+
+	};
+
 	self.can_equip_weapon = function(member) {
+		if(!self.vue) return;
 		for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
 			if(self.vue.band[0].inventory[i].is_weapon) {
 				return true;
 			}
 		}
 		return false;
+	};
+
+	self.equip_weapon = function(member) {
+
 	};
 
     // Complete as needed.
@@ -79,7 +88,9 @@ var app = function() {
 			get_band_health: self.get_band_health,
 			toggle_view_pane: self.toggle_view_pane,
 			can_eat_food: self.can_eat_food,
-			can_equip_weapon: self.can_equip_weapon
+			can_equip_weapon: self.can_equip_weapon,
+			eat_food: self.eat_food,
+			equip_weapon: self.equip_weapon
         }
     });
 
