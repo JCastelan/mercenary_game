@@ -50,10 +50,32 @@ def load_resources():
 	row=db(q).select().first()
 	if row is None:
 		# print( "\tdne")
-		return response.json(dict(counter=0))
+		loaded_data = dict(
+			coal=0,
+			copper=0,
+			fur=0,
+			iron=0,
+			mithril=0,
+			steel=0,
+			stone=0,
+			tin=0,
+			wood=0
+		)
+		return response.json(loaded_data)
 	else:
 		# print("\texists")
-		return response.json(dict(counter=row.counter))
+		loaded_data = dict(
+			coal=row.coal,
+			copper=row.copper,
+			fur=row.fur,
+			iron=row.iron,
+			mithril=row.iron,
+			steel=row.steel,
+			stone=row.stone,
+			tin=row.tin,
+			wood=row.wood
+		)
+		return response.json(loaded_data)
 
 def save_resources():
 	if auth.user is None:

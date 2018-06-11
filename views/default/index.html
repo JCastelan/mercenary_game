@@ -23,6 +23,12 @@
 						<div v-for="obj in band[0].inventory">
 							${obj.name} x ${obj.num}<br>
 						</div>
+						<br>
+						______________________________
+						<br><br>
+						<div v-for="res in resources">
+							${res[1]} x ${res[0]}<br>
+						</div>
 					</div>
 					<a v-if="!viewing_resources" class="btn" v-on:click="toggle_view_pane()">Band</a>
 					<div v-if="!viewing_resources" v-for="member in band">
