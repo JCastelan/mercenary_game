@@ -60,6 +60,7 @@ var app = function() {
 	self.can_equip_weapon = function(member) {
 		if(!self.vue) return false;
 		for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
+			// console.log(self.vue.band[0].inventory[i].damage);
 			if(self.vue.band[0].inventory[i].is_weapon && self.vue.band[0].inventory[i].damage > member.weapon.damage) {
 				return true;
 			}
@@ -191,7 +192,6 @@ jQuery(function(){APP = app();});
 /* General TODOs
 
 Exploration parts
-	Make food eatable in and out of combat
 	Make random loot bags with random items
 	Be able to equip weapons onto and off of yourself and band members
 	Implement armor in the same way as weapons
