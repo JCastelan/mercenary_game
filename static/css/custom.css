@@ -13,10 +13,9 @@ a:not(.btn):not(.noeffect):after {background-color:#26a69a}
 #popup-event {
 	background-color: white;
 	border: 2px solid black;
-	width: 40%;
-	height: 40%;
+	width: 600px;
+	height: 300px;
 	display: block;
-	visibility: hidden;
 	position: absolute;
 	margin-left: auto;
 	margin-right: auto;
@@ -27,3 +26,9 @@ a:not(.btn):not(.noeffect):after {background-color:#26a69a}
 	top: 0;
 	bottom: 0;
 }
+.fill_width {
+	width: 100%;
+}
+/* .not_padded {
+	padding: -10px !important;
+} */
