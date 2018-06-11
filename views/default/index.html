@@ -9,15 +9,25 @@
 
 <div class="main_content">
 	<div id="vue-div" style="display:none">
-		<div v-if="logged_in">
+		<!-- <div v-if="logged_in"> -->
+		{{if auth.user is not None:}}
 			<div class="container">
 				<div class="quarter">
 					<a v-if="viewing_resources" class="btn" v-on:click="toggle_view_pane()">Resources</a>
+					<div v-if="viewing_resources">
+						Inventory:<br><br>
+						<div v-for="obj in band[0].inventory">
+							${obj.name} x ${obj.num}<br>
+						</div>
+					</div>
 					<a v-if="!viewing_resources" class="btn" v-on:click="toggle_view_pane()">Band</a>
 					<div v-if="!viewing_resources" v-for="member in band">
 						Name: ${member.name}<br>
 						Health: ${member.health}<br>
-						Weapon: ${member.inventory.weapon.name}<br><br>
+						Weapon: ${member.weapon.name}
+						<br>
+						______________________________
+						<br><br>
 					</div>
 				</div>
 				<div class="threequarters" id="grid">this is a grid boi</div>
@@ -27,8 +37,8 @@
 				<input style="width:500px" class="not_padded center" :disabled="true" v-model="popup_title"></input>
 				<input style="width:594px" class="not_padded" :disabled="true" v-model="popup_desc"></input>
 				<br><br>
-				<div v-for="button in popup_buttons">
-					<a class="btn option_buttons" v-on:click="button.onClick()">${button.name}</a>
+				<div v-for="(button, i) in popup_buttons">
+					<a class="btn option_buttons" v-on:click="button.onClick()">(${i+1}) ${button.name}</a>
 				</div>
 				<br>
 				<div v-if="in_battle">
@@ -52,14 +62,16 @@
 					<h1 class="right" id="counter">0</h1>
 				</div>
 			</div>
-		</div>
-		<div v-if="!logged_in">
+		{{else:}}
+		<!-- </div>
+		<div v-if="!logged_in"> -->
 			<h1 class="main_title">Welcome!</h1>
 			<p class="explanation">This game is about managing a mercenary band. Please log in to use it.</p>
 			<div class="login_button">
 				<a href="{{=URL('default', 'user')}}" class="btn">Login</a>
 			</div>
-		</div>
+		<!-- </div> -->
+		{{pass}}
 	</div>
 </div>
 

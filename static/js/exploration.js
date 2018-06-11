@@ -14,10 +14,56 @@ var houseChar = 'H';
 var enemyChar = 'E';
 var hiddenEnemyChar = 'Q';
 var itemChar = 'I';
+var lootChar = 'L';
 var bossChar = 'B';
 
 var lastPlayerPos = {x: 0, y: 0};
 var playerPos = {x: 0, y: 0};
+
+function clearCurrentTile() {
+	grid[playerPos.y][playerPos.x].title = null;
+	grid[playerPos.y][playerPos.x].desc = null;
+	grid[playerPos.y][playerPos.x].buttons = null;
+	grid[playerPos.y][playerPos.x].char = emptyChar;
+}
+
+function makeLootBag(bagY, bagX, items) {
+	grid[bagY][bagX].char = lootChar;
+	grid[bagY][bagX].title = "Loot Bag";
+	grid[bagY][bagX].desc = "You conveniently found a loot bag with some goodies inside. Would you like to take some?";
+	grid[bagY][bagX].buttons = [];
+	for(var i = 0; i < items.length; i++) {
+		// add buttons to the to-be popup event for taking each item
+		grid[bagY][bagX].buttons.push(items[i]);
+		grid[bagY][bagX].buttons[grid[bagY][bagX].buttons.length - 1].item_name = items[i].name;
+		grid[bagY][bagX].buttons[grid[bagY][bagX].buttons.length - 1].name = "Take " + items[i].name;
+		grid[bagY][bagX].buttons[grid[bagY][bagX].buttons.length - 1].onClick = function() {
+			// when we click "take item", check if we already have 1 of that item,
+			// if so, add to the quantity
+			var found = false;
+			for(var j = 0; j < APP.vue.band[0].inventory.length; j++) {
+				if(APP.vue.band[0].inventory[j].name == this.item_name) {
+					APP.vue.band[0].inventory[j].num++;
+					found = true;
+				}
+			}
+			// if we dont already have it, then add it
+			if(!found) {
+				APP.vue.band[0].inventory.push({name: this.item_name, num: 1});
+			}
+			if(this.is_weapon && APP.vue.band[0].weapon.damage < this.damage) {
+				// auto equip if it does more damage
+				APP.vue.band[0].weapon = this;
+			}
+			grid[playerPos.y][playerPos.x].buttons.splice(grid[playerPos.y][playerPos.x].buttons.indexOf(this), 1);
+			if(grid[playerPos.y][playerPos.x].buttons.length == 0) {
+				grid[playerPos.y][playerPos.x].desc = "Looted.";
+				APP.vue.popup_desc = "Looted.";
+				clearCurrentTile();
+			}
+		};
+	}
+}
 
 function initStartingAreaGrid() {
 	grid = [];
@@ -40,25 +86,12 @@ function initStartingAreaGrid() {
 	grid[playerPos.y][playerPos.x].char = emptyChar;
 	// make path to boss with an iron sword and an enemy along the way
 	grid[playerPos.y - 1][playerPos.x].char = emptyChar;
-	
-	grid[playerPos.y - 2][playerPos.x].char = itemChar;
-	grid[playerPos.y - 2][playerPos.x].title = "Iron Sword";
-	grid[playerPos.y - 2][playerPos.x].desc = "You found an iron sword on the ground. Would you like to pick it up?";
-	grid[playerPos.y - 2][playerPos.x].buttons = [
-		{name: "(1) Pick Up", onClick: function(){
-			APP.vue.band[0].inventory.weapon = {name: "iron sword", damage: 2};
-			APP.vue.popup_desc = "You picked up the iron sword.";
-			APP.vue.popup_buttons = [];
 
-			grid[playerPos.y][playerPos.x].title = null;
-			grid[playerPos.y][playerPos.x].desc = null;
-			grid[playerPos.y][playerPos.x].buttons = null;
-			grid[playerPos.y][playerPos.x].char = emptyChar;
-		}},
-		{name: "(2) Leave it", onClick: function(){
-			APP.closePopup();
-		}}
-	];
+	// TODO: pass num and make the button just reduce the num until it's 0, then removes the button
+	makeLootBag(playerPos.y - 2, playerPos.x, [
+		{name: "iron sword", is_weapon: true, damage: 2},
+		{name: "food"}
+	]);
 
 	grid[playerPos.y - 3][playerPos.x].char = emptyChar;
 
@@ -72,7 +105,7 @@ function initStartingAreaGrid() {
 		grid[playerPos.y][playerPos.x].desc = "ur not too shabby m8, can I join u?";
 		APP.vue.popup_desc = grid[playerPos.y][playerPos.x].desc;
 		grid[playerPos.y][playerPos.x].buttons =  [
-			{name: "(1) Sure m8", onClick: function() {
+			{name: "Sure m8", onClick: function() {
 				grid[playerPos.y][playerPos.x].title = null;
 				grid[playerPos.y][playerPos.x].desc = null;
 				grid[playerPos.y][playerPos.x].buttons = null;
@@ -80,16 +113,14 @@ function initStartingAreaGrid() {
 				APP.vue.band.push({
 					name: "1337 hacker boi",
 					health: 10,
-					inventory: {
-						weapon: {
-							name: "fists",
-							damage: 1
-						}
+					weapon: {
+						name: "fists",
+						damage: 1
 					}
 				});
 				APP.vue.show_popup = false;
 			}},
-			{name: "(2) Nah man, I aint about that life", onClick: function() {
+			{name: "Nah man, I aint about that life", onClick: function() {
 				APP.closePopup();
 			}}
 		];
@@ -113,6 +144,8 @@ function initHubWorldGrid(width, height) {
 			if(chance < 0.01) {
 				grid[y].push({char: houseChar});
 			} else if(chance < 0.05) {
+				// TODO: randomize the enemy names and stories
+				// TODO: clear this tile onDeath
 				grid[y].push({char: hiddenEnemyChar, battle: true});
 			} else {
 				grid[y].push({char: emptyChar});
@@ -224,7 +257,7 @@ function onPlayerMove() {
 		APP.vue.player_attack_time = 60;
 		start_player_attacks();
 		APP.vue.popup_buttons = [
-			{name: "(1) Attacc", onClick: function() {
+			{name: "Attacc", onClick: function() {
 				if(!can_attacc) return;
 				can_attacc = false;
 				APP.vue.player_attack_time = 0;
@@ -240,7 +273,7 @@ function onPlayerMove() {
 				var damage = 0;
 				for(var i = 0; i < APP.vue.band.length; i++) {
 					if(APP.vue.band[i].health > 0) {
-						damage += APP.vue.band[i].inventory.weapon.damage;
+						damage += APP.vue.band[i].weapon.damage;
 					}
 				}
 				APP.vue.enemy_health -= damage;
@@ -310,7 +343,7 @@ function start_enemy_attacks(damage, cooldown) {
 	simulate_enemy_attacks();
 }
 
-// TODO: ressurection, but you have to get a negative stat every time you revive a band member
+// TODO: resurrection, but you have to get a negative stat every time you revive a band member
 	// for now we'll just have perma death
 
 function simulate_enemy_attacks() {
@@ -319,13 +352,12 @@ function simulate_enemy_attacks() {
 	if(enemy_attack_ticks % enemy_attack_cooldown_ticks == 0) {
 		APP.vue.band[cur_band_member_being_attacked].health -= enemy_damage;
 		if(APP.vue.band[cur_band_member_being_attacked].health <= 0) {
-			APP.vue.band.splice(APP.vue.band.length - 1, 1);
 			cur_band_member_being_attacked--;
 			if(cur_band_member_being_attacked == -1) {
 				APP.vue.popup_title = "You died!";
 				APP.vue.popup_desc = "u ded boyo";
 				APP.vue.popup_buttons = [
-					{name: "(1) Revive", onClick: function() {
+					{name: "Revive", onClick: function() {
 						initStartingAreaGrid();
 						displayGrid();
 						APP.vue.band = [
@@ -345,6 +377,7 @@ function simulate_enemy_attacks() {
 				];
 				return;
 			}
+			APP.vue.band.splice(APP.vue.band.length - 1, 1);
 		}
 	}
 	requestAnimationFrame(simulate_enemy_attacks);
