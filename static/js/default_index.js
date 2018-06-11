@@ -216,7 +216,8 @@ var app = function() {
 	self.get_name = function() {
 		$.get(get_name_url, function(data) {
 			self.vue.logged_in = data.logged_in;
-			self.vue.band[0].name = data.name;
+			self.vue.my_name = data.name;
+			self.vue.band[0].name = self.vue.my_name;
 		});
 	};
 	self.get_name();

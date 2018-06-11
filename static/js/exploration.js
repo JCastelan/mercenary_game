@@ -41,7 +41,7 @@ function makeLootBag(bagY, bagX, items) {
 			// auto equip weapon if it does more damage
 			// if(this.is_weapon && APP.vue.band[0].weapon.damage < this.damage) {
 			// 	APP.vue.band[0].weapon = {name: this.item_name, damage: this.damage, num: 1, is_weapon: true};
-			// }
+			// } else
 			{ // otherwise add it to the inventory
 				// check if we already have 1 of that item
 				var found = false;
@@ -57,7 +57,6 @@ function makeLootBag(bagY, bagX, items) {
 					APP.vue.band[0].inventory.push({name: this.item_name, damage: this.damage, num: 1, is_weapon: this.is_weapon});
 				}
 			}
-			// remove the button from the menu (TODO: just reduce the num and if it gets to 0, then do this)
 			if(this.num > 1) {
 				this.num--;
 			}
@@ -393,13 +392,13 @@ function simulate_enemy_attacks() {
 						displayGrid();
 						APP.vue.band = [
 							{ // index 0 is you
+								name: APP.vue.my_name,
 								health: 10,
-								inventory: {
-									weapon: {
-										name: "fists",
-										damage: 1
-									}
-								}
+								weapon: {
+									name: "fists",
+									damage: 1
+								},
+								inventory: []
 							} // any more is people you've recruited
 						];
 						APP.vue.in_battle = false;

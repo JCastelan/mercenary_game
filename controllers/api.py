@@ -2,7 +2,7 @@
 
 def get_name():
 	if auth.user is None:
-		return response.json(dict(logged_in = false))
+		return response.json(dict(logged_in = False))
 	
 	r = db(db.auth_user.email == auth.user.email).select().first()
 	return response.json(dict(
