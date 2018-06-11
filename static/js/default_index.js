@@ -158,6 +158,15 @@ var app = function() {
     // real stuff
     self.loadResources = function(){
         // console.log( "loading all stored vals")
+        $.getJSON(load_resources_url, function (data) {
+            console.log(data );
+            console.log( Object.entries(data))
+            Object.entries(data).forEach( function(d){
+                console.log(d);
+            })
+            self.vue.res_count = data;
+            self.vue.resources = Object.entries(data);
+        });
     };
 
     self.saveResources = function(){
@@ -192,7 +201,8 @@ var app = function() {
 			viewing_resources: false,
 			my_name: "You",
 
-            counter: 0
+            counter: 0,
+            resources: null
         },
         methods: {
 			closePopup: self.closePopup,
@@ -207,7 +217,6 @@ var app = function() {
 			clicked: self.clicked,
             loadCounter: self.loadCounter,
             saveCounter: self.saveCounter,
-            // real stuff
             loadResources: self.loadResources,
             saveResources: self.saveResources
         }

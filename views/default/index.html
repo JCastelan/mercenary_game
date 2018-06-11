@@ -6,6 +6,8 @@
 	var get_name_url = "{{=URL('api', 'get_name', user_signature=True)}}";
 	var load_counter_url = "{{=URL('api', 'load_counter', user_signature=True)}}";
 	var save_counter_url = "{{=URL('api', 'save_counter', user_signature=True)}}";
+	var load_resources_url = "{{=URL('api', 'load_resources', user_signature=True)}}";
+	var save_resources_url = "{{=URL('api', 'save_resources', user_signature=True)}}";
 </script>
 {{end}}
 
@@ -20,6 +22,12 @@
 						Inventory:<br><br>
 						<div v-for="obj in band[0].inventory">
 							${obj.name} x ${obj.num}<br>
+						</div>
+						<br>
+						______________________________
+						<br><br>
+						<div v-for="res in resources">
+							${res[1]} x ${res[0]}<br>
 						</div>
 					</div>
 					<a v-if="!viewing_resources" class="btn" v-on:click="toggle_view_pane()">Band</a>
@@ -64,6 +72,7 @@
 				<div class="quarter">
 					<h2>Click the button to increment the counter</h2>
 					<a class="center btn large" v-on:click="clicked"><tt>Click Me</tt></a>
+					<a class="center btn large" v-on:click="saveCounter"><tt>Save counter</tt></a>
 				</div>
 				<div class="threequarters">
 					<h1 class="right" id="counter">${counter}</h1>
