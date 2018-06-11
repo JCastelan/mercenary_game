@@ -1,7 +1,14 @@
 # Here go your api methods.
 
-def check_logged_in():
-	return response.json(dict(logged_in=auth.user is not None))
+def get_name():
+	if auth.user is None:
+		return response.json(dict(logged_in = false))
+	
+	r = db(db.auth_user.email == auth.user.email).select().first()
+	return response.json(dict(
+		logged_in = auth.user is not None,
+		name = r.first_name
+		))
 
 # @auth.requires_signature() # TODO: need to fix this
 def load_counter():

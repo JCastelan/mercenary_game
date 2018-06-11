@@ -190,6 +190,7 @@ var app = function() {
 			in_battle: false,
 			player_attack_time: 16, // used for limiting player attacks
 			viewing_resources: false,
+			my_name: "You",
 
             counter: 0
         },
@@ -212,13 +213,13 @@ var app = function() {
         }
     });
 
-	self.check_logged_in = function() {
-		$.get(check_logged_in_url, function(data) {
+	self.get_name = function() {
+		$.get(get_name_url, function(data) {
 			self.vue.logged_in = data.logged_in;
-			// $("#vue-div").show();
+			self.vue.band[0].name = data.name;
 		});
 	};
-	self.check_logged_in();
+	self.get_name();
 	$("#vue-div").show();
 
 
