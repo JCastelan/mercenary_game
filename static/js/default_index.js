@@ -70,6 +70,7 @@ var app = function() {
 	self.equip_weapon = function(member) {
 		for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
 			if(self.vue.band[0].inventory[i].is_weapon && self.vue.band[0].inventory[i].damage > member.weapon.damage) {
+				// add back our current weapon to the inventory if we have a current weapon other than fists
 				if(member.weapon.name != "fists") {
 					var weapon_num = 1;
 					for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
@@ -85,11 +86,13 @@ var app = function() {
 						num: weapon_num
 					});
 				}
+				// set the weapon to the new weapon
 				member.weapon = {
 					name: self.vue.band[0].inventory[i].name,
 					is_weapon: self.vue.band[0].inventory[i].is_weapon,
 					damage: self.vue.band[0].inventory[i].damage
 				};
+				// remove that weapon from the inventory
 				if(self.vue.band[0].inventory[i].num > 1) {
 					self.vue.band[0].inventory[i].num--;
 				}
@@ -99,6 +102,32 @@ var app = function() {
 				return;
 			}
 		}
+	};
+
+	self.unequip_weapon = function(member) {
+		if(member.weapon.name == "fists") {
+			console.log("NOOOOOO");
+			return;
+		}
+		var found = false;
+		for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
+			if(self.vue.band[0].inventory[i].name == member.weapon.name) {
+				found = true;
+				self.vue.band[0].inventory[i].num++;
+			}
+		}
+		if(!found) {
+			self.vue.band[0].inventory.push({
+				name: member.weapon.name,
+				is_weapon: member.weapon.is_weapon,
+				damage: member.weapon.damage,
+				num: 1
+			});
+		}
+		member.weapon = {
+			name: "fists",
+			damage: 1
+		};
 	};
 
     // generic counter functions (for debugging purposes)
@@ -161,6 +190,7 @@ var app = function() {
 			in_battle: false,
 			player_attack_time: 16, // used for limiting player attacks
 			viewing_resources: false,
+			my_name: "You",
 
             counter: 0
         },
@@ -172,6 +202,7 @@ var app = function() {
 			can_equip_weapon: self.can_equip_weapon,
 			eat_food: self.eat_food,
 			equip_weapon: self.equip_weapon,
+			unequip_weapon: self.unequip_weapon,
 
 			clicked: self.clicked,
             loadCounter: self.loadCounter,
@@ -182,13 +213,13 @@ var app = function() {
         }
     });
 
-	self.check_logged_in = function() {
-		$.get(check_logged_in_url, function(data) {
+	self.get_name = function() {
+		$.get(get_name_url, function(data) {
 			self.vue.logged_in = data.logged_in;
-			// $("#vue-div").show();
+			self.vue.band[0].name = data.name;
 		});
 	};
-	self.check_logged_in();
+	self.get_name();
 	$("#vue-div").show();
 
 
@@ -207,7 +238,6 @@ jQuery(function(){APP = app();});
 
 Exploration parts
 	Make random loot bags with random items
-	Be able to equip weapons onto and off of yourself and band members
 	Implement armor in the same way as weapons
 
 Idle game parts
