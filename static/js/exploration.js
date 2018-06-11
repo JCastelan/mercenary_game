@@ -54,16 +54,20 @@ function makeLootBag(bagY, bagX, items) {
 				}
 				// if we dont already have it, then add it
 				if(!found) {
-					console.log("hit");
 					APP.vue.band[0].inventory.push({name: this.item_name, damage: this.damage, num: 1, is_weapon: this.is_weapon});
 				}
 			}
 			// remove the button from the menu (TODO: just reduce the num and if it gets to 0, then do this)
-			grid[playerPos.y][playerPos.x].buttons.splice(grid[playerPos.y][playerPos.x].buttons.indexOf(this), 1);
-			if(grid[playerPos.y][playerPos.x].buttons.length == 0) {
-				grid[playerPos.y][playerPos.x].desc = "Looted.";
-				APP.vue.popup_desc = "Looted.";
-				clearCurrentTile();
+			if(this.num > 1) {
+				this.num--;
+			}
+			else {
+				grid[playerPos.y][playerPos.x].buttons.splice(grid[playerPos.y][playerPos.x].buttons.indexOf(this), 1);
+				if(grid[playerPos.y][playerPos.x].buttons.length == 0) {
+					grid[playerPos.y][playerPos.x].desc = "Looted.";
+					APP.vue.popup_desc = "Looted.";
+					clearCurrentTile();
+				}
 			}
 		};
 	}
@@ -92,8 +96,8 @@ function initStartingAreaGrid() {
 	grid[playerPos.y - 1][playerPos.x].char = emptyChar;
 
 	makeLootBag(playerPos.y - 2, playerPos.x, [
-		{name: "iron sword", is_weapon: true, damage: 2},
-		{name: "food"}
+		{name: "iron sword", is_weapon: true, damage: 2, num: 1},
+		{name: "food", num: 1}
 	]);
 
 	grid[playerPos.y - 3][playerPos.x].char = emptyChar;
@@ -141,8 +145,8 @@ function initStartingAreaGrid() {
 		grid[playerPos.y][playerPos.x].buttons = [
 			{name: "Search body", onClick: function() {
 				makeLootBag(playerPos.y, playerPos.x, [
-					{name: "iron sword", is_weapon: true, damage: 3},
-					{name: "food"}
+					{name: "iron sword", is_weapon: true, damage: 2, num: 1},
+					{name: "food", num: 2}
 				]);
 				grid[playerPos.y][playerPos.x].buttons.push({name: "Go to hub world", onClick: function() {
 					initHubWorldGrid(100, 40);

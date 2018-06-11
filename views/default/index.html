@@ -19,12 +19,7 @@
 					<div v-if="viewing_resources">
 						Inventory:<br><br>
 						<div v-for="obj in band[0].inventory">
-							<div v-if="obj.is_weapon">
-								${obj.name}, dmg: ${obj.damage} x ${obj.num}<br>
-							</div>
-							<div v-if="!obj.is_weapon">
-								${obj.name} x ${obj.num}<br>
-							</div>
+							${obj.name} x ${obj.num}<br>
 						</div>
 					</div>
 					<a v-if="!viewing_resources" class="btn" v-on:click="toggle_view_pane()">Band</a>
@@ -35,6 +30,7 @@
 						<br>
 						Weapon: ${member.weapon.name}, dmg: ${member.weapon.damage}
 						<a class="btn" v-if="can_equip_weapon(member)" v-on:click="equip_weapon(member)">Equip weapon</a>
+						<a class="btn" v-if="member.weapon.name != 'fists'" v-on:click="unequip_weapon(member)">Unequip weapon</a>
 						<br>
 						______________________________
 						<br><br>
@@ -48,7 +44,8 @@
 				<input style="width:594px" class="not_padded" :disabled="true" v-model="popup_desc"></input>
 				<br><br>
 				<div v-for="(button, i) in popup_buttons">
-					<a class="btn option_buttons" v-on:click="button.onClick()">(${i+1}) ${button.name}</a>
+					<a v-if="button.num" class="btn option_buttons" v-on:click="button.onClick()">(${i+1}) ${button.name} x ${button.num}</a>
+					<a v-if="!button.num" class="btn option_buttons" v-on:click="button.onClick()">(${i+1}) ${button.name}</a>
 				</div>
 				<br>
 				<div v-if="in_battle">
