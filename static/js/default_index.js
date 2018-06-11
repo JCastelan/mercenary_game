@@ -238,7 +238,6 @@ jQuery(function(){APP = app();});
 
 Exploration parts
 	Make random loot bags with random items
-	Be able to equip weapons onto and off of yourself and band members
 	Implement armor in the same way as weapons
 
 Idle game parts
