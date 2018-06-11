@@ -12,10 +12,6 @@ var app = function() {
 
 	self.closePopup = function() {
 		if(self.vue.in_battle && self.vue.enemy_health > 0) return;
-		if(grid[playerPos.y][playerPos.x].char == bossChar) {
-			initHubWorldGrid(100, 40);
-			displayGrid();
-		}
 		self.vue.show_popup = false;
 	};
 	
@@ -89,6 +85,7 @@ Exploration parts
 	Make food eatable in and out of combat
 	Make random loot bags with random items
 	Be able to equip weapons onto and off of yourself and band members
+	Implement armor in the same way as weapons
 
 Idle game parts
 	Be able to assign yourself and band members to certain tasks to collect resources

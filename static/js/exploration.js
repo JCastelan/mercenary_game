@@ -38,23 +38,26 @@ function makeLootBag(bagY, bagX, items) {
 		grid[bagY][bagX].buttons[grid[bagY][bagX].buttons.length - 1].item_name = items[i].name;
 		grid[bagY][bagX].buttons[grid[bagY][bagX].buttons.length - 1].name = "Take " + items[i].name;
 		grid[bagY][bagX].buttons[grid[bagY][bagX].buttons.length - 1].onClick = function() {
-			// when we click "take item", check if we already have 1 of that item,
-			// if so, add to the quantity
-			var found = false;
-			for(var j = 0; j < APP.vue.band[0].inventory.length; j++) {
-				if(APP.vue.band[0].inventory[j].name == this.item_name) {
-					APP.vue.band[0].inventory[j].num++;
-					found = true;
+			// auto equip weapon if it does more damage
+			if(this.is_weapon && APP.vue.band[0].weapon.damage < this.damage) {
+				APP.vue.band[0].weapon = {name: this.item_name, damage: this.damage};
+			}
+			else { // otherwise add it to the inventory
+				// check if we already have 1 of that item
+				var found = false;
+				for(var j = 0; j < APP.vue.band[0].inventory.length; j++) {
+					if(APP.vue.band[0].inventory[j].name == this.item_name) {
+						// if so, add to the quantity
+						APP.vue.band[0].inventory[j].num++;
+						found = true;
+					}
+				}
+				// if we dont already have it, then add it
+				if(!found) {
+					APP.vue.band[0].inventory.push({name: this.item_name, num: 1});
 				}
 			}
-			// if we dont already have it, then add it
-			if(!found) {
-				APP.vue.band[0].inventory.push({name: this.item_name, num: 1});
-			}
-			if(this.is_weapon && APP.vue.band[0].weapon.damage < this.damage) {
-				// auto equip if it does more damage
-				APP.vue.band[0].weapon = this;
-			}
+			// remove the button from the menu (TODO: just reduce the num and if it gets to 0, then do this)
 			grid[playerPos.y][playerPos.x].buttons.splice(grid[playerPos.y][playerPos.x].buttons.indexOf(this), 1);
 			if(grid[playerPos.y][playerPos.x].buttons.length == 0) {
 				grid[playerPos.y][playerPos.x].desc = "Looted.";
@@ -87,7 +90,6 @@ function initStartingAreaGrid() {
 	// make path to boss with an iron sword and an enemy along the way
 	grid[playerPos.y - 1][playerPos.x].char = emptyChar;
 
-	// TODO: pass num and make the button just reduce the num until it's 0, then removes the button
 	makeLootBag(playerPos.y - 2, playerPos.x, [
 		{name: "iron sword", is_weapon: true, damage: 2},
 		{name: "food"}
@@ -129,7 +131,37 @@ function initStartingAreaGrid() {
 	// make the path to the boss
 	grid[playerPos.y - 5][playerPos.x].char = emptyChar;
 	grid[playerPos.y - 6][playerPos.x].char = bossChar;
+	grid[playerPos.y - 6][playerPos.x].title = "Donovan";
+	grid[playerPos.y - 6][playerPos.x].desc = "I\'m about to rick flair that ass. WOOOO!";
 	grid[playerPos.y - 6][playerPos.x].battle = true;
+	grid[playerPos.y - 6][playerPos.x].onDeath = function() {
+		grid[playerPos.y][playerPos.x].title = "Victory!";
+		grid[playerPos.y][playerPos.x].desc = "You defeated Donny.";
+		grid[playerPos.y][playerPos.x].buttons = [
+			{name: "Search body", onClick: function() {
+				makeLootBag(playerPos.y, playerPos.x, [
+					{name: "iron sword", is_weapon: true, damage: 2},
+					{name: "food"}
+				]);
+				grid[playerPos.y][playerPos.x].buttons.push({name: "Go to hub world", onClick: function() {
+					initHubWorldGrid(100, 40);
+					displayGrid();
+					APP.vue.show_popup = false;
+				}});
+				APP.vue.popup_title = grid[playerPos.y][playerPos.x].title;
+				APP.vue.popup_desc = grid[playerPos.y][playerPos.x].desc;
+				APP.vue.popup_buttons = grid[playerPos.y][playerPos.x].buttons;
+			}},
+			{name: "Go to hub world", onClick: function() {
+				initHubWorldGrid(100, 40);
+				displayGrid();
+				APP.vue.show_popup = false;
+			}}
+		];
+		APP.vue.popup_title = grid[playerPos.y][playerPos.x].title;
+		APP.vue.popup_desc = grid[playerPos.y][playerPos.x].desc;
+		APP.vue.popup_buttons = grid[playerPos.y][playerPos.x].buttons;
+	};
 }
 
 function initHubWorldGrid(width, height) {
@@ -247,7 +279,7 @@ function onPlayerMove() {
 		once = false; // used to make sure we call start_enemy_attacks once
 		for(var i = 0; i < APP.vue.band.length; i++) {
 			if(APP.vue.band[i].health > 0) {
-				// TODO: maybe have food and remove this auto-heal feature
+				// TODO: remove this auto-heal feature once we got food
 				APP.vue.band[i].health = 10; // reset the health of all recruits including you
 			}
 		}
