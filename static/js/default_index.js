@@ -39,44 +39,85 @@ var app = function() {
 		return false;
 	};
 
+	self.eat_food = function(member) {
+		for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
+			if(self.vue.band[0].inventory[i].name == "food" && self.vue.band[0].inventory[i].num > 0) {
+				member.health += 5;
+				if(member.health > 10) {
+					member.health = 10;
+				}
+				if(self.vue.band[0].inventory[i].num > 1) {
+					self.vue.band[0].inventory[i].num--;
+				}
+				else {
+					self.vue.band[0].inventory.splice(i, 1);
+				}
+				return;
+			}
+		}
+	};
+
 	self.can_equip_weapon = function(member) {
 		if(!self.vue) return false;
 		for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
-			if(self.vue.band[0].inventory[i].is_weapon) {
+			if(self.vue.band[0].inventory[i].is_weapon && self.vue.band[0].inventory[i].damage > member.weapon.damage) {
 				return true;
 			}
 		}
 		return false;
 	};
 
+	self.equip_weapon = function(member) {
+		for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
+			if(self.vue.band[0].inventory[i].is_weapon && self.vue.band[0].inventory[i].damage > member.weapon.damage) {
+				member.weapon = {
+					name: self.vue.band[0].inventory[i].name,
+					is_weapon: self.vue.band[0].inventory[i].is_weapon,
+					damage: self.vue.band[0].inventory[i].damage
+				};
+				if(self.vue.band[0].inventory[i].num > 1) {
+					self.vue.band[0].inventory[i].num--;
+				}
+				else {
+					self.vue.band[0].inventory.splice(i, 1);
+				}
+				return;
+			}
+		}
+	};
+
     // generic counter functions (for debugging purposes)
     self.loadCounter = function(){ 
-        console.log("getting the stored counter");
-        console.log( self.vue.counter);
+        // console.log("getting the stored counter");
+        // console.log( self.vue.counter);
         $.getJSON(load_counter_url, function (data) {
-            console.log("Loaded "+data.counter+" as the counter value" );
+            // console.log("Loaded " + data.counter + " as the counter value" );
             self.vue.counter = data.counter;
         });
     };
 
     self.saveCounter = function(){
-        console.log("saving the counter");
+        // console.log("saving the counter");
         $.post(save_counter_url,
             { 
                 counter: self.vue.counter
             },
             function (result) {
-                console.log( result )
+                // console.log( result )
             });
-    };
+	};
+	
+	self.clicked = function () {
+		self.vue.counter++;
+	}
 
     // real stuff
     self.loadResources = function(){
-        console.log( "loading all stored vals")
+        // console.log( "loading all stored vals")
     };
 
     self.saveResources = function(){
-        console.log( "saving all resources")
+        // console.log( "saving all resources")
     };
 
     // Complete as needed.
@@ -114,7 +155,10 @@ var app = function() {
 			toggle_view_pane: self.toggle_view_pane,
 			can_eat_food: self.can_eat_food,
 			can_equip_weapon: self.can_equip_weapon,
+			eat_food: self.eat_food,
+			equip_weapon: self.equip_weapon,
 
+			clicked: self.clicked,
             loadCounter: self.loadCounter,
             saveCounter: self.saveCounter,
             // real stuff

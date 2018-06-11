@@ -25,10 +25,11 @@
 					<a v-if="!viewing_resources" class="btn" v-on:click="toggle_view_pane()">Band</a>
 					<div v-if="!viewing_resources" v-for="member in band">
 						Name: ${member.name}<br>
-						Health: ${member.health}<br>
+						Health: ${member.health}
+						<a class="btn" v-if="can_eat_food(member)" v-on:click="eat_food(member)">Eat fud</a>
+						<br>
 						Weapon: ${member.weapon.name}
-						<a v-if="can_eat_food(member)">Eat fud</a>
-						<a v-if="can_equip_weapon(member)">Equip weapon</a>
+						<a class="btn" v-if="can_equip_weapon(member)" v-on:click="equip_weapon(member)">Equip weapon</a>
 						<br>
 						______________________________
 						<br><br>
@@ -60,10 +61,10 @@
 			<div class="container padded center">
 				<div class="quarter">
 					<h2>Click the button to increment the counter</h2>
-					<a class="center btn large" href='javascript:clicked()'><tt>Click Me</tt></a>
+					<a class="center btn large" v-on:click="clicked"><tt>Click Me</tt></a>
 				</div>
 				<div class="threequarters">
-					<h1 class="right" id="counter">0</h1>
+					<h1 class="right" id="counter">${counter}</h1>
 				</div>
 			</div>
 		{{else:}}
