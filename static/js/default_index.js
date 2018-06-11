@@ -40,13 +40,23 @@ var app = function() {
 	};
 
 	self.eat_food = function(member) {
-
+		for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
+			if(self.vue.band[0].inventory[i].name == "food" && self.vue.band[0].inventory[i].num > 0) {
+				member.health += 5;
+				if(member.health > 10) {
+					member.health = 10;
+				}
+				// TODO: if we have more than 1 num then don't splice
+				self.vue.band[0].inventory.splice(i, 1);
+				return;
+			}
+		}
 	};
 
 	self.can_equip_weapon = function(member) {
 		if(!self.vue) return false;
 		for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
-			if(self.vue.band[0].inventory[i].is_weapon) {
+			if(self.vue.band[0].inventory[i].is_weapon && self.vue.band[0].inventory[i].damage > member.weapon.damage) {
 				return true;
 			}
 		}
@@ -54,7 +64,18 @@ var app = function() {
 	};
 
 	self.equip_weapon = function(member) {
-
+		for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
+			if(self.vue.band[0].inventory[i].is_weapon && self.vue.band[0].inventory[i].damage > member.weapon.damage) {
+				member.weapon = {
+					name: self.vue.band[0].inventory[i].name,
+					is_weapon: self.vue.band[0].inventory[i].is_weapon,
+					damage: self.vue.band[0].inventory[i].damage
+				};
+				// TODO: if we have more than 1 num then don't splice
+				self.vue.band[0].inventory.splice(i, 1);
+				return;
+			}
+		}
 	};
     // generic counter functions (for debugging purposes)
     self.loadCounter = function(){ 
