@@ -87,3 +87,18 @@ CREATE TABLE "web2py_session_mercenary_game"(
     "session_data" BLOB
 );
 success!
+timestamp: 2018-06-10T18:16:05.980661
+CREATE TABLE "userdb"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "user_email" CHAR(512),
+    "updated_on" TIMESTAMP,
+    "user_name" CHAR(512),
+    "counter" INTEGER,
+    "wood" INTEGER,
+    "iron" INTEGER,
+    "coal" INTEGER,
+    "houses" INTEGER,
+    "workers" INTEGER,
+    "fighters" INTEGER
+);
+success!

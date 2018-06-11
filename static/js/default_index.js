@@ -40,6 +40,7 @@ var app = function() {
 	};
 
 	self.can_equip_weapon = function(member) {
+		if(!self.vue) return false;
 		for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
 			if(self.vue.band[0].inventory[i].is_weapon) {
 				return true;
@@ -105,7 +106,7 @@ var app = function() {
 			player_attack_time: 16, // used for limiting player attacks
 			viewing_resources: false,
 
-            current_counter: 0
+            counter: 0
         },
         methods: {
 			closePopup: self.closePopup,
