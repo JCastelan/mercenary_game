@@ -6,6 +6,8 @@
 	var get_name_url = "{{=URL('api', 'get_name', user_signature=True)}}";
 	var load_counter_url = "{{=URL('api', 'load_counter', user_signature=True)}}";
 	var save_counter_url = "{{=URL('api', 'save_counter', user_signature=True)}}";
+	var load_resources_url = "{{=URL('api', 'load_resources', user_signature=True)}}";
+	var save_resources_url = "{{=URL('api', 'save_resources', user_signature=True)}}";
 </script>
 {{end}}
 
@@ -64,6 +66,7 @@
 				<div class="quarter">
 					<h2>Click the button to increment the counter</h2>
 					<a class="center btn large" v-on:click="clicked"><tt>Click Me</tt></a>
+					<a class="center btn large" v-on:click="saveCounter"><tt>Save counter</tt></a>
 				</div>
 				<div class="threequarters">
 					<h1 class="right" id="counter">${counter}</h1>

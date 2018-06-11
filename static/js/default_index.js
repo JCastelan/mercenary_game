@@ -207,7 +207,6 @@ var app = function() {
 			clicked: self.clicked,
             loadCounter: self.loadCounter,
             saveCounter: self.saveCounter,
-            // real stuff
             loadResources: self.loadResources,
             saveResources: self.saveResources
         }

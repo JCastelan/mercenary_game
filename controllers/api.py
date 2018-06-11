@@ -32,10 +32,14 @@ def save_counter():
 	q=(db.userdb.user_email ==auth.user.email)
 	row=db(q).select().first()
 	if row is not None:
+		#returning user
 		result = row.update_record(counter=request.vars.counter)
 		return
 	else:
-		result = db.userdb.insert()
+		#new user
+		result = db.userdb.insert(
+			counter=request.vars.counter
+		)
 		return
 
 def load_resources():
