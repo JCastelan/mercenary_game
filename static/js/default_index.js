@@ -311,19 +311,27 @@ var app = function() {
     // real stuff
     self.loadResources = function(){ //loads more than just resources
         // console.log( "loading all stored vals")
+        resourcesList = ["coal","iron","mithril","steel","wood", "leather"] 
         $.getJSON(load_resources_url, function (data) {
             //console.log(data );
             dataElems=Object.entries(data);
-            dataElems.forEach(function(d){
+            dataElems.forEach(function(d,i){
                 d[1] = +d[1];
+                if (resourcesList.indexOf(d[0])<0) {
+                    self.vue.equipment.push(d)
+                }else{
+                    //console.log(d[0], i)
+                    self.vue.resources.push(d)
+                }
             });
-            console.log(dataElems);
-            self.vue.resources = dataElems;
+            console.log(self.vue.equipment);
+            console.log(self.vue.resources);
+            //self.vue.resources = dataElems;
         });
         
     };
 
-    self.saveResources = function(){ //save resources is basically save game
+    self.saveResources = function(){ //saves more than just resources
         //console.log( "saving all resources")
         //console.log(self.vue.resources)
         $.post(save_resources_url,
@@ -586,8 +594,9 @@ var app = function() {
 			num_villagers: 0,
 			cur_fighter_health: -1,
 
-            counter: 0,
-            resources: null,
+            //counter: 0,
+            resources: [],
+            equipment: [],
 			available_villagers: 0,
 			wood_gatherer: 0,
 			hunter: 0,
@@ -631,8 +640,8 @@ var app = function() {
 			clicked: self.clicked,
 			incrementResource: self.incrementResource,
 			
-            loadCounter: self.loadCounter,
-            saveCounter: self.saveCounter,
+            //loadCounter: self.loadCounter,
+            //saveCounter: self.saveCounter,
             loadResources: self.loadResources,
 			saveResources: self.saveResources,
 			
@@ -681,7 +690,7 @@ var app = function() {
 	$("#vue-div").show();
 
 
-    self.loadCounter(); 
+    //self.loadCounter(); 
     self.loadResources();
     self.show_view_panel_resources();
     autosave();

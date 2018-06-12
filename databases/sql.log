@@ -1,4 +1,4 @@
-timestamp: 2018-06-12T11:49:07.418693
+timestamp: 2018-06-12T13:14:30.783622
 CREATE TABLE "web2py_session_mercenary_game"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "locked" CHAR(1),
@@ -9,7 +9,7 @@ CREATE TABLE "web2py_session_mercenary_game"(
     "session_data" BLOB
 );
 success!
-timestamp: 2018-06-12T11:49:08.925418
+timestamp: 2018-06-12T13:14:30.933065
 CREATE TABLE "auth_user"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "first_name" CHAR(128),
@@ -21,21 +21,21 @@ CREATE TABLE "auth_user"(
     "registration_id" CHAR(512)
 );
 success!
-timestamp: 2018-06-12T11:49:08.962957
+timestamp: 2018-06-12T13:14:30.987232
 CREATE TABLE "auth_group"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "role" CHAR(512),
     "description" TEXT
 );
 success!
-timestamp: 2018-06-12T11:49:08.998068
+timestamp: 2018-06-12T13:14:31.036861
 CREATE TABLE "auth_membership"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "user_id" INTEGER REFERENCES "auth_user" ("id") ON DELETE CASCADE  ,
     "group_id" INTEGER REFERENCES "auth_group" ("id") ON DELETE CASCADE  
 );
 success!
-timestamp: 2018-06-12T11:49:09.049992
+timestamp: 2018-06-12T13:14:31.096142
 CREATE TABLE "auth_permission"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "group_id" INTEGER REFERENCES "auth_group" ("id") ON DELETE CASCADE  ,
@@ -44,7 +44,7 @@ CREATE TABLE "auth_permission"(
     "record_id" INTEGER
 );
 success!
-timestamp: 2018-06-12T11:49:09.100171
+timestamp: 2018-06-12T13:14:31.153989
 CREATE TABLE "auth_event"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "time_stamp" TIMESTAMP,
@@ -54,7 +54,7 @@ CREATE TABLE "auth_event"(
     "description" TEXT
 );
 success!
-timestamp: 2018-06-12T11:49:09.136044
+timestamp: 2018-06-12T13:14:31.220169
 CREATE TABLE "auth_cas"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "user_id" INTEGER REFERENCES "auth_user" ("id") ON DELETE CASCADE  ,
@@ -64,33 +64,83 @@ CREATE TABLE "auth_cas"(
     "renew" CHAR(1)
 );
 success!
-timestamp: 2018-06-12T11:49:09.180007
+timestamp: 2018-06-12T13:14:31.296457
 CREATE TABLE "userdb"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "user_email" CHAR(512),
     "created_on" TIMESTAMP,
     "updated_on" TIMESTAMP,
-    "counter" INTEGER,
+    "max_health" INTEGER,
+    "current_health" INTEGER,
+    "equipped_weapon" CHAR(512),
+    "equipped_armor" CHAR(512),
     "coal" INTEGER,
     "iron" INTEGER,
     "mithril" INTEGER,
     "steel" INTEGER,
     "wood" INTEGER,
     "leather" INTEGER,
+    "w_sword" INTEGER,
+    "i_sword" INTEGER,
+    "s_sword" INTEGER,
+    "m_sword" INTEGER,
     "houses" INTEGER,
-    "workers" INTEGER,
-    "mages" INTEGER,
-    "warriors" INTEGER,
-    "bowmen" INTEGER,
-    "fighters" INTEGER
+    "fighter_count" CHAR(512),
+    "fighter_health" CHAR(512),
+    "c_miners" INTEGER,
+    "i_miners" INTEGER,
+    "m_miners" INTEGER,
+    "hunters" INTEGER
 );
 success!
-timestamp: 2018-06-12T12:07:18.477282
-ALTER TABLE "userdb" ADD "i_sword" INTEGER;
-timestamp: 2018-06-12T12:07:18.608381
-ALTER TABLE "userdb" ADD "s_sword" INTEGER;
-timestamp: 2018-06-12T12:07:18.749999
-ALTER TABLE "userdb" ADD "m_sword" INTEGER;
-timestamp: 2018-06-12T12:07:18.924392
-ALTER TABLE "userdb" ADD "w_sword" INTEGER;
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
 success!

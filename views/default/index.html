@@ -125,17 +125,7 @@
 			<script src="{{=URL('static', 'js/resource_management.js')}}"></script>
 			<script src="{{=URL('static', 'js/button_stuff.js')}}"></script>
 	
-			<div class="container padded center">
-				<div class="quarter">
-					<h2>Click the button to increment the counter</h2>
-					<a class="center btn large" v-on:click="clicked"><tt>Click Me</tt></a>
-					<a class="center btn large" v-on:click="saveCounter"><tt>Save counter</tt></a>
-					<a class="center btn large" v-on:click="saveResources"><tt>Save resources</tt></a>
-				</div>
-				<div class="threequarters">
-					<h1 class="right" id="counter">${counter}</h1>
-				</div>
-			</div>
+			
 		{{else:}}
 		<!-- </div>
 		<div v-if="!logged_in"> -->
