@@ -311,7 +311,7 @@ var app = function() {
     }
 
     // real stuff
-    self.loadResources = function(){
+    self.loadResources = function(){ //loads more than just resources
         // console.log( "loading all stored vals")
         $.getJSON(load_resources_url, function (data) {
             //console.log(data );
@@ -325,7 +325,7 @@ var app = function() {
         
     };
 
-    self.saveResources = function(){
+    self.saveResources = function(){ //save resources is basically save game
         //console.log( "saving all resources")
         //console.log(self.vue.resources)
         $.post(save_resources_url,
