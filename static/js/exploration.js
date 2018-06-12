@@ -54,7 +54,14 @@ function makeLootBag(bagY, bagX, items) {
 				}
 				// if we dont already have it, then add it
 				if(!found) {
-					APP.vue.band[0].inventory.push({name: this.item_name, damage: this.damage, num: 1, is_weapon: this.is_weapon});
+					APP.vue.band[0].inventory.push({
+						name: this.item_name,
+						damage: this.damage,
+						num: 1,
+						is_weapon: this.is_weapon,
+						is_armor: this.is_armor,
+						health_boost: this.health_boost
+					});
 				}
 			}
 			if(this.num > 1) {
@@ -96,7 +103,8 @@ function initStartingAreaGrid() {
 
 	makeLootBag(playerPos.y - 2, playerPos.x, [
 		{name: "iron sword", is_weapon: true, damage: 2, num: 1},
-		{name: "food", num: 1}
+		{name: "food", num: 1},
+		{name: "leather armor", is_armor: true, health_boost: 5, num: 1}
 	]);
 
 	grid[playerPos.y - 3][playerPos.x].char = emptyChar;
@@ -119,9 +127,14 @@ function initStartingAreaGrid() {
 				APP.vue.band.push({
 					name: "1337 hacker boi",
 					health: 10,
+					max_health: 10,
 					weapon: {
 						name: "fists",
 						damage: 1
+					},
+					armor: {
+						name: "nothing",
+						health_boost: 0
 					}
 				});
 				APP.vue.show_popup = false;
@@ -302,7 +315,7 @@ function onPlayerMove() {
 				start_enemy_attacks(damage, cooldown);
 				var damage = 0;
 				for(var i = 0; i < APP.vue.band.length; i++) {
-					if(APP.vue.band[i].health > 0) {
+					if(APP.vue.band[i].health > 0) { // TODO: keep this for resurrection if we do that
 						damage += APP.vue.band[i].weapon.damage;
 					}
 				}
@@ -392,11 +405,16 @@ function simulate_enemy_attacks() {
 						displayGrid();
 						APP.vue.band = [
 							{ // index 0 is you
-								name: APP.vue.my_name,
+								name: "You",
+								max_health: 10,
 								health: 10,
 								weapon: {
 									name: "fists",
 									damage: 1
+								},
+								armor: {
+									name: "nothing",
+									health_boost: 0
 								},
 								inventory: []
 							} // any more is people you've recruited

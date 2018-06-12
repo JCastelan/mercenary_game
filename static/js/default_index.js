@@ -30,7 +30,7 @@ var app = function() {
 
 	self.can_eat_food = function(member) {
 		// TODO: change this when we change max health due to armor and stuff
-		if(member.health >= 10) return false; // cant heal if full health
+		if(member.health >= member.max_health) return false; // cant heal if full health
 		for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
 			if(self.vue.band[0].inventory[i].name == "food" && self.vue.band[0].inventory[i].num > 0) {
 				return true;
@@ -43,8 +43,8 @@ var app = function() {
 		for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
 			if(self.vue.band[0].inventory[i].name == "food" && self.vue.band[0].inventory[i].num > 0) {
 				member.health += 5;
-				if(member.health > 10) {
-					member.health = 10;
+				if(member.health > member.max_health) {
+					member.health = member.max_health;
 				}
 				if(self.vue.band[0].inventory[i].num > 1) {
 					self.vue.band[0].inventory[i].num--;
@@ -130,6 +130,112 @@ var app = function() {
 		};
 	};
 
+	self.can_equip_armor = function(member) {
+		if(!self.vue) return false;
+		for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
+			if(self.vue.band[0].inventory[i].is_armor && member.armor.health_boost < self.vue.band[0].inventory[i].health_boost) {
+				return true;
+			}
+		}
+		return false;
+	};
+
+	self.equip_armor = function(member) {
+		for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
+			if(self.vue.band[0].inventory[i].is_armor && member.armor.health_boost < self.vue.band[0].inventory[i].health_boost) {
+				// add back our current armor to the inventory if we have current armor other than fists
+				if(member.armor.name != "nothing") {
+					var armor_num = 1;
+					for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
+						if(self.vue.band[0].inventory[i].name == member.armor.name) {
+							armor_num = self.vue.band[0].inventory[i].num;
+							break;
+						}
+					}
+					self.vue.band[0].inventory.push({
+						name: member.armor.name,
+						is_armor: member.armor.is_armor,
+						health_boost: member.armor.health_boost,
+						num: armor_num
+					});
+				}
+				// set the armor to the new armor
+				member.armor = {
+					name: self.vue.band[0].inventory[i].name,
+					is_armor: self.vue.band[0].inventory[i].is_armor,
+					health_boost: self.vue.band[0].inventory[i].health_boost
+				};
+				member.max_health += member.armor.health_boost;
+				member.health += member.armor.health_boost;
+				// remove that armor from the inventory
+				if(self.vue.band[0].inventory[i].num > 1) {
+					self.vue.band[0].inventory[i].num--;
+				}
+				else {
+					self.vue.band[0].inventory.splice(i, 1);
+				}
+				return;
+			}
+		}
+	};
+
+	self.unequip_armor = function(member) {
+		if(member.armor.name == "nothing") {
+			console.log("NOOOOOO");
+			return;
+		}
+		var found = false;
+		for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
+			if(self.vue.band[0].inventory[i].name == member.armor.name) {
+				found = true;
+				self.vue.band[0].inventory[i].num++;
+			}
+		}
+		if(!found) {
+			self.vue.band[0].inventory.push({
+				name: member.armor.name,
+				is_armor: member.armor.is_armor,
+				health_boost: member.armor.health_boost,
+				num: 1
+			});
+		}
+		member.max_health -= member.armor.health_boost;
+		member.health -= member.armor.health_boost;
+		if(member.health <= 0) {
+			self.vue.popup_title = "You killed yourself!";
+			self.vue.popup_desc = "Did you think we\'d just give you free health? Nah man, u ded";
+			self.vue.popup_buttons = [
+				{name: "Revive", onClick: function() {
+					initStartingAreaGrid();
+					displayGrid();
+					APP.vue.band = [
+						{ // index 0 is you
+							name: "You",
+							max_health: 10,
+							health: 10,
+							weapon: {
+								name: "fists",
+								damage: 1
+							},
+							armor: {
+								name: "nothing",
+								health_boost: 0
+							},
+							inventory: []
+						} // any more is people you've recruited
+					];
+					APP.vue.in_battle = false;
+					APP.vue.show_popup = false;
+				}}
+			]
+			self.vue.show_popup = true;
+		}
+		member.armor = {
+			name: "nothing",
+			health_boost: 0
+		};
+	};
+
     // generic counter functions (for debugging purposes)
     self.loadCounter = function(){ 
         // console.log("getting the stored counter");
@@ -187,10 +293,15 @@ var app = function() {
 			band: [
 				{ // index 0 is you
 					name: "You",
+					max_health: 10,
 					health: 10,
 					weapon: {
 						name: "fists",
 						damage: 1
+					},
+					armor: {
+						name: "nothing",
+						health_boost: 0
 					},
 					inventory: []
 				} // any more is people you've recruited
@@ -213,6 +324,9 @@ var app = function() {
 			eat_food: self.eat_food,
 			equip_weapon: self.equip_weapon,
 			unequip_weapon: self.unequip_weapon,
+			can_equip_armor: self.can_equip_armor,
+			equip_armor: self.equip_armor,
+			unequip_armor: self.unequip_armor,
 
 			clicked: self.clicked,
             loadCounter: self.loadCounter,

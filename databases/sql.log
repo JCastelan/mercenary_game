@@ -248,3 +248,69 @@ success!
 success!
 success!
 success!
+timestamp: 2018-06-11T16:30:28.994514
+ALTER TABLE "userdb" ADD "steel" INTEGER;
+timestamp: 2018-06-11T16:30:29.000430
+ALTER TABLE "userdb" ADD "copper" INTEGER;
+timestamp: 2018-06-11T16:30:29.004515
+ALTER TABLE "userdb" ADD "stone" INTEGER;
+timestamp: 2018-06-11T16:30:29.008569
+ALTER TABLE "userdb" ADD "fur" INTEGER;
+timestamp: 2018-06-11T16:30:29.084699
+ALTER TABLE "userdb" ADD "tin" INTEGER;
+timestamp: 2018-06-11T16:30:29.115927
+ALTER TABLE "userdb" ADD "created_on" TIMESTAMP;
+timestamp: 2018-06-11T16:30:29.128576
+ALTER TABLE "userdb" ADD "mithril" INTEGER;
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
