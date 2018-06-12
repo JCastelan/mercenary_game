@@ -541,6 +541,20 @@ var app = function() {
 		}
 	}
 
+	self.increment_mithril_miner = function(){
+    	if(self.vue.available_villagers > 0){
+    		self.vue.available_villagers -= 1;
+    		self.vue.mithril_miner += 1;
+		}
+	}
+
+	self.decrement_mithril_miner = function(){
+    	if(self.vue.mithril_miner > 0){
+    		self.vue.available_villagers += 1;
+    		self.vue.mithril_miner -= 1;
+		}
+	}
+
     // Complete as needed.
     self.vue = new Vue({
         el: "#vue-div",
@@ -593,8 +607,10 @@ var app = function() {
 			hunter: 0,
 			coal_miner: 0,
 			iron_miner: 0,
+            mithril_miner: 0,
 			coal_mine_unlocked: false,
 			iron_mine_unlocked: false,
+            mithril_mine_unlocked: false,
         },
         methods: {
 			closePopup: self.closePopup,
@@ -627,6 +643,8 @@ var app = function() {
 			decrement_coal_miner:self.decrement_coal_miner,
 			increment_iron_miner:self.increment_iron_miner,
 			decrement_iron_miner:self.decrement_iron_miner,
+			increment_mithril_miner:self.increment_mithril_miner,
+			decrement_mithril_miner:self.decrement_mithril_miner,
 
 			clicked: self.clicked,
 			incrementResource: self.incrementResource,
