@@ -33,11 +33,13 @@ var app = function() {
         activated_color = 'yellow';
         ids = ["b_res", "b_village", "b_party", "b_crafting"];
         ids.forEach(function(d){
-            if( d == id){
-                document.getElementById(d).classList.add(activated_color);
-            }else{
-                document.getElementById(d).classList.remove(activated_color);
-            }
+			if(document.getElementById(d) != null) {
+				if( d == id){
+					document.getElementById(d).classList.add(activated_color);
+				}else{
+					document.getElementById(d).classList.remove(activated_color);
+				}
+			}
         });
 
     }
@@ -382,6 +384,24 @@ var app = function() {
 		}
 	};
 
+	self.can_craft_steel = function() {
+		return self.get_num_craftable_steel() > 0;
+	};
+
+	self.craft_steel = function() {
+		addToResources("steel");
+		removeFromResources("iron", 1);
+		removeFromResources("coal", 1);
+		self.vue.$forceUpdate();
+	};
+
+	self.get_num_craftable_steel = function() {
+		var num_iron = getNumOfResource("iron");
+		var num_coal = getNumOfResource("coal");
+		// return min(num_iron, num_coal)
+		return num_iron > num_coal ? num_coal : num_iron;
+	};
+
 	self.can_craft_wood_sword = function() {
 		return self.get_num_craftable_wood_swords() > 0;
 	};
@@ -560,6 +580,20 @@ var app = function() {
 		}
 	}
 
+	self.increment_mithril_miner = function(){
+    	if(self.vue.available_villagers > 0){
+    		self.vue.available_villagers -= 1;
+    		self.vue.mithril_miner += 1;
+		}
+	}
+
+	self.decrement_mithril_miner = function(){
+    	if(self.vue.mithril_miner > 0){
+    		self.vue.available_villagers += 1;
+    		self.vue.mithril_miner -= 1;
+		}
+	}
+
     // Complete as needed.
     self.vue = new Vue({
         el: "#vue-div",
@@ -598,8 +632,8 @@ var app = function() {
 			viewing_crafting: false,
 
 			my_name: "You",
-			num_fighters: [0, 0, 0, 0, 0], // each element is a different level of fighter
-			fighter_group_health: [0, 0, 0, 0, 0],
+			num_fighters: [2, 0, 0, 0, 0], // each element is a different level of fighter
+			fighter_group_health: [20, 0, 0, 0, 0],
 			health_per_figher: [10, 15, 20, 25, 30],
 			damage_per_figher: [1, 2, 3, 4, 5],
 			num_villagers: 0,
@@ -613,8 +647,10 @@ var app = function() {
 			hunter: 0,
 			coal_miner: 0,
 			iron_miner: 0,
+            mithril_miner: 0,
 			coal_mine_unlocked: false,
 			iron_mine_unlocked: false,
+            mithril_mine_unlocked: false,
         },
         methods: {
 			closePopup: self.closePopup,
@@ -647,6 +683,8 @@ var app = function() {
 			decrement_coal_miner:self.decrement_coal_miner,
 			increment_iron_miner:self.increment_iron_miner,
 			decrement_iron_miner:self.decrement_iron_miner,
+			increment_mithril_miner:self.increment_mithril_miner,
+			decrement_mithril_miner:self.decrement_mithril_miner,
 
 			clicked: self.clicked,
 			incrementResource: self.incrementResource,
@@ -655,6 +693,10 @@ var app = function() {
             //saveCounter: self.saveCounter,
             loadResources: self.loadResources,
 			saveResources: self.saveResources,
+			
+			can_craft_steel: self.can_craft_steel,
+			craft_steel: self.craft_steel,
+			get_num_craftable_steel: self.get_num_craftable_steel,
 			
 			can_craft_wood_sword: self.can_craft_wood_sword,
 			craft_wood_sword: self.craft_wood_sword,
@@ -704,6 +746,14 @@ var app = function() {
     //self.loadCounter(); 
     self.loadResources();
     self.show_view_panel_resources();
+    window.setInterval(function(){
+		if(!self.vue.logged_in) return;
+        addToResources("wood",self.vue.wood_gatherer);
+        addToResources("leather",self.vue.hunter);
+        addToResources("coal",self.vue.coal_miner);
+		addToResources("iron",self.vue.iron_miner);
+		self.vue.$forceUpdate();
+    }, 1000);
     autosave();
     return self;
 };
