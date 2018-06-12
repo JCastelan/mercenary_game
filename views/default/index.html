@@ -20,7 +20,9 @@
 					<a class="btn" id="b_res" v-on:click="show_view_panel_resources()">Resources</a>
 					<a class="btn" id="b_party" v-on:click="show_view_panel_party()">Party</a>
 					<a class="btn" id="b_village" v-on:click="show_view_panel_village()">Village</a>
+					<a class="btn" id="b_crafting" v-on:click="show_view_panel_crafting()">Crafting</a>
 					<div v-if="viewing_resources">
+						<br>
 						Inventory:<br><br>
 						<div v-for="obj in band[0].inventory">
 							${obj.num} x ${obj.name}<br>
@@ -28,11 +30,13 @@
 						<br>
 						______________________________
 						<br><br>
+						Resources:<br><br>
 						<div v-for="res in resources">
 							${res[1]} x ${res[0]}<br>
 						</div>
 					</div>
 					<div v-if="viewing_party" v-for="member in band">
+						<br>
 						Name: ${member.name}<br>
 						Max Health: ${member.max_health}<br>
 						Health: ${member.health} <a class="btn" v-if="can_eat_food(member)" v-on:click="eat_food(member)">Eat fud</a><br>
@@ -56,6 +60,8 @@
 						</div>
 					</div>
 					<div v-if="viewing_village">
+						<br>
+                        <a class="btn" v-on:click="send_villager_to_party()">Send to party</a>
                         Available villagers: ${available_villagers}<br>
                         <div class="gather_wood ">
                             Wood Gatherer
@@ -63,6 +69,36 @@
                             ${wood_gatherer}
                             <a class="btn" v-on:click="decrement_wood_gatherer()"><i class="fa fa-minus" aria-hidden="true"></i></a>
                         </div>
+                        <div class="hunting ">
+                            Hunter
+                            <a class="btn" v-on:click="increment_hunter()"><i class="fa fa-plus" aria-hidden="true"></i></a>
+                            ${hunter}
+                            <a class="btn" v-on:click="decrement_hunter()"><i class="fa fa-minus" aria-hidden="true"></i></a>
+                        </div>
+                        <div v-if="coal_mine_unlocked" class="mine_coal ">
+                            Coal miner
+                            <a class="btn" v-on:click="increment_coal_miner()"><i class="fa fa-plus" aria-hidden="true"></i></a>
+                            ${coal_miner}
+                            <a class="btn" v-on:click="decrement_coal_miner()"><i class="fa fa-minus" aria-hidden="true"></i></a>
+                        </div>
+                        <div v-if="iron_mine_unlocked" class="mine_iron ">
+                            Iron miner
+                            <a class="btn" v-on:click="increment_iron_miner()"><i class="fa fa-plus" aria-hidden="true"></i></a>
+                            ${iron_miner}
+                            <a class="btn" v-on:click="decrement_iron_miner()"><i class="fa fa-minus" aria-hidden="true"></i></a>
+                        </div>
+					</div>
+					<div v-if="viewing_crafting">
+						<br>
+						<a class="btn" v-if="can_craft_wood_sword()" v-on:click="craft_wood_sword">Craft Wooden Sword (${get_num_craftable_wood_swords()} craftable)</a>
+						<a class="btn" v-if="can_craft_iron_sword()" v-on:click="craft_iron_sword">Craft Iron Sword (${get_num_craftable_iron_swords()} craftable)</a>
+						<a class="btn" v-if="can_craft_steel_sword()" v-on:click="craft_steel_sword">Craft Steel Sword (${get_num_craftable_steel_swords()} craftable)</a>
+						<a class="btn" v-if="can_craft_mithril_sword()" v-on:click="craft_mithril_sword">Craft Mithril Sword (${get_num_craftable_mithril_swords()} craftable)</a>
+						<br><br>
+						<a class="btn" v-if="can_craft_leather_armor()" v-on:click="craft_leather_armor">Craft Leather Armor (${get_num_craftable_leather_armors()} craftable)</a>
+						<a class="btn" v-if="can_craft_iron_armor()" v-on:click="craft_iron_armor">Craft Iron Armor (${get_num_craftable_iron_armors()} craftable)</a>
+						<a class="btn" v-if="can_craft_steel_armor()" v-on:click="craft_steel_armor">Craft Steel Armor (${get_num_craftable_steel_armors()} craftable)</a>
+						<a class="btn" v-if="can_craft_mithril_armor()" v-on:click="craft_mithril_armor">Craft Mithril Armor (${get_num_craftable_mithril_armors()} craftable)</a>
 					</div>
 				</div>
 				<div class="threequarters" id="grid">this is a grid boi</div>

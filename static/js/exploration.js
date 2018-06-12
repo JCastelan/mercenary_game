@@ -27,6 +27,58 @@ function clearCurrentTile() {
 	grid[playerPos.y][playerPos.x].char = emptyChar;
 }
 
+function addToInventory(item) {
+	if(!item.num) item.num = 1;
+	// find the item in the inventory
+	var found = false;
+	for(var i = 0; i < APP.vue.band[0].inventory.length; i++) {
+		if(APP.vue.band[0].inventory[i].name == item.name) {
+			// if found, increment num of them
+			APP.vue.band[0].inventory[i].num += item.num;
+			found = true;
+		}
+	}
+	if(!found) {
+		// if not found, add it to the inventory
+		APP.vue.band[0].inventory.push({
+			name: item.name,
+			damage: item.damage,
+			num: item.num,
+			is_weapon: item.is_weapon,
+			is_armor: item.is_armor,
+			health_boost: item.health_boost
+		});
+	}
+}
+
+function removeFromResources(resourceName, num) {
+	if(!num) num = 1;
+	for(var i = 0; i < APP.vue.resources.length; i++) {
+		if(APP.vue.resources[i][0] == resourceName) {
+			APP.vue.resources[i][1] -= num;
+		}
+	}
+}
+
+function getNumOfResource(resourceName) {
+	if(APP.vue.resources == null) return 0;
+	for(var i = 0; i < APP.vue.resources.length; i++) {
+		if(APP.vue.resources[i][0] == resourceName) {
+			return APP.vue.resources[i][1];
+		}
+	}
+	return 0;
+}
+
+function addToResources(resourceName, num) {
+	if(!num) num = 1;
+	for(var i = 0; i < APP.vue.resources.length; i++) {
+		if(APP.vue.resources[i][0] == resourceName) {
+			APP.vue.resources[i][1] += num;
+		}
+	}
+}
+
 function addRecruitToBand(name) {
 	// APP.vue.band.push({
 	// 	name: name,
