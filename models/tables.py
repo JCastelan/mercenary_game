@@ -34,7 +34,11 @@ db.define_table('userdb',
 				# Field( 'tin', 'integer', default=0),
 				Field( 'wood', 'integer', default=0),
 				Field( 'leather', 'integer', default=0),
-				#tools
+				#weapons
+				Field( 'w_sword', 'integer', default=0),
+				Field( 'i_sword', 'integer', default=0),
+				Field( 's_sword', 'integer', default=0),
+				Field( 'm_sword', 'integer', default=0),
 				#buildings
 				Field( 'houses', 'integer', default=0),
 				#human units

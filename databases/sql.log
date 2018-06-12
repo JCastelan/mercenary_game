@@ -1,4 +1,4 @@
-timestamp: 2018-06-11T21:08:18.455909
+timestamp: 2018-06-12T11:49:07.418693
 CREATE TABLE "web2py_session_mercenary_game"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "locked" CHAR(1),
@@ -9,7 +9,7 @@ CREATE TABLE "web2py_session_mercenary_game"(
     "session_data" BLOB
 );
 success!
-timestamp: 2018-06-11T21:08:18.604763
+timestamp: 2018-06-12T11:49:08.925418
 CREATE TABLE "auth_user"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "first_name" CHAR(128),
@@ -21,21 +21,21 @@ CREATE TABLE "auth_user"(
     "registration_id" CHAR(512)
 );
 success!
-timestamp: 2018-06-11T21:08:18.637454
+timestamp: 2018-06-12T11:49:08.962957
 CREATE TABLE "auth_group"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "role" CHAR(512),
     "description" TEXT
 );
 success!
-timestamp: 2018-06-11T21:08:18.664634
+timestamp: 2018-06-12T11:49:08.998068
 CREATE TABLE "auth_membership"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "user_id" INTEGER REFERENCES "auth_user" ("id") ON DELETE CASCADE  ,
     "group_id" INTEGER REFERENCES "auth_group" ("id") ON DELETE CASCADE  
 );
 success!
-timestamp: 2018-06-11T21:08:18.695808
+timestamp: 2018-06-12T11:49:09.049992
 CREATE TABLE "auth_permission"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "group_id" INTEGER REFERENCES "auth_group" ("id") ON DELETE CASCADE  ,
@@ -44,7 +44,7 @@ CREATE TABLE "auth_permission"(
     "record_id" INTEGER
 );
 success!
-timestamp: 2018-06-11T21:08:18.725104
+timestamp: 2018-06-12T11:49:09.100171
 CREATE TABLE "auth_event"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "time_stamp" TIMESTAMP,
@@ -54,7 +54,7 @@ CREATE TABLE "auth_event"(
     "description" TEXT
 );
 success!
-timestamp: 2018-06-11T21:08:18.752053
+timestamp: 2018-06-12T11:49:09.136044
 CREATE TABLE "auth_cas"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "user_id" INTEGER REFERENCES "auth_user" ("id") ON DELETE CASCADE  ,
@@ -64,7 +64,7 @@ CREATE TABLE "auth_cas"(
     "renew" CHAR(1)
 );
 success!
-timestamp: 2018-06-11T21:08:18.783548
+timestamp: 2018-06-12T11:49:09.180007
 CREATE TABLE "userdb"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "user_email" CHAR(512),
@@ -72,129 +72,25 @@ CREATE TABLE "userdb"(
     "updated_on" TIMESTAMP,
     "counter" INTEGER,
     "coal" INTEGER,
-    "copper" INTEGER,
-    "fur" INTEGER,
     "iron" INTEGER,
     "mithril" INTEGER,
     "steel" INTEGER,
-    "stone" INTEGER,
-    "tin" INTEGER,
     "wood" INTEGER,
+    "leather" INTEGER,
     "houses" INTEGER,
     "workers" INTEGER,
+    "mages" INTEGER,
+    "warriors" INTEGER,
+    "bowmen" INTEGER,
     "fighters" INTEGER
 );
 success!
-timestamp: 2018-06-11T22:06:51.441209
-ALTER TABLE "userdb" ADD "warriors" INTEGER;
-timestamp: 2018-06-11T22:06:51.509823
-ALTER TABLE "userdb" ADD "bowmen" INTEGER;
-timestamp: 2018-06-11T22:06:51.556581
-ALTER TABLE "userdb" ADD "mages" INTEGER;
-timestamp: 2018-06-11T22:06:51.684345
-ALTER TABLE "userdb" ADD "grass" INTEGER;
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
+timestamp: 2018-06-12T12:07:18.477282
+ALTER TABLE "userdb" ADD "i_sword" INTEGER;
+timestamp: 2018-06-12T12:07:18.608381
+ALTER TABLE "userdb" ADD "s_sword" INTEGER;
+timestamp: 2018-06-12T12:07:18.749999
+ALTER TABLE "userdb" ADD "m_sword" INTEGER;
+timestamp: 2018-06-12T12:07:18.924392
+ALTER TABLE "userdb" ADD "w_sword" INTEGER;
 success!
