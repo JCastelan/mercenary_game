@@ -846,12 +846,3 @@ var APP = null;
 // This will make everything accessible from the js console;
 // for instance, self.x above would be accessible as APP.x
 jQuery(function(){APP = app();});
-
-/* General TODOs
-
-What needs to be done in the general order that it needs to be done
-	Make assigned villagers gather resources
-	Make crafting equipment using resources
-	Make upgrading recruits using equipment
-
-*/
