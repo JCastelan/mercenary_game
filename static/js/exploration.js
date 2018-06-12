@@ -212,7 +212,10 @@ function makeLootBag(bagY, bagX, items) {
 function setVisibleToExplored() {
 	for(var x = -playerViewLength; x <= playerViewLength; x++) {
 		for(var y = -playerViewLength; y <= playerViewLength; y++) {
-			grid[playerPos.y + y][playerPos.x + x].explored = true;
+			if(playerPos.y + y >= 0 && playerPos.y + y < gridHeight
+			&& playerPos.x + x >= 0 && playerPos.x + x < gridWidth) {
+				grid[playerPos.y + y][playerPos.x + x].explored = true;
+			}
 		}
 	}
 }
@@ -591,9 +594,9 @@ function simulate_enemy_attacks() {
 		else {
 			var old_num_alive_fighers = Math.ceil(APP.vue.fighter_group_health[i] / APP.vue.health_per_figher[i]);
 			APP.vue.fighter_group_health[i] -= enemy_damage;
-			console.log("fgh: " + APP.vue.fighter_group_health[i]);
+			// console.log("fgh: " + APP.vue.fighter_group_health[i]);
 			var new_num_alive_fighers = Math.ceil(APP.vue.fighter_group_health[i] / APP.vue.health_per_figher[i]);
-			console.log("nnaf: " + new_num_alive_fighers);
+			// console.log("nnaf: " + new_num_alive_fighers);
 			if(new_num_alive_fighers != old_num_alive_fighers) {
 				// a figher died, decrement num_fighers
 				APP.vue.num_fighters[i]--;

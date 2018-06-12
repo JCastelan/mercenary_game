@@ -77,6 +77,7 @@ var app = function() {
 	};
 
 	self.can_eat_food = function(member) {
+		// TODO: make it so you can heal your band members
 		if(member.health >= member.max_health) return false; // cant heal if full health
 		for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
 			if(self.vue.band[0].inventory[i].name == "food" && self.vue.band[0].inventory[i].num > 0) {
@@ -349,15 +350,17 @@ var app = function() {
                     }
                 }else{ //other random data I guess
                     if(d[0]== "num_fighters"){
-						self.vue.num_fighters= d[1];
-						/*for(var i = 0; i < self.vue.num_fighters.length; i++) {
+						// d[1].forEach(function(d){d=+d;});
+						// self.vue.num_fighters= d[1];
+						for(var i = 0; i < self.vue.num_fighters.length; i++) {
 							self.vue.num_fighters[i] = +self.vue.num_fighters[i];
-						}*/
+						}
                     } else if (d[0]=="fighter_health") {
-						self.vue.fighter_group_health=d[1];
-						/*for(var i = 0; i < self.vue.num_fighters.length; i++) {
+						// d[1].forEach(function(d){d=+d;});
+						// self.vue.fighter_group_health=d[1];
+						for(var i = 0; i < self.vue.num_fighters.length; i++) {
 							self.vue.fighter_group_health[i] = +self.vue.fighter_group_health[i];
-						}*/
+						}
                     }else{
                         console.log("warning: did not store ", d);
                     }}});});};
