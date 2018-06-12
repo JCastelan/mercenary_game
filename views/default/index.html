@@ -3,9 +3,11 @@
 <script src="{{=URL('static', 'js/vue.js')}}"></script>
 <script>
 	// Define your URLs here.
-	var check_logged_in_url = "{{=URL('api', 'check_logged_in', user_signature=True)}}";
+	var get_name_url = "{{=URL('api', 'get_name', user_signature=True)}}";
 	var load_counter_url = "{{=URL('api', 'load_counter', user_signature=True)}}";
 	var save_counter_url = "{{=URL('api', 'save_counter', user_signature=True)}}";
+	var load_resources_url = "{{=URL('api', 'load_resources', user_signature=True)}}";
+	var save_resources_url = "{{=URL('api', 'save_resources', user_signature=True)}}";
 </script>
 {{end}}
 
@@ -22,22 +24,27 @@
                         <a class="btn" v-on:click="show_view_panel_resources()">Send a boi home</a>
 						Inventory:<br><br>
 						<div v-for="obj in band[0].inventory">
-							<div v-if="obj.is_weapon">
-								${obj.name}, dmg: ${obj.damage} x ${obj.num}<br>
-							</div>
-							<div v-if="!obj.is_weapon">
-								${obj.name} x ${obj.num}<br>
-							</div>
+							${obj.num} x ${obj.name}<br>
+						</div>
+						<br>
+						______________________________
+						<br><br>
+						<div v-for="res in resources">
+							${res[1]} x ${res[0]}<br>
 						</div>
 					</div>
 					<div v-if="viewing_party" v-for="member in band">
 						Name: ${member.name}<br>
-						Health: ${member.health}
-						<a class="btn" v-if="can_eat_food(member)" v-on:click="eat_food(member)">Eat fud</a>
-						<br>
-						Weapon: ${member.weapon.name}, dmg: ${member.weapon.damage}
+						Max Health: ${member.max_health}<br>
+						Health: ${member.health} <a class="btn" v-if="can_eat_food(member)" v-on:click="eat_food(member)">Eat fud</a><br>
+						Damage: ${member.weapon.damage}<br>
+						Weapon: ${member.weapon.name}
 						<a class="btn" v-if="can_equip_weapon(member)" v-on:click="equip_weapon(member)">Equip weapon</a>
+						<a class="btn" v-if="member.weapon.name != 'fists'" v-on:click="unequip_weapon(member)">Unequip</a>
 						<br>
+						Armor: ${member.armor.name}
+						<a class="btn" v-if="can_equip_armor(member)" v-on:click="equip_armor(member)">Equip armor</a>
+						<a class="btn" v-if="member.armor.name != 'nothing'" v-on:click="unequip_armor(member)">Unequip</a>
 						______________________________
 						<br><br>
 					</div>
@@ -53,7 +60,8 @@
 				<input style="width:594px" class="not_padded" :disabled="true" v-model="popup_desc"></input>
 				<br><br>
 				<div v-for="(button, i) in popup_buttons">
-					<a class="btn option_buttons" v-on:click="button.onClick()">(${i+1}) ${button.name}</a>
+					<a v-if="button.num" class="btn option_buttons" v-on:click="button.onClick()">(${i+1}) ${button.name} x ${button.num}</a>
+					<a v-if="!button.num" class="btn option_buttons" v-on:click="button.onClick()">(${i+1}) ${button.name}</a>
 				</div>
 				<br>
 				<div v-if="in_battle">
@@ -72,6 +80,7 @@
 				<div class="quarter">
 					<h2>Click the button to increment the counter</h2>
 					<a class="center btn large" v-on:click="clicked"><tt>Click Me</tt></a>
+					<a class="center btn large" v-on:click="saveCounter"><tt>Save counter</tt></a>
 				</div>
 				<div class="threequarters">
 					<h1 class="right" id="counter">${counter}</h1>

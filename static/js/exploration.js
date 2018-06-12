@@ -27,6 +27,44 @@ function clearCurrentTile() {
 	grid[playerPos.y][playerPos.x].char = emptyChar;
 }
 
+function addRecruitToBand(name) {
+	APP.vue.band.push({
+		name: name,
+		health: 10,
+		max_health: 10,
+		weapon: {
+			name: "fists",
+			damage: 1
+		},
+		armor: {
+			name: "nothing",
+			health_boost: 0
+		}
+	});
+}
+
+function restartGame() {
+	initStartingAreaGrid();
+	displayGrid();
+	APP.vue.band = [
+		{ // index 0 is you
+			name: "You",
+			max_health: 10,
+			health: 10,
+			weapon: {
+				name: "fists",
+				damage: 1
+			},
+			armor: {
+				name: "nothing",
+				health_boost: 0
+			},
+			inventory: []
+		} // any more is people you've recruited
+	];
+	APP.vue.in_battle = false;
+}
+
 function makeLootBag(bagY, bagX, items) {
 	grid[bagY][bagX].char = lootChar;
 	grid[bagY][bagX].title = "Loot Bag";
@@ -41,7 +79,7 @@ function makeLootBag(bagY, bagX, items) {
 			// auto equip weapon if it does more damage
 			// if(this.is_weapon && APP.vue.band[0].weapon.damage < this.damage) {
 			// 	APP.vue.band[0].weapon = {name: this.item_name, damage: this.damage, num: 1, is_weapon: true};
-			// }
+			// } else
 			{ // otherwise add it to the inventory
 				// check if we already have 1 of that item
 				var found = false;
@@ -54,16 +92,26 @@ function makeLootBag(bagY, bagX, items) {
 				}
 				// if we dont already have it, then add it
 				if(!found) {
-					console.log("hit");
-					APP.vue.band[0].inventory.push({name: this.item_name, damage: this.damage, num: 1, is_weapon: this.is_weapon});
+					APP.vue.band[0].inventory.push({
+						name: this.item_name,
+						damage: this.damage,
+						num: 1,
+						is_weapon: this.is_weapon,
+						is_armor: this.is_armor,
+						health_boost: this.health_boost
+					});
 				}
 			}
-			// remove the button from the menu (TODO: just reduce the num and if it gets to 0, then do this)
-			grid[playerPos.y][playerPos.x].buttons.splice(grid[playerPos.y][playerPos.x].buttons.indexOf(this), 1);
-			if(grid[playerPos.y][playerPos.x].buttons.length == 0) {
-				grid[playerPos.y][playerPos.x].desc = "Looted.";
-				APP.vue.popup_desc = "Looted.";
-				clearCurrentTile();
+			if(this.num > 1) {
+				this.num--;
+			}
+			else {
+				grid[playerPos.y][playerPos.x].buttons.splice(grid[playerPos.y][playerPos.x].buttons.indexOf(this), 1);
+				if(grid[playerPos.y][playerPos.x].buttons.length == 0) {
+					grid[playerPos.y][playerPos.x].desc = "Looted.";
+					APP.vue.popup_desc = "Looted.";
+					clearCurrentTile();
+				}
 			}
 		};
 	}
@@ -92,8 +140,9 @@ function initStartingAreaGrid() {
 	grid[playerPos.y - 1][playerPos.x].char = emptyChar;
 
 	makeLootBag(playerPos.y - 2, playerPos.x, [
-		{name: "iron sword", is_weapon: true, damage: 2},
-		{name: "food"}
+		{name: "iron sword", is_weapon: true, damage: 2, num: 1},
+		{name: "food", num: 1},
+		{name: "leather armor", is_armor: true, health_boost: 5, num: 1}
 	]);
 
 	grid[playerPos.y - 3][playerPos.x].char = emptyChar;
@@ -109,18 +158,8 @@ function initStartingAreaGrid() {
 		APP.vue.popup_desc = grid[playerPos.y][playerPos.x].desc;
 		grid[playerPos.y][playerPos.x].buttons =  [
 			{name: "Sure m8", onClick: function() {
-				grid[playerPos.y][playerPos.x].title = null;
-				grid[playerPos.y][playerPos.x].desc = null;
-				grid[playerPos.y][playerPos.x].buttons = null;
-				grid[playerPos.y][playerPos.x].char = emptyChar;
-				APP.vue.band.push({
-					name: "1337 hacker boi",
-					health: 10,
-					weapon: {
-						name: "fists",
-						damage: 1
-					}
-				});
+				clearCurrentTile();
+				addRecruitToBand("1337 hacker boi");
 				APP.vue.show_popup = false;
 			}},
 			{name: "Nah man, I aint about that life", onClick: function() {
@@ -141,8 +180,9 @@ function initStartingAreaGrid() {
 		grid[playerPos.y][playerPos.x].buttons = [
 			{name: "Search body", onClick: function() {
 				makeLootBag(playerPos.y, playerPos.x, [
-					{name: "iron sword", is_weapon: true, damage: 3},
-					{name: "food"}
+					{name: "iron sword", is_weapon: true, damage: 2, num: 1},
+					{name: "food", num: 2},
+					{name: "iron armor", is_armor: true, health_boost: 10, num: 1}
 				]);
 				grid[playerPos.y][playerPos.x].buttons.push({name: "Go to hub world", onClick: function() {
 					initHubWorldGrid(100, 40);
@@ -299,7 +339,7 @@ function onPlayerMove() {
 				start_enemy_attacks(damage, cooldown);
 				var damage = 0;
 				for(var i = 0; i < APP.vue.band.length; i++) {
-					if(APP.vue.band[i].health > 0) {
+					if(APP.vue.band[i].health > 0) { // TODO: keep this for resurrection if we do that
 						damage += APP.vue.band[i].weapon.damage;
 					}
 				}
@@ -385,20 +425,7 @@ function simulate_enemy_attacks() {
 				APP.vue.popup_desc = "u ded boyo";
 				APP.vue.popup_buttons = [
 					{name: "Revive", onClick: function() {
-						initStartingAreaGrid();
-						displayGrid();
-						APP.vue.band = [
-							{ // index 0 is you
-								health: 10,
-								inventory: {
-									weapon: {
-										name: "fists",
-										damage: 1
-									}
-								}
-							} // any more is people you've recruited
-						];
-						APP.vue.in_battle = false;
+						restartGame();
 						APP.vue.show_popup = false;
 					}}
 				];
