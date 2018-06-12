@@ -47,6 +47,15 @@
 						<a class="btn" v-if="member.armor.name != 'nothing'" v-on:click="unequip_armor(member)">Unequip</a>
 						______________________________
 						<br><br>
+						<!-- TODO: make a "health of currently attacked fighter" field -->
+							<!-- so the enemy can attack 1 figher at a time until you're all that's left -->
+						<div v-for="(group_hp, i) in fighter_group_health">
+							<div v-if="num_fighters[i] != 0">
+								Number of level ${i+1} fighters: ${num_fighters[i]}<br>
+								Level ${i+1} fighters group HP: ${group_hp}
+							</div>
+							<br>
+						</div>
 					</div>
 					<div v-if="viewing_village">
                         village is shitty

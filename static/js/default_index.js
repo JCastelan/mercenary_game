@@ -18,8 +18,13 @@ var app = function() {
 	
 	self.get_band_health = function() {
 		var health = 0;
+		// this for is from the old way of recruiting
 		for(var i = 0; i < self.vue.band.length; i++) {
 			health += self.vue.band[i].health;
+		}
+		// this for is from the new way of recruiting
+		for(var i = 0; i < self.vue.fighter_group_health.length; i++) {
+			health += self.vue.fighter_group_health[i];
 		}
 		return health;
 	};
@@ -301,11 +306,16 @@ var app = function() {
 			in_battle: false,
 			player_attack_time: 16, // used for limiting player attacks
 			viewing_resources: false,
-			viewing_party: false,
+			viewing_party: true,
 			viewing_village: false,
 			viewing_assignment: false,
-            counter: 0
 			my_name: "You",
+			num_fighters: [0, 0, 0, 0, 0], // each element is a different level of fighter
+			fighter_group_health: [0, 0, 0, 0, 0],
+			health_per_figher: [10, 15, 20, 25, 30],
+			damage_per_figher: [1, 2, 3, 4, 5],
+			num_villagers: 0,
+			cur_fighter_health: -1,
 
             counter: 0,
             resources: null
@@ -358,8 +368,10 @@ jQuery(function(){APP = app();});
 /* General TODOs
 
 Exploration parts
+	Remake recruiting
+		For getting attacked by enemies, lets just give the group a health bar,
+		and when it gets below a multiple of the health per fighter, we decrement the number of fighters
 	Make random loot bags with random items
-	Implement armor in the same way as weapons
 
 Idle game parts
 	Be able to assign yourself and band members to certain tasks to collect resources JACK
