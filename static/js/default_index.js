@@ -324,12 +324,22 @@ var app = function() {
             });
     };
 
-
     autosave = function(){
         window.setInterval(self.saveResources, 5000);
     }
-    self.gather_wood = function(){
-    	sel
+
+	self.increment_wood_gatherer = function(){
+    	if(self.vue.available_villagers > 0){
+    		self.vue.available_villagers -= 1;
+    		self.vue.wood_gatherer += 1;
+		}
+	}
+
+	self.decrement_wood_gatherer = function(){
+    	if(self.vue.wood_gatherer > 0){
+    		self.vue.available_villagers += 1;
+    		self.vue.wood_gatherer -= 1;
+		}
 	}
 
     // Complete as needed.
@@ -376,7 +386,7 @@ var app = function() {
 
             counter: 0,
             resources: null,
-			available_villagers: 0,
+			available_villagers: 1,
 			wood_gatherer: 0,
         },
         methods: {
@@ -400,6 +410,8 @@ var app = function() {
 
 			send_to_village: self.send_to_village,
 			send_party_member_home:self.send_party_member_home,
+			increment_wood_gatherer:self.increment_wood_gatherer,
+			decrement_wood_gatherer:self.decrement_wood_gatherer,
 
 			clicked: self.clicked,
 			incrementResource: self.incrementResource,
