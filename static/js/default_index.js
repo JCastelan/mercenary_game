@@ -29,7 +29,6 @@ var app = function() {
 	};
 
 	self.can_eat_food = function(member) {
-		// TODO: change this when we change max health due to armor and stuff
 		if(member.health >= member.max_health) return false; // cant heal if full health
 		for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
 			if(self.vue.band[0].inventory[i].name == "food" && self.vue.band[0].inventory[i].num > 0) {
