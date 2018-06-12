@@ -54,6 +54,9 @@
 							<div v-if="num_fighters[i] != 0">
 								Number of level ${i+1} fighters: ${num_fighters[i]}<br>
 								Level ${i+1} fighters group HP: ${group_hp}<br>
+								Level ${i+1} fighters group damage: ${num_fighters[i] * (i+1)}<br>
+								<a class="btn" v-if="can_equip_boi(i)" v-on:click="equip_boi(i)">Equip (level up) a a boi</a>
+								<a class="btn" v-if="i != 0" v-on:click="unequip_boi(i)">Unequip (level down to 1) a boi</a>
 								<a class="btn" v-on:click="send_to_village(i)">Send a boi to the village</a>
 							</div>
 							<br>
@@ -61,8 +64,8 @@
 					</div>
 					<div v-if="viewing_village">
 						<br>
-                        <a class="btn" v-on:click="send_villager_to_party()">Send to party</a>
-                        Available villagers: ${available_villagers}<br>
+                        Available villagers: ${available_villagers}<br><br>
+                        <a class="btn" v-if="available_villagers > 0" v-on:click="send_villager_to_party()">Send a boi to the party</a>
                         <div class="gather_wood ">
                             Wood Gatherer
                             <a class="btn" v-on:click="increment_wood_gatherer()"><i class="fa fa-plus" aria-hidden="true"></i></a>
@@ -96,6 +99,8 @@
 					</div>
 					<div v-if="viewing_crafting">
 						<br>
+						<a class="btn" v-if="can_craft_steel()" v-on:click="craft_steel">Craft Steel (${get_num_craftable_steel()} craftable)</a>
+						<br><br>
 						<a class="btn" v-if="can_craft_wood_sword()" v-on:click="craft_wood_sword">Craft Wooden Sword (${get_num_craftable_wood_swords()} craftable)</a>
 						<a class="btn" v-if="can_craft_iron_sword()" v-on:click="craft_iron_sword">Craft Iron Sword (${get_num_craftable_iron_swords()} craftable)</a>
 						<a class="btn" v-if="can_craft_steel_sword()" v-on:click="craft_steel_sword">Craft Steel Sword (${get_num_craftable_steel_swords()} craftable)</a>
@@ -131,17 +136,7 @@
 			<script src="{{=URL('static', 'js/resource_management.js')}}"></script>
 			<script src="{{=URL('static', 'js/button_stuff.js')}}"></script>
 	
-			<div class="container padded center">
-				<div class="quarter">
-					<h2>Click the button to increment the counter</h2>
-					<a class="center btn large" v-on:click="clicked"><tt>Click Me</tt></a>
-					<a class="center btn large" v-on:click="saveCounter"><tt>Save counter</tt></a>
-					<a class="center btn large" v-on:click="saveResources"><tt>Save resources</tt></a>
-				</div>
-				<div class="threequarters">
-					<h1 class="right" id="counter">${counter}</h1>
-				</div>
-			</div>
+			
 		{{else:}}
 		<!-- </div>
 		<div v-if="!logged_in"> -->

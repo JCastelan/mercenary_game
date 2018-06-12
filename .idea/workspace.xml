@@ -2,13 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a3121111-ec48-4b3d-9e1b-04c8b2ca8ea6" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/databases/c8b669d15150d7109e5f7ab36744a5b7_userdb.table" beforeDir="false" afterPath="$PROJECT_DIR$/databases/c8b669d15150d7109e5f7ab36744a5b7_userdb.table" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/databases/sql.log" beforeDir="false" afterPath="$PROJECT_DIR$/databases/sql.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/databases/storage.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/databases/storage.sqlite" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/tables.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/tables.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/default_index.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/default_index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/exploration.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/exploration.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/layout.html" beforeDir="false" afterPath="$PROJECT_DIR$/views/layout.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/databases/c8b669d15150d7109e5f7ab36744a5b7_auth_cas.table" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/databases/c8b669d15150d7109e5f7ab36744a5b7_auth_event.table" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/databases/c8b669d15150d7109e5f7ab36744a5b7_auth_group.table" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/databases/c8b669d15150d7109e5f7ab36744a5b7_auth_membership.table" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/databases/c8b669d15150d7109e5f7ab36744a5b7_auth_permission.table" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/databases/c8b669d15150d7109e5f7ab36744a5b7_auth_user.table" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/databases/c8b669d15150d7109e5f7ab36744a5b7_userdb.table" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/databases/c8b669d15150d7109e5f7ab36744a5b7_web2py_session_mercenary_game.table" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/databases/sql.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/databases/storage.sqlite" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -36,17 +39,8 @@
       <file leaf-file-name="default_index.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/static/js/default_index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="276">
+            <state relative-caret-position="5776">
               <caret line="611" column="38" selection-start-line="611" selection-start-column="38" selection-end-line="611" selection-end-column="38" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="sql.log" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/databases/sql.log">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2159">
-              <caret line="127" column="8" selection-start-line="127" selection-start-column="8" selection-end-line="127" selection-end-column="8" />
             </state>
           </provider>
         </entry>
@@ -54,15 +48,15 @@
       <file leaf-file-name="api.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/controllers/api.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1312" />
+            <state relative-caret-position="-1465" />
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="exploration.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="exploration.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/static/js/exploration.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-391">
-              <caret line="28" column="1" selection-start-line="28" selection-start-column="1" selection-end-line="28" selection-end-column="1" />
+            <state relative-caret-position="177">
+              <caret line="30" column="12" selection-start-line="30" selection-start-column="9" selection-end-line="30" selection-end-column="12" />
             </state>
           </provider>
         </entry>
@@ -90,9 +84,9 @@
       <find>force</find>
       <find>wood</find>
       <find>save</find>
-      <find>resource</find>
       <find>addToR</find>
       <find>band</find>
+      <find>resource</find>
       <find>add</find>
     </findStrings>
   </component>
@@ -114,7 +108,7 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="682" />
     <option name="y" value="6" />
     <option name="width" value="694" />
@@ -136,11 +130,6 @@
               <item name="mercenary_game" type="b2602c69:ProjectViewProjectNode" />
               <item name="mercenary_game" type="462c0819:PsiDirectoryNode" />
               <item name="controllers" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="mercenary_game" type="b2602c69:ProjectViewProjectNode" />
-              <item name="mercenary_game" type="462c0819:PsiDirectoryNode" />
-              <item name="databases" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="mercenary_game" type="b2602c69:ProjectViewProjectNode" />
@@ -229,7 +218,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1376" height="744" extended-state="6" />
+    <frame x="-8" y="-8" width="1376" height="744" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -272,13 +261,6 @@
         <state relative-caret-position="-241" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/static/js/exploration.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-391">
-          <caret line="28" column="1" selection-start-line="28" selection-start-column="1" selection-end-line="28" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/views/default/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="327">
@@ -291,22 +273,29 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/controllers/api.py">
+    <entry file="file://$PROJECT_DIR$/databases/sql.log">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1312" />
+        <state relative-caret-position="153">
+          <caret line="30" column="8" lean-forward="true" selection-start-line="30" selection-start-column="8" selection-end-line="30" selection-end-column="8" />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/static/js/default_index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="276">
+        <state relative-caret-position="5776">
           <caret line="611" column="38" selection-start-line="611" selection-start-column="38" selection-end-line="611" selection-end-column="38" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/databases/sql.log">
+    <entry file="file://$PROJECT_DIR$/controllers/api.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2159">
-          <caret line="127" column="8" selection-start-line="127" selection-start-column="8" selection-end-line="127" selection-end-column="8" />
+        <state relative-caret-position="-1465" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/js/exploration.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="177">
+          <caret line="30" column="12" selection-start-line="30" selection-start-column="9" selection-end-line="30" selection-end-column="12" />
         </state>
       </provider>
     </entry>
