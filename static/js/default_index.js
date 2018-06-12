@@ -310,7 +310,7 @@ var app = function() {
 			viewing_party: false,
 			viewing_village: false,
 			viewing_assignment: false,
-            counter: 0
+            counter: 0,
 			my_name: "You",
 
             counter: 0,
