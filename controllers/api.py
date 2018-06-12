@@ -70,7 +70,7 @@ def load_resources():
 			i_sword=0,
 			s_sword=0,
 			m_sword=0,
-			
+
 			num_fighters=[0,0,0,0,0],
 			fighter_health=[0,0,0,0,0],
 
@@ -91,9 +91,13 @@ def load_resources():
 			mithril=row.iron,
 			steel=row.steel,
 			wood=row.wood,
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 8e4623abdb0acc12f25f9741e845f33afe2d817b
 			leather=row.leather,
+
 			w_sword=row.w_sword,
 			i_sword=row.i_sword,
 			s_sword=row.s_sword,
@@ -106,8 +110,8 @@ def load_resources():
 		return response.json(loaded_data)
 
 def save_resources():
-	valueList=["coal","iron","mithril",   "steel","wood", "leather"]
-	valuesToStore=[0,0,0,      0,0,0,0]
+	valueList=["coal","iron","mithril",   "steel","wood", "leather",  "w_sword","i_sword","s_sword","m_sword"]
+	valuesToStore=[0,0,0,      0,0,0,0,       0,0,0,0]
 	if auth.user is None:
 		return
 	# print "save_counter!!!!!!!!!!!!!!!!!"
@@ -128,23 +132,60 @@ def save_resources():
 	print valuesToStore
 	if dataCount == 0:
 		return "failed"
+
+	num_fighters_string=""
+	fighter_health_string=""
+	for item in request.vars.num_fighters:
+		num_fighters_string+=item+","
+	for item in request.vars.fighter_health:
+		fighter_health_string+=item+","
+	num_fighters_string = num_fighters_string[:-1]
+	fighter_health_string = fighter_health_string[:-1]
 	if row is not None:
 		result = row.update_record(
+			max_health=request.vars.max_health,
+			current_health=request.vars.current_health,
+			equipped_weapon=request.vars.equipped_weapon,
+			equipped_armor=request.vars.equipped_armor,
+
 			coal=valuesToStore[0],
 			iron=valuesToStore[1],
 			mithril=valuesToStore[2],
 			steel=valuesToStore[3],
 			wood=valuesToStore[4],
-			leather=valuesToStore[5]
+			leather=valuesToStore[5],
+
+			w_sword=valuesToStore[6],
+			i_sword=valuesToStore[7],
+			s_sword=valuesToStore[8],
+			m_sword=valuesToStore[9],
+
+			fighter_count=num_fighters_string,
+			fighter_health=fighter_health_string
 		)
+		print "\n\n", result, "\n\n"
 		return result
 	else:
 		result = db.userdb.insert(
+			max_health=request.vars.max_health,
+			current_health=request.vars.current_health,
+			equipped_weapon=request.vars.equipped_weapon,
+			equipped_armor=request.vars.equipped_armor,
+
 			coal=valuesToStore[0],
 			iron=valuesToStore[1],
 			mithril=valuesToStore[2],
 			steel=valuesToStore[3],
 			wood=valuesToStore[4],
-			leather=valuesToStore[5]
+			leather=valuesToStore[5],
+
+			w_sword=valuesToStore[6],
+			i_sword=valuesToStore[7],
+			s_sword=valuesToStore[8],
+			m_sword=valuesToStore[9],
+
+			fighter_count=num_fighters_string,
+			fighter_health=fighter_health_string
 		)
+		print "\n\n", result, "\n\n"
 		return result
