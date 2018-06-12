@@ -33,11 +33,13 @@ var app = function() {
         activated_color = 'yellow';
         ids = ["b_res", "b_village", "b_party"];
         ids.forEach(function(d){
-            if( d == id){
-                document.getElementById(d).classList.add(activated_color);
-            }else{
-                document.getElementById(d).classList.remove(activated_color);
-            }
+			if(document.getElementById(d) != null) {
+				if( d == id){
+					document.getElementById(d).classList.add(activated_color);
+				}else{
+					document.getElementById(d).classList.remove(activated_color);
+				}
+			}
         });
 
     }
