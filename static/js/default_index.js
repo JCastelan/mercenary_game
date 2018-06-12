@@ -250,6 +250,9 @@ var app = function() {
 	
 	self.clicked = function () {
 		self.vue.counter++;
+        self.vue.resources.forEach(function(d){
+            d[1]++;
+        });
 	}
 
     // real stuff
@@ -257,18 +260,20 @@ var app = function() {
         // console.log( "loading all stored vals")
         $.getJSON(load_resources_url, function (data) {
             //console.log(data );
-            self.vue.raw_resources = data;
-            self.vue.resources = Object.entries(data);
+            dataElems=Object.entries(data);
+            dataElems.forEach(function(d){
+                d[1] = +d[1];
+            });
+            console.log(dataElems);
+            self.vue.resources = dataElems;
         });
     };
 
     self.saveResources = function(){
         // console.log( "saving all resources")
-        console.log(self.vue.raw_resources)
         console.log(self.vue.resources)
         $.post(save_resources_url,
             { 
-                raw_res: ["a","b",3],
                 resources: self.vue.resources
             },
             function (result) {
@@ -314,7 +319,6 @@ var app = function() {
 			my_name: "You",
 
             counter: 0,
-            raw_resources: null,
             resources: null
         },
         methods: {

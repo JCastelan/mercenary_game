@@ -78,41 +78,47 @@ def load_resources():
 		return response.json(loaded_data)
 
 def save_resources():
+	valueList=["coal","copper","fur","iron","mithril","steel","stone","tin","wood"]
+	valuesToStore=[0 ,       0,    0,     0,        0,      0,      0,    0,     0]
 	if auth.user is None:
 		return
 	# print "save_counter!!!!!!!!!!!!!!!!!"
 	q=(db.userdb.user_email ==auth.user.email)
 	row=db(q).select().first()
 	print "~~~~~~~~~~~~~~~~~~~~"
+	print "~~~~~~~~~~~~~~~~~~~~"
 	print request.vars
 	print "~~~~~~~~~~~~~~~~~~~~"
-	print request.vars.resources
+	for value in request.vars.itervalues():
+		if not isinstance(value, list):
+			continue
+		valuesToStore[valueList.index(value[0])]=int(value[1])
+		print "\t", value
 	print "~~~~~~~~~~~~~~~~~~~~"
-	print request.vars.raw_res
-	print "~~~~~~~~~~~~~~~~~~~~"
+	print valuesToStore
 	if row is not None:
-		"""result = row.update_record(
-			coal=request.vars.coal,
-			copper=request.vars.copper,
-			fur=request.vars.fur,
-			iron=request.vars.iron,
-			mithril=request.vars.mithril,
-			steel=request.vars.steel,
-			stone=request.vars.stone,
-			tin=request.vars.tin,
-			wood=request.vars.wood
-		)"""
+		result = row.update_record(
+			coal=valuesToStore[0],
+			copper=valuesToStore[1],
+			fur=valuesToStore[2],
+			iron=valuesToStore[3],
+			mithril=valuesToStore[4],
+			steel=valuesToStore[5],
+			stone=valuesToStore[6],
+			tin=valuesToStore[7],
+			wood=valuesToStore[8]
+		)
 		return
 	else:
-		"""result = db.userdb.insert(
-			coal=request.vars.coal,
-			copper=request.vars.copper,
-			fur=request.vars.fur,
-			iron=request.vars.iron,
-			mithril=request.vars.mithril,
-			steel=request.vars.steel,
-			stone=request.vars.stone,
-			tin=request.vars.tin,
-			wood=request.vars.woods
-		)"""
+		result = db.userdb.insert(
+			coal=valuesToStore[0],
+			copper=valuesToStore[1],
+			fur=valuesToStore[2],
+			iron=valuesToStore[3],
+			mithril=valuesToStore[4],
+			steel=valuesToStore[5],
+			stone=valuesToStore[6],
+			tin=valuesToStore[7],
+			wood=valuesToStore[8]
+		)
 		return
