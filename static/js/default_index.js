@@ -374,7 +374,7 @@ var app = function() {
                 equipped_weapon: self.vue.band[0].weapon.name,
                 equipped_armor: self.vue.band[0].armor.name,
                 num_fighters: self.vue.num_fighters,
-                fighter_health: self.vue.health_per_figher
+                fighter_health: self.vue.fighter_group_health
             },
             function (result) {
                 //console.log( result )
@@ -619,6 +619,7 @@ var app = function() {
 	};
 
 	self.can_equip_boi = function(index) {
+		// TODO: make it so you can skip a level
 		if(!self.vue) return false;
 		if(i == 4) return false; // can't upgrade level 5 fighters
 		// find the items in the inventory
@@ -636,6 +637,7 @@ var app = function() {
 	};
 
 	self.equip_boi = function(i) {
+		// TODO: make it so you can skip a level
 		if(i != 0) {
 			addToInventory(self.vue.upgrade_items[i - 1][0]);
 			addToInventory(self.vue.upgrade_items[i - 1][1]);
