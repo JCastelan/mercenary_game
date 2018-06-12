@@ -24,8 +24,22 @@ var app = function() {
 		return health;
 	};
 	
-	self.toggle_view_pane = function() {
-		self.vue.viewing_resources = !self.vue.viewing_resources;
+	self.show_view_panel_resources = function() {
+		self.vue.viewing_resources = true;
+		self.vue.viewing_party = false;
+		self.vue.viewing_village = false;
+	};
+
+	self.show_view_panel_party = function() {
+		self.vue.viewing_resources = false;
+		self.vue.viewing_party = true;
+		self.vue.viewing_village = false;
+	};
+
+	self.show_view_panel_village = function() {
+		self.vue.viewing_resources = false;
+		self.vue.viewing_party = false;
+		self.vue.viewing_village = true;
 	};
 
 	self.can_eat_food = function(member) {
@@ -161,13 +175,17 @@ var app = function() {
 			in_battle: false,
 			player_attack_time: 16, // used for limiting player attacks
 			viewing_resources: false,
-
+			viewing_party: false,
+			viewing_village: false,
+			viewing_assignment: false,
             counter: 0
         },
         methods: {
 			closePopup: self.closePopup,
 			get_band_health: self.get_band_health,
-			toggle_view_pane: self.toggle_view_pane,
+			show_view_panel_resources: self.show_view_panel_resources,
+			show_view_panel_party: self.show_view_panel_party,
+			show_view_panel_village: self.show_view_panel_village,
 			can_eat_food: self.can_eat_food,
 			can_equip_weapon: self.can_equip_weapon,
 			eat_food: self.eat_food,
@@ -211,7 +229,7 @@ Exploration parts
 	Implement armor in the same way as weapons
 
 Idle game parts
-	Be able to assign yourself and band members to certain tasks to collect resources
+	Be able to assign yourself and band members to certain tasks to collect resources JACK
 	Decide on how to gather resources
 	Be able to craft items using resources
 	Decide on what items, resources, and crafting recipes we're gonna put in the game

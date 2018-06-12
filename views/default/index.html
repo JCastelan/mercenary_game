@@ -15,8 +15,11 @@
 		{{if auth.user is not None:}}
 			<div class="container">
 				<div class="quarter">
-					<a v-if="viewing_resources" class="btn" v-on:click="toggle_view_pane()">Resources</a>
+					<a class="btn" v-on:click="show_view_panel_resources()">Resources</a>
+					<a class="btn" v-on:click="show_view_panel_party()">Party</a>
+					<a class="btn" v-on:click="show_view_panel_village()">Village</a>
 					<div v-if="viewing_resources">
+                        <a class="btn" v-on:click="show_view_panel_resources()">Send a boi home</a>
 						Inventory:<br><br>
 						<div v-for="obj in band[0].inventory">
 							<div v-if="obj.is_weapon">
@@ -27,8 +30,7 @@
 							</div>
 						</div>
 					</div>
-					<a v-if="!viewing_resources" class="btn" v-on:click="toggle_view_pane()">Band</a>
-					<div v-if="!viewing_resources" v-for="member in band">
+					<div v-if="viewing_party" v-for="member in band">
 						Name: ${member.name}<br>
 						Health: ${member.health}
 						<a class="btn" v-if="can_eat_food(member)" v-on:click="eat_food(member)">Eat fud</a>
@@ -38,6 +40,9 @@
 						<br>
 						______________________________
 						<br><br>
+					</div>
+					<div v-if="viewing_village">
+                        village is shitty
 					</div>
 				</div>
 				<div class="threequarters" id="grid">this is a grid boi</div>
