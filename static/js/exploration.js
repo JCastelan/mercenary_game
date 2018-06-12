@@ -16,6 +16,7 @@ var hiddenEnemyChar = 'Q';
 var itemChar = 'I';
 var lootChar = 'L';
 var bossChar = 'B';
+var lootedChar = 'h'; //KRON wuz here
 
 var lastPlayerPos = {x: 0, y: 0};
 var playerPos = {x: 0, y: 0};
@@ -164,7 +165,14 @@ function makeLootBag(bagY, bagX, items) {
 				if(grid[playerPos.y][playerPos.x].buttons.length == 0) {
 					grid[playerPos.y][playerPos.x].desc = "Looted.";
 					APP.vue.popup_desc = "Looted.";
-					clearCurrentTile();
+					//-EDIT BY KRON: changes char to 'h' after a house has been looted-
+					if (grid[playerPos.y][playerPos.x].char != null){
+						grid[playerPos.y][playerPos.x].char = lootedChar;
+					}
+					else{
+						clearCurrentTile(); 
+					}
+					//----------------------------------------------------------------
 				}
 			}
 		};
@@ -270,6 +278,22 @@ function initHubWorldGrid(width, height) {
 			var chance = Math.random();
 			if(chance < 0.01) {
 				grid[y].push({char: houseChar});
+				//-EDIT BY KRON: Creates loot bags in random houses on Grid upon Hub Creation-
+				var lootChance = Math.random();
+				if (lootChance < .40) {
+					grid[y][x].buttons = [
+						{name: "Aye a loot bag", onClick: function() {
+							makeLootBag(playerPos.y, playerPos.x, [
+								{name: "iron sword", is_weapon: true, damage: 2, num: 1},
+								{name: "food", num: 2},
+								{name: "iron armor", is_armor: true, health_boost: 10, num: 1}
+							]);
+						 APP.vue.popup_title = grid[playerPos.y][playerPos.x].title;
+						 APP.vue.popup_desc = grid[playerPos.y][playerPos.x].desc;
+						 APP.vue.popup_buttons = grid[playerPos.y][playerPos.x].buttons;
+						}}];
+				}
+				//--------------------------------------------------------------------------
 			} else if(chance < 0.05) {
 				// TODO: randomize the enemy names and stories
 				// TODO: clear this tile onDeath
@@ -335,6 +359,9 @@ function onPlayerMove() {
 	if(grid[playerPos.y][playerPos.x].char == houseChar) {
 		APP.vue.popup_title = "House";
 		APP.vue.popup_desc = "You\'ve encountered a generic house.";
+		//--EDIT BY KRON: show buttons for House Loot Event--
+		APP.vue.popup_buttons = grid[playerPos.y][playerPos.x].buttons;
+		//--------------------------------------------------
 		APP.vue.show_popup = true;
 	}
 	if(grid[playerPos.y][playerPos.x].char == enemyChar) {
