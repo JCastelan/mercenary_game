@@ -326,7 +326,7 @@ var app = function() {
         equipList = ["w_sword", "i_sword","s_sword","m_sword"]
         playerInfo = ["max_health","current_health","equipped_weapon","equipped_armor"]
         $.getJSON(load_resources_url, function (data) {
-            //console.log(data );
+            console.log(data );
             dataElems=Object.entries(data);
             dataElems.forEach(function(d,i){
                 if (equipList.indexOf(d[0])>=0) {
@@ -350,14 +350,14 @@ var app = function() {
                 }else{ //other random data I guess
                     if(d[0]== "num_fighters"){
 						self.vue.num_fighters= d[1];
-						for(var i = 0; i < self.vue.num_fighters.length; i++) {
+						/*for(var i = 0; i < self.vue.num_fighters.length; i++) {
 							self.vue.num_fighters[i] = +self.vue.num_fighters[i];
-						}
+						}*/
                     } else if (d[0]=="fighter_health") {
 						self.vue.fighter_group_health=d[1];
-						for(var i = 0; i < self.vue.num_fighters.length; i++) {
+						/*for(var i = 0; i < self.vue.num_fighters.length; i++) {
 							self.vue.fighter_group_health[i] = +self.vue.fighter_group_health[i];
-						}
+						}*/
                     }else{
                         console.log("warning: did not store ", d);
                     }}});});};
@@ -365,6 +365,7 @@ var app = function() {
     self.saveResources = function(){ //saves more than just resources
         //console.log( "saving all resources")
         //console.log(self.vue.resources)
+        //console.log(self.vue.num_fighters)
         $.post(save_resources_url,
             { 
                 resources: self.vue.resources,
