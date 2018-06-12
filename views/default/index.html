@@ -90,6 +90,8 @@
 					</div>
 					<div v-if="viewing_crafting">
 						<br>
+						<a class="btn" v-if="can_craft_steel()" v-on:click="craft_steel">Craft Steel (${get_num_craftable_steel()} craftable)</a>
+						<br>
 						<a class="btn" v-if="can_craft_wood_sword()" v-on:click="craft_wood_sword">Craft Wooden Sword (${get_num_craftable_wood_swords()} craftable)</a>
 						<a class="btn" v-if="can_craft_iron_sword()" v-on:click="craft_iron_sword">Craft Iron Sword (${get_num_craftable_iron_swords()} craftable)</a>
 						<a class="btn" v-if="can_craft_steel_sword()" v-on:click="craft_steel_sword">Craft Steel Sword (${get_num_craftable_steel_swords()} craftable)</a>

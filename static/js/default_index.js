@@ -365,6 +365,24 @@ var app = function() {
 		}
 	};
 
+	self.can_craft_steel = function() {
+		return self.get_num_craftable_steel() > 0;
+	};
+
+	self.craft_steel = function() {
+		addToResources("steel");
+		removeFromResources("iron", 1);
+		removeFromResources("coal", 1);
+		self.vue.$forceUpdate();
+	};
+
+	self.get_num_craftable_steel = function() {
+		var num_iron = getNumOfResource("iron");
+		var num_coal = getNumOfResource("coal");
+		// return min(num_iron, num_coal)
+		return num_iron > num_coal ? num_coal : num_iron;
+	};
+
 	self.can_craft_wood_sword = function() {
 		return self.get_num_craftable_wood_swords() > 0;
 	};
@@ -638,6 +656,10 @@ var app = function() {
             loadResources: self.loadResources,
 			saveResources: self.saveResources,
 			
+			can_craft_steel: self.can_craft_steel,
+			craft_steel: self.craft_steel,
+			get_num_craftable_steel: self.get_num_craftable_steel,
+			
 			can_craft_wood_sword: self.can_craft_wood_sword,
 			craft_wood_sword: self.craft_wood_sword,
 			get_num_craftable_wood_swords: self.get_num_craftable_wood_swords,
@@ -687,10 +709,12 @@ var app = function() {
     self.loadResources();
     self.show_view_panel_resources();
     window.setInterval(function(){
-        addToResources("wood",wood_gatherer)
-        addToResources("leather",hunter)
-        addToResources("coal",coal_miner)
-        addToResources("iron",iron_miner)
+		if(!self.vue.logged_in) return;
+        addToResources("wood",self.vue.wood_gatherer);
+        addToResources("leather",self.vue.hunter);
+        addToResources("coal",self.vue.coal_miner);
+		addToResources("iron",self.vue.iron_miner);
+		self.vue.$forceUpdate();
     }, 1000);
     autosave();
     return self;
