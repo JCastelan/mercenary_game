@@ -293,14 +293,13 @@ var app = function() {
             });
 	};
 	
-	self.clicked = function () { //increments all counters
-		self.vue.counter++;
+	self.clicked = function () { //increments all resource counters
         self.vue.resources.forEach(function(d){
             d[1]++;
         });
 	};
 
-    self.incrementResource = function(name){ //increments only the specified counter
+    self.incrementResource = function(name){ //increments only the specified resource counter
         console.log(name);
         self.vue.resources.forEach(function(d){
             if( d[0] == name){
@@ -310,22 +309,63 @@ var app = function() {
         });
     };
 
+    self.decrementResource = function(name){ //increments only the specified resource counter
+        console.log(name);
+        self.vue.resources.forEach(function(d){
+            if( d[0] == name){
+                console.log(d[0]);
+                d[1]--;
+            }
+        });
+    }
+
     // real stuff
     self.loadResources = function(){ //loads more than just resources
         // console.log( "loading all stored vals")
+        resourcesList = ["coal","iron","mithril","steel","wood", "leather"];
+        equipList = ["w_sword", "i_sword","s_sword","m_sword"]
+        playerInfo = ["max_health","current_health","equipped_weapon","equipped_armor"]
         $.getJSON(load_resources_url, function (data) {
             //console.log(data );
             dataElems=Object.entries(data);
-            dataElems.forEach(function(d){
-                d[1] = +d[1];
+            dataElems.forEach(function(d,i){
+                
+                if (equipList.indexOf(d[0])>=0) {
+                    d[1] = +d[1];
+                    self.vue.equipment.push(d)
+                }else if (resourcesList.indexOf(d[0])>=0){
+                    d[1] = +d[1];
+                    self.vue.resources.push(d)
+                }else if (playerInfo.indexOf(d[0])>=0){
+                    if(d[0]== "max_health"){
+                        self.vue.band.max_health=+d[1];
+                    } else if (d[0]=="current_health") {
+                        self.vue.band.health=+d[1];
+                    } else if (d[0]=="equipped_weapon") {
+                        self.vue.band[0].weapon.name=d[1];
+                    } else if (d[0]=="equipped_armor") {
+                        self.vue.band[0].armor.name=d[1];
+                    }else{
+                        console.log("warning: did not store ", d);
+                    }
+                }else{
+                    if(d[0]== "num_fighters"){
+                        self.vue.num_fighters= +d[1];
+                    } else if (d[0]=="fighter_health") {
+                        self.vue.health_per_figher=+d[1]; //not sure if this is the right one
+                    }else{
+                        console.log("warning: did not store ", d);
+                    }
+                }
             });
-            console.log(dataElems);
-            self.vue.resources = dataElems;
+            console.log(self.vue.equipment);
+            console.log(self.vue.resources);
+            //self.vue.resources = dataElems;
         });
         
     };
 
-    self.saveResources = function(){ //save resources is basically save game
+    self.saveResources = function(){ //saves more than just resources
         //console.log( "saving all resources")
         //console.log(self.vue.resources)
         $.post(save_resources_url,
@@ -338,7 +378,7 @@ var app = function() {
     };
 
     autosave = function(){
-        window.setInterval(self.saveResources, 5000);
+        window.setInterval(self.saveResources, 60*1000);
     };
 
 	self.send_villager_to_party = function(){
@@ -673,8 +713,9 @@ var app = function() {
 			num_villagers: 0,
 			cur_fighter_health: -1,
 
-            counter: 0,
-            resources: null,
+            //counter: 0,
+            resources: [],
+            equipment: [],
 			available_villagers: 0,
 			wood_gatherer: 0,
 			hunter: 0,
@@ -722,8 +763,8 @@ var app = function() {
 			clicked: self.clicked,
 			incrementResource: self.incrementResource,
 			
-            loadCounter: self.loadCounter,
-            saveCounter: self.saveCounter,
+            //loadCounter: self.loadCounter,
+            //saveCounter: self.saveCounter,
             loadResources: self.loadResources,
 			saveResources: self.saveResources,
 			
@@ -780,7 +821,7 @@ var app = function() {
 	$("#vue-div").show();
 
 
-    self.loadCounter(); 
+    //self.loadCounter(); 
     self.loadResources();
     self.show_view_panel_resources();
     window.setInterval(function(){
