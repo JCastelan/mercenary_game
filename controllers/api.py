@@ -69,7 +69,7 @@ def load_resources():
 			m_sword=0,
 
 			num_fighters=[0,0,0,0,0],
-			fighter_health=[10, 15, 20, 25, 30],
+			fighter_health=[0,0,0,0,0],
 		)
 		return response.json(loaded_data)
 	else:

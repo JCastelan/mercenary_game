@@ -54,6 +54,9 @@
 							<div v-if="num_fighters[i] != 0">
 								Number of level ${i+1} fighters: ${num_fighters[i]}<br>
 								Level ${i+1} fighters group HP: ${group_hp}<br>
+								Level ${i+1} fighters group damage: ${num_fighters[i] * (i+1)}<br>
+								<a class="btn" v-if="can_equip_boi(i)" v-on:click="equip_boi(i)">Equip (level up) a a boi</a>
+								<a class="btn" v-if="i != 0" v-on:click="unequip_boi(i)">Unequip (level down to 1) a boi</a>
 								<a class="btn" v-on:click="send_to_village(i)">Send a boi to the village</a>
 							</div>
 							<br>

@@ -37,7 +37,7 @@ db.define_table('userdb',
 
 				#human units
 				Field( 'fighter_count', 'string', default="0,0,0,0,0"),
-				Field( 'fighter_health', 'string', default="10,15,20,25,30"),
+				Field( 'fighter_health', 'string', default="0,0,0,0,0"),
 
 				Field( 'c_miners', 'integer', default=0),
 				Field( 'i_miners', 'integer', default=0),

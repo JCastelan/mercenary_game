@@ -52,6 +52,33 @@ function addToInventory(item) {
 	}
 }
 
+function removeFromInventory(item) {
+	if(!item.num) item.num = 1;
+	// find the item in the inventory
+	var found = false;
+	for(var i = 0; i < APP.vue.band[0].inventory.length; i++) {
+		if(APP.vue.band[0].inventory[i].name == item.name) {
+			// if found, decrement num of them
+			if(APP.vue.band[0].inventory[i].num > item.num) {
+				APP.vue.band[0].inventory[i].num -= item.num;
+			}
+			else if(APP.vue.band[0].inventory[i].num == item.num) {
+				APP.vue.band[0].inventory.splice(i, 1);
+				return;
+			}
+			else {
+				console.log("NOOOOOO");
+				return;
+			}
+			found = true;
+		}
+	}
+	if(!found) {
+		// if not found, bad things happen
+		console.log("NOOOOOO");
+	}
+}
+
 function removeFromResources(resourceName, num) {
 	if(!num) num = 1;
 	for(var i = 0; i < APP.vue.resources.length; i++) {
