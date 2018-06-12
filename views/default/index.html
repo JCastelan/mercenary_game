@@ -57,6 +57,7 @@
 						</div>
 					</div>
 					<div v-if="viewing_village">
+                        <a class="btn" v-on:click="send_villager_to_party()"><i class="fa fa-plus" aria-hidden="true"></i></a>
                         Available villagers: ${available_villagers}<br>
                         <div class="gather_wood ">
                             Wood Gatherer

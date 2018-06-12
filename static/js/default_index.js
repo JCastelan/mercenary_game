@@ -321,6 +321,14 @@ var app = function() {
 		}
 	}
 
+	self.send_villager_to_party = function(){
+    	if(self.vue.available_villagers > 0){
+    		self.vue.available_villagers -= 1;
+    		self.vue.num_fighters[0] += 1;
+		}
+
+	}
+
     // Complete as needed.
     self.vue = new Vue({
         el: "#vue-div",
@@ -365,7 +373,7 @@ var app = function() {
 
             counter: 0,
             resources: null,
-			available_villagers: 1,
+			available_villagers: 0,
 			wood_gatherer: 0,
         },
         methods: {
@@ -383,6 +391,7 @@ var app = function() {
 			equip_armor: self.equip_armor,
 			unequip_armor: self.unequip_armor,
 			send_party_member_home:self.send_party_member_home,
+			send_villager_to_party:self.send_villager_to_party,
 			increment_wood_gatherer:self.increment_wood_gatherer,
 			decrement_wood_gatherer:self.decrement_wood_gatherer,
 
