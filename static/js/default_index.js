@@ -29,19 +29,29 @@ var app = function() {
 		return health;
 	};
 	
+    activated_color = 'yellow';
 	self.show_view_panel_resources = function() {
+        document.getElementById("b_res").classList.add(activated_color);
+        document.getElementById("b_village").classList.remove(activated_color);
+        document.getElementById("b_party").classList.remove(activated_color);
 		self.vue.viewing_resources = true;
 		self.vue.viewing_party = false;
 		self.vue.viewing_village = false;
 	};
 
 	self.show_view_panel_party = function() {
+        document.getElementById("b_party").classList.add(activated_color);
+        document.getElementById("b_res").classList.remove(activated_color);
+        document.getElementById("b_village").classList.remove(activated_color);
 		self.vue.viewing_resources = false;
 		self.vue.viewing_party = true;
 		self.vue.viewing_village = false;
 	};
 
 	self.show_view_panel_village = function() {
+        document.getElementById("b_village").classList.add(activated_color);
+        document.getElementById("b_res").classList.remove(activated_color);
+        document.getElementById("b_party").classList.remove(activated_color);
 		self.vue.viewing_resources = false;
 		self.vue.viewing_party = false;
 		self.vue.viewing_village = true;
@@ -253,26 +263,48 @@ var app = function() {
             });
 	};
 	
-	self.clicked = function () {
+	self.clicked = function () { //increments all counters
 		self.vue.counter++;
+        self.vue.resources.forEach(function(d){
+            d[1]++;
+        });
 	}
+
+    self.incrementResource = function(name){ //increments only the specified counter
+        console.log(name);
+        self.vue.resources.forEach(function(d){
+            if( d[0] == name){
+                console.log(d[0]);
+                d[1]++;
+            }
+        });
+    }
 
     // real stuff
     self.loadResources = function(){
         // console.log( "loading all stored vals")
         $.getJSON(load_resources_url, function (data) {
-            console.log(data );
-            console.log( Object.entries(data))
-            Object.entries(data).forEach( function(d){
-                console.log(d);
-            })
-            self.vue.res_count = data;
-            self.vue.resources = Object.entries(data);
+            //console.log(data );
+            dataElems=Object.entries(data);
+            dataElems.forEach(function(d){
+                d[1] = +d[1];
+            });
+            console.log(dataElems);
+            self.vue.resources = dataElems;
         });
+        
     };
 
     self.saveResources = function(){
         // console.log( "saving all resources")
+        console.log(self.vue.resources)
+        $.post(save_resources_url,
+            { 
+                resources: self.vue.resources
+            },
+            function (result) {
+                // console.log( result )
+            });
     };
 
     self.gather_wood = function(){
@@ -343,6 +375,7 @@ var app = function() {
 			send_party_member_home:self.send_party_member_home,
 
 			clicked: self.clicked,
+            incrementResource: self.incrementResource,
             loadCounter: self.loadCounter,
             saveCounter: self.saveCounter,
             loadResources: self.loadResources,
@@ -363,6 +396,7 @@ var app = function() {
 
     self.loadCounter(); 
     self.loadResources();
+    self.show_view_panel_resources();
     return self;
 };
 

@@ -17,9 +17,9 @@
 		{{if auth.user is not None:}}
 			<div class="container">
 				<div class="quarter">
-					<a class="btn" v-on:click="show_view_panel_resources()">Resources</a>
-					<a class="btn" v-on:click="show_view_panel_party()">Party</a>
-					<a class="btn" v-on:click="show_view_panel_village()">Village</a>
+					<a class="btn" id="b_res" v-on:click="show_view_panel_resources()">Resources</a>
+					<a class="btn" id="b_party" v-on:click="show_view_panel_party()">Party</a>
+					<a class="btn" id="b_village" v-on:click="show_view_panel_village()">Village</a>
 					<div v-if="viewing_resources">
 						Inventory:<br><br>
 						<div v-for="obj in band[0].inventory">
@@ -95,6 +95,7 @@
 					<h2>Click the button to increment the counter</h2>
 					<a class="center btn large" v-on:click="clicked"><tt>Click Me</tt></a>
 					<a class="center btn large" v-on:click="saveCounter"><tt>Save counter</tt></a>
+					<a class="center btn large" v-on:click="saveResources"><tt>Save resources</tt></a>
 				</div>
 				<div class="threequarters">
 					<h1 class="right" id="counter">${counter}</h1>
