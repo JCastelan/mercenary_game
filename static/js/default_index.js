@@ -329,7 +329,6 @@ var app = function() {
             //console.log(data );
             dataElems=Object.entries(data);
             dataElems.forEach(function(d,i){
-                
                 if (equipList.indexOf(d[0])>=0) {
                     d[1] = +d[1];
                     self.vue.equipment.push(d)
@@ -338,9 +337,9 @@ var app = function() {
                     self.vue.resources.push(d)
                 }else if (playerInfo.indexOf(d[0])>=0){
                     if(d[0]== "max_health"){
-                        self.vue.band.max_health=+d[1];
+                        self.vue.band[0].max_health=+d[1];
                     } else if (d[0]=="current_health") {
-                        self.vue.band.health=+d[1];
+                        self.vue.band[0].health=+d[1];
                     } else if (d[0]=="equipped_weapon") {
                         self.vue.band[0].weapon.name=d[1];
                     } else if (d[0]=="equipped_armor") {
@@ -348,7 +347,7 @@ var app = function() {
                     }else{
                         console.log("warning: did not store ", d);
                     }
-                }else{
+                }else{ //other random data I guess
                     if(d[0]== "num_fighters"){
 						self.vue.num_fighters= d[1];
 						for(var i = 0; i < self.vue.num_fighters.length; i++) {
@@ -361,22 +360,21 @@ var app = function() {
 						}
                     }else{
                         console.log("warning: did not store ", d);
-                    }
-                }
-            });
-            console.log(self.vue.equipment);
-            console.log(self.vue.resources);
-            //self.vue.resources = dataElems;
-        });
-        
-    };
+                    }}});});};
 
     self.saveResources = function(){ //saves more than just resources
         //console.log( "saving all resources")
         //console.log(self.vue.resources)
         $.post(save_resources_url,
             { 
-                resources: self.vue.resources
+                resources: self.vue.resources,
+                equipment: self.vue.equipment,
+                max_health: self.vue.band[0].max_health,
+                current_health: self.vue.band[0].health,
+                equipped_weapon: self.vue.band[0].weapon.name,
+                equipped_armor: self.vue.band[0].armor.name,
+                num_fighters: self.vue.num_fighters,
+                fighter_health: self.vue.health_per_figher
             },
             function (result) {
                 //console.log( result )
@@ -384,7 +382,7 @@ var app = function() {
     };
 
     autosave = function(){
-        window.setInterval(self.saveResources, 60*1000);
+        window.setInterval(self.saveResources, 5*1000);
     };
 
 	self.send_villager_to_party = function(){
