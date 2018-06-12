@@ -297,16 +297,21 @@ var app = function() {
     };
 
     self.saveResources = function(){
-        // console.log( "saving all resources")
-        console.log(self.vue.resources)
+        //console.log( "saving all resources")
+        //console.log(self.vue.resources)
         $.post(save_resources_url,
             { 
                 resources: self.vue.resources
             },
             function (result) {
-                // console.log( result )
+                //console.log( result )
             });
     };
+
+
+    autosave = function(){
+        window.setInterval(self.saveResources, 5000);
+    }
 
     // Complete as needed.
     self.vue = new Vue({
@@ -386,6 +391,7 @@ var app = function() {
     self.loadCounter(); 
     self.loadResources();
     self.show_view_panel_resources();
+    autosave();
     return self;
 };
 
