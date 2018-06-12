@@ -339,6 +339,16 @@ var app = function() {
         window.setInterval(self.saveResources, 5000);
     };
 
+	self.send_villager_to_party = function(){
+    	if(self.vue.available_villagers > 0){
+    		self.vue.available_villagers -= 1;
+    		self.vue.num_fighters[0] += 1;
+    		self.vue.fighter_group_health[0] += self.vue.health_per_figher[0];
+    		self.vue.$forceUpdate();
+		}
+
+	}
+
 	self.increment_wood_gatherer = function(){
     	if(self.vue.available_villagers > 0){
     		self.vue.available_villagers -= 1;
@@ -489,6 +499,48 @@ var app = function() {
 		return num_mithril > num_leather ? num_leather : num_mithril;
 	};
 
+	self.increment_hunter = function(){
+    	if(self.vue.available_villagers > 0){
+    		self.vue.available_villagers -= 1;
+    		self.vue.hunter += 1;
+		}
+	}
+
+	self.decrement_hunter = function(){
+    	if(self.vue.hunter > 0){
+    		self.vue.available_villagers += 1;
+    		self.vue.hunter -= 1;
+		}
+	}
+
+	self.increment_coal_miner = function(){
+    	if(self.vue.available_villagers > 0){
+    		self.vue.available_villagers -= 1;
+    		self.vue.coal_miner += 1;
+		}
+	}
+
+	self.decrement_coal_miner = function(){
+    	if(self.vue.coal_miner > 0){
+    		self.vue.available_villagers += 1;
+    		self.vue.coal_miner -= 1;
+		}
+	}
+
+	self.increment_iron_miner = function(){
+    	if(self.vue.available_villagers > 0){
+    		self.vue.available_villagers -= 1;
+    		self.vue.iron_miner += 1;
+		}
+	}
+
+	self.decrement_iron_miner = function(){
+    	if(self.vue.iron_miner > 0){
+    		self.vue.available_villagers += 1;
+    		self.vue.iron_miner -= 1;
+		}
+	}
+
     // Complete as needed.
     self.vue = new Vue({
         el: "#vue-div",
@@ -536,8 +588,13 @@ var app = function() {
 
             counter: 0,
             resources: null,
-			available_villagers: 1,
+			available_villagers: 0,
 			wood_gatherer: 0,
+			hunter: 0,
+			coal_miner: 0,
+			iron_miner: 0,
+			coal_mine_unlocked: false,
+			iron_mine_unlocked: false,
         },
         methods: {
 			closePopup: self.closePopup,
@@ -561,8 +618,15 @@ var app = function() {
 
 			send_to_village: self.send_to_village,
 			send_party_member_home:self.send_party_member_home,
+			send_villager_to_party:self.send_villager_to_party,
 			increment_wood_gatherer:self.increment_wood_gatherer,
 			decrement_wood_gatherer:self.decrement_wood_gatherer,
+			increment_hunter:self.increment_hunter,
+			decrement_hunter:self.decrement_hunter,
+			increment_coal_miner:self.increment_coal_miner,
+			decrement_coal_miner:self.decrement_coal_miner,
+			increment_iron_miner:self.increment_iron_miner,
+			decrement_iron_miner:self.decrement_iron_miner,
 
 			clicked: self.clicked,
 			incrementResource: self.incrementResource,

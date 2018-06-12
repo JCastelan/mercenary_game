@@ -61,12 +61,31 @@
 					</div>
 					<div v-if="viewing_village">
 						<br>
+                        <a class="btn" v-on:click="send_villager_to_party()">Send to party</a>
                         Available villagers: ${available_villagers}<br>
                         <div class="gather_wood ">
                             Wood Gatherer
                             <a class="btn" v-on:click="increment_wood_gatherer()"><i class="fa fa-plus" aria-hidden="true"></i></a>
                             ${wood_gatherer}
                             <a class="btn" v-on:click="decrement_wood_gatherer()"><i class="fa fa-minus" aria-hidden="true"></i></a>
+                        </div>
+                        <div class="hunting ">
+                            Hunter
+                            <a class="btn" v-on:click="increment_hunter()"><i class="fa fa-plus" aria-hidden="true"></i></a>
+                            ${hunter}
+                            <a class="btn" v-on:click="decrement_hunter()"><i class="fa fa-minus" aria-hidden="true"></i></a>
+                        </div>
+                        <div class="mine_coal ">
+                            Coal miner
+                            <a class="btn" v-on:click="increment_coal_miner()"><i class="fa fa-plus" aria-hidden="true"></i></a>
+                            ${coal_miner}
+                            <a class="btn" v-on:click="decrement_coal_miner()"><i class="fa fa-minus" aria-hidden="true"></i></a>
+                        </div>
+                        <div class="mine_iron ">
+                            Iron miner
+                            <a class="btn" v-on:click="increment_iron_miner()"><i class="fa fa-plus" aria-hidden="true"></i></a>
+                            ${iron_miner}
+                            <a class="btn" v-on:click="decrement_iron_miner()"><i class="fa fa-minus" aria-hidden="true"></i></a>
                         </div>
 					</div>
 					<div v-if="viewing_crafting">
