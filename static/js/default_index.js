@@ -350,9 +350,15 @@ var app = function() {
                     }
                 }else{
                     if(d[0]== "num_fighters"){
-                        self.vue.num_fighters= +d[1];
+						self.vue.num_fighters= d[1];
+						for(var i = 0; i < self.vue.num_fighters.length; i++) {
+							self.vue.num_fighters[i] = +self.vue.num_fighters[i];
+						}
                     } else if (d[0]=="fighter_health") {
-                        self.vue.health_per_figher=+d[1]; //not sure if this is the right one
+						self.vue.fighter_group_health=d[1];
+						for(var i = 0; i < self.vue.num_fighters.length; i++) {
+							self.vue.fighter_group_health[i] = +self.vue.fighter_group_health[i];
+						}
                     }else{
                         console.log("warning: did not store ", d);
                     }
