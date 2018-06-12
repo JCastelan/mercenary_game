@@ -24,19 +24,29 @@ var app = function() {
 		return health;
 	};
 	
+    activated_color = 'yellow';
 	self.show_view_panel_resources = function() {
+        document.getElementById("b_res").classList.add(activated_color);
+        document.getElementById("b_village").classList.remove(activated_color);
+        document.getElementById("b_party").classList.remove(activated_color);
 		self.vue.viewing_resources = true;
 		self.vue.viewing_party = false;
 		self.vue.viewing_village = false;
 	};
 
 	self.show_view_panel_party = function() {
+        document.getElementById("b_party").classList.add(activated_color);
+        document.getElementById("b_res").classList.remove(activated_color);
+        document.getElementById("b_village").classList.remove(activated_color);
 		self.vue.viewing_resources = false;
 		self.vue.viewing_party = true;
 		self.vue.viewing_village = false;
 	};
 
 	self.show_view_panel_village = function() {
+        document.getElementById("b_village").classList.add(activated_color);
+        document.getElementById("b_res").classList.remove(activated_color);
+        document.getElementById("b_party").classList.remove(activated_color);
 		self.vue.viewing_resources = false;
 		self.vue.viewing_party = false;
 		self.vue.viewing_village = true;
@@ -369,6 +379,7 @@ var app = function() {
 
     self.loadCounter(); 
     self.loadResources();
+    self.show_view_panel_resources();
     return self;
 };
 

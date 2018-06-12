@@ -17,9 +17,9 @@
 		{{if auth.user is not None:}}
 			<div class="container">
 				<div class="quarter">
-					<a class="btn" v-on:click="show_view_panel_resources()">Resources</a>
-					<a class="btn" v-on:click="show_view_panel_party()">Party</a>
-					<a class="btn" v-on:click="show_view_panel_village()">Village</a>
+					<a class="btn" id="b_res" v-on:click="show_view_panel_resources()">Resources</a>
+					<a class="btn" id="b_party" v-on:click="show_view_panel_party()">Party</a>
+					<a class="btn" id="b_village" v-on:click="show_view_panel_village()">Village</a>
 					<div v-if="viewing_resources">
                         <a class="btn" v-on:click="show_view_panel_resources()">Send a boi home</a>
 						Inventory:<br><br>
