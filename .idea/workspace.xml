@@ -2,18 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a3121111-ec48-4b3d-9e1b-04c8b2ca8ea6" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/errors/127.0.0.1.2018-06-10.20-10-05.b248c81a-d2b9-412f-bf04-b76cb8e9256e" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/errors/127.0.0.1.2018-06-10.20-10-43.7db5c174-075c-4b0b-93fc-a4a3bbf230f5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/errors/127.0.0.1.2018-06-10.20-11-07.8df5c286-a731-49d9-814d-7db0e9081781" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/errors/127.0.0.1.2018-06-10.22-45-51.7a4474e1-8ea6-4e25-b1a7-71c669fa5915" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/errors/127.0.0.1.2018-06-11.16-22-49.38f68040-dd0f-4351-b31f-dfea7f9b6e26" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controllers/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/databases/c8b669d15150d7109e5f7ab36744a5b7_userdb.table" beforeDir="false" afterPath="$PROJECT_DIR$/databases/c8b669d15150d7109e5f7ab36744a5b7_userdb.table" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/databases/sql.log" beforeDir="false" afterPath="$PROJECT_DIR$/databases/sql.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/databases/storage.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/databases/storage.sqlite" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/tables.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/tables.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/js/default_index.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/default_index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/exploration.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/exploration.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/default/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/views/default/index.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -25,21 +17,33 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/views/default/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="157">
-              <caret line="23" column="86" selection-start-line="23" selection-start-column="86" selection-end-line="23" selection-end-column="86" />
+            <state relative-caret-position="170">
+              <caret line="52" column="33" selection-start-line="52" selection-start-column="33" selection-end-line="52" selection-end-column="33" />
+              <folding>
+                <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#input#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#input#1;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="default_index.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="default_index.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/static/js/default_index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="341">
-              <caret line="311" selection-start-line="311" selection-end-line="311" />
+            <state relative-caret-position="351">
+              <caret line="315" column="31" selection-start-line="315" selection-start-column="31" selection-end-line="315" selection-end-column="31" />
             </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="exploration.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/static/js/exploration.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-6783" />
           </provider>
         </entry>
       </file>
@@ -65,8 +69,8 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>view_pane</find>
-      <find>resource</find>
       <find>band</find>
+      <find>resource</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -75,8 +79,9 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/views/default/index.html" />
+        <option value="$PROJECT_DIR$/databases/sql.log" />
         <option value="$PROJECT_DIR$/static/js/default_index.js" />
+        <option value="$PROJECT_DIR$/views/default/index.html" />
       </list>
     </option>
   </component>
@@ -108,6 +113,11 @@
               <item name="mercenary_game" type="b2602c69:ProjectViewProjectNode" />
               <item name="mercenary_game" type="462c0819:PsiDirectoryNode" />
               <item name="controllers" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="mercenary_game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="mercenary_game" type="462c0819:PsiDirectoryNode" />
+              <item name="databases" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="mercenary_game" type="b2602c69:ProjectViewProjectNode" />
@@ -229,9 +239,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/models/tables.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/controllers/default.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-91" />
@@ -240,17 +247,37 @@
     <entry file="file://$PROJECT_DIR$/controllers/api.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/default/index.html">
+    <entry file="file://$PROJECT_DIR$/databases/sql.log">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="157">
-          <caret line="23" column="86" selection-start-line="23" selection-start-column="86" selection-end-line="23" selection-end-column="86" />
+        <state relative-caret-position="3825">
+          <caret line="225" column="8" selection-start-line="225" selection-start-column="8" selection-end-line="225" selection-end-column="8" />
         </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models/tables.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/js/exploration.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-6783" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/static/js/default_index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="341">
-          <caret line="311" selection-start-line="311" selection-end-line="311" />
+        <state relative-caret-position="351">
+          <caret line="315" column="31" selection-start-line="315" selection-start-column="31" selection-end-line="315" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/default/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="52" column="33" selection-start-line="52" selection-start-column="33" selection-end-line="52" selection-end-column="33" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#input#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#input#1;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -28,19 +28,21 @@ function clearCurrentTile() {
 }
 
 function addRecruitToBand(name) {
-	APP.vue.band.push({
-		name: name,
-		health: 10,
-		max_health: 10,
-		weapon: {
-			name: "fists",
-			damage: 1
-		},
-		armor: {
-			name: "nothing",
-			health_boost: 0
-		}
-	});
+	// APP.vue.band.push({
+	// 	name: name,
+	// 	health: 10,
+	// 	max_health: 10,
+	// 	weapon: {
+	// 		name: "fists",
+	// 		damage: 1
+	// 	},
+	// 	armor: {
+	// 		name: "nothing",
+	// 		health_boost: 0
+	// 	}
+	// });
+	APP.vue.num_fighters[0]++;
+	APP.vue.fighter_group_health[0] += 10;
 }
 
 function restartGame() {
@@ -328,20 +330,25 @@ function onPlayerMove() {
 				if(!can_attacc) return;
 				can_attacc = false;
 				APP.vue.player_attack_time = 0;
-				var damage = 1;
-				var cooldown = 60;
+				var enemy_damage = 1;
+				var enemy_cooldown = 60;
 				if(grid[playerPos.y][playerPos.x].damage) {
-					damage = grid[playerPos.y][playerPos.x].damage;
+					enemy_damage = grid[playerPos.y][playerPos.x].damage;
 				}
 				if(grid[playerPos.y][playerPos.x].cooldown) {
-					cooldown = grid[playerPos.y][playerPos.x].cooldown;
+					enemy_cooldown = grid[playerPos.y][playerPos.x].cooldown;
 				}
-				start_enemy_attacks(damage, cooldown);
+				start_enemy_attacks(enemy_damage, enemy_cooldown);
 				var damage = 0;
+				// this is for calculating damage based on the old recruiting system
 				for(var i = 0; i < APP.vue.band.length; i++) {
 					if(APP.vue.band[i].health > 0) { // TODO: keep this for resurrection if we do that
 						damage += APP.vue.band[i].weapon.damage;
 					}
+				}
+				// this is for calculating damage based on the new recruiting system
+				for(var i = 0; i < APP.vue.num_fighters.length; i++) {
+					damage += APP.vue.num_fighters[i] * (i+1);
 				}
 				APP.vue.enemy_health -= damage;
 				if(APP.vue.enemy_health <= 0) {
@@ -401,8 +408,15 @@ function start_enemy_attacks(damage, cooldown) {
 	enemy_attack_ticks = 0;
 	enemy_attack_cooldown_ticks = cooldown;
 	enemy_damage = damage;
-	for(var i = APP.vue.band.length - 1; i >= 0; i--) {
-		if(APP.vue.band[i].health > 0) {
+	// for(var i = APP.vue.band.length - 1; i >= 0; i--) {
+	// 	if(APP.vue.band[i].health > 0) {
+	// 		cur_band_member_being_attacked = i;
+	// 		break;
+	// 	}
+	// }
+	cur_band_member_being_attacked = -1;
+	for(var i = 0; i < APP.vue.num_fighters.length; i++) {
+		if(APP.vue.num_fighters[i] != 0) {
 			cur_band_member_being_attacked = i;
 			break;
 		}
@@ -417,10 +431,29 @@ function simulate_enemy_attacks() {
 	enemy_attack_ticks++;
 	if(APP.vue.enemy_health == 0) return;
 	if(enemy_attack_ticks % enemy_attack_cooldown_ticks == 0) {
-		APP.vue.band[cur_band_member_being_attacked].health -= enemy_damage;
-		if(APP.vue.band[cur_band_member_being_attacked].health <= 0) {
-			cur_band_member_being_attacked--;
-			if(cur_band_member_being_attacked == -1) {
+		var i = cur_band_member_being_attacked;
+		// APP.vue.band[cur_band_member_being_attacked].health -= enemy_damage;
+		// if(APP.vue.band[cur_band_member_being_attacked].health <= 0) {
+		// 	cur_band_member_being_attacked--;
+		// 	if(cur_band_member_being_attacked == -1) {
+		// 		APP.vue.popup_title = "You died!";
+		// 		APP.vue.popup_desc = "u ded boyo";
+		// 		APP.vue.popup_buttons = [
+		// 			{name: "Revive", onClick: function() {
+		// 				restartGame();
+		// 				APP.vue.show_popup = false;
+		// 			}}
+		// 		];
+		// 		return;
+		// 	}
+		// 	APP.vue.band.splice(APP.vue.band.length - 1, 1);
+		// }
+
+		// below is for updated recuiting
+		if(i == -1) {
+			APP.vue.band[0].health -= enemy_damage;
+			if(APP.vue.band[0].health <= 0) {
+				APP.vue.band[0].health = 0;
 				APP.vue.popup_title = "You died!";
 				APP.vue.popup_desc = "u ded boyo";
 				APP.vue.popup_buttons = [
@@ -431,7 +464,22 @@ function simulate_enemy_attacks() {
 				];
 				return;
 			}
-			APP.vue.band.splice(APP.vue.band.length - 1, 1);
+		}
+		else {
+			var old_num_alive_fighers = Math.ceil(APP.vue.fighter_group_health[i] / APP.vue.health_per_figher[i]);
+			APP.vue.fighter_group_health[i] -= enemy_damage;
+			console.log("fgh: " + APP.vue.fighter_group_health[i]);
+			var new_num_alive_fighers = Math.ceil(APP.vue.fighter_group_health[i] / APP.vue.health_per_figher[i]);
+			console.log("nnaf: " + new_num_alive_fighers);
+			if(new_num_alive_fighers != old_num_alive_fighers) {
+				// a figher died, decrement num_fighers
+				APP.vue.num_fighters[i]--;
+			}
+			if(APP.vue.fighter_group_health[i] <= 0) {
+				APP.vue.fighter_group_health[i] = 0;
+				cur_band_member_being_attacked--;
+			}
+			APP.vue.$forceUpdate();
 		}
 	}
 	requestAnimationFrame(simulate_enemy_attacks);

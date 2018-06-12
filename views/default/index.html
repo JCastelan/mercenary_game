@@ -21,7 +21,6 @@
 					<a class="btn" id="b_party" v-on:click="show_view_panel_party()">Party</a>
 					<a class="btn" id="b_village" v-on:click="show_view_panel_village()">Village</a>
 					<div v-if="viewing_resources">
-                        <a class="btn" v-on:click="show_view_panel_resources()">Send a boi home</a>
 						Inventory:<br><br>
 						<div v-for="obj in band[0].inventory">
 							${obj.num} x ${obj.name}<br>
@@ -47,9 +46,24 @@
 						<a class="btn" v-if="member.armor.name != 'nothing'" v-on:click="unequip_armor(member)">Unequip</a>
 						______________________________
 						<br><br>
+						<!-- TODO: make a "health of currently attacked fighter" field -->
+							<!-- so the enemy can attack 1 figher at a time until you're all that's left -->
+						<div v-for="(group_hp, i) in fighter_group_health">
+							<div v-if="num_fighters[i] != 0">
+								Number of level ${i+1} fighters: ${num_fighters[i]}<br>
+								Level ${i+1} fighters group HP: ${group_hp}
+							</div>
+							<br>
+						</div>
 					</div>
 					<div v-if="viewing_village">
-                        village is shitty
+                        Available villagers: ${available_villagers}<br>
+                        <div class="gather_wood ">
+                            Wood Gatherer
+                            <a class="btn" v-on:click="increment_wood_gatherer()"><i class="fa fa-plus" aria-hidden="true"></i></a>
+                            ${wood_gatherer}
+                            <a class="btn" v-on:click="decrement_wood_gatherer()"><i class="fa fa-minus" aria-hidden="true"></i></a>
+                        </div>
 					</div>
 				</div>
 				<div class="threequarters" id="grid">this is a grid boi</div>
