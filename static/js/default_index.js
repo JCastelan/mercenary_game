@@ -242,6 +242,17 @@ var app = function() {
 		};
 	};
 
+	self.send_to_village = function(i) {
+		self.vue.available_villagers++;
+		self.vue.num_fighters[i]--;
+		self.vue.fighter_group_health[i] -= self.vue.health_per_figher[i];
+		if(self.vue.fighter_group_health[i] < 0) {
+			self.vue.fighter_group_health[i] = 0;
+		}
+		APP.vue.$forceUpdate();
+		// TODO: based on which level we decremented from, add the necessary upgrade items back to the inventory
+	}
+
     // generic counter functions (for debugging purposes)
     self.loadCounter = function(){ 
         // console.log("getting the stored counter");
@@ -329,7 +340,7 @@ var app = function() {
 					health: 10,
 					weapon: {
 						name: "fists",
-						damage: 1
+						damage: 10
 					},
 					armor: {
 						name: "nothing",
@@ -361,21 +372,28 @@ var app = function() {
         methods: {
 			closePopup: self.closePopup,
 			get_band_health: self.get_band_health,
+
 			show_view_panel_resources: self.show_view_panel_resources,
 			show_view_panel_party: self.show_view_panel_party,
 			show_view_panel_village: self.show_view_panel_village,
+
 			can_eat_food: self.can_eat_food,
-			can_equip_weapon: self.can_equip_weapon,
 			eat_food: self.eat_food,
+
+			can_equip_weapon: self.can_equip_weapon,
 			equip_weapon: self.equip_weapon,
 			unequip_weapon: self.unequip_weapon,
+
 			can_equip_armor: self.can_equip_armor,
 			equip_armor: self.equip_armor,
 			unequip_armor: self.unequip_armor,
+
+			send_to_village: self.send_to_village,
 			send_party_member_home:self.send_party_member_home,
 
 			clicked: self.clicked,
-            incrementResource: self.incrementResource,
+			incrementResource: self.incrementResource,
+			
             loadCounter: self.loadCounter,
             saveCounter: self.saveCounter,
             loadResources: self.loadResources,
