@@ -100,6 +100,8 @@ def load_resources():
 def save_resources():
 	valueList=["coal","iron","mithril",   "steel","wood", "leather",  "w_sword","i_sword","s_sword","m_sword"]
 	valuesToStore=[0,0,0,      0,0,0,0,       0,0,0,0]
+	num_fighters_string=""
+	fighter_health_string=""
 	if auth.user is None:
 		return
 	# print "save_counter!!!!!!!!!!!!!!!!!"
@@ -110,23 +112,32 @@ def save_resources():
 	print request.vars
 	print "~~~~~~~~~~~~~~~~~~~~"
 	dataCount = 0
-	for value in request.vars.itervalues():
+	for key, value in request.vars.iteritems():
 		if not isinstance(value, list):
+			print "~~~\t", value
 			continue
-		valuesToStore[valueList.index(value[0])]=int(value[1])
-		dataCount+=1
 		print "\t", value
+		if len(value)>2:
+			print key, value
+			if key == "num_fighters[]":
+				print "num of fighters!!!!"
+				for item in value:
+					num_fighters_string+=item+","
+			elif key == "fighter_health[]":
+				print "health of fighters!!!!"
+				for item in value:
+					fighter_health_string+=item+","
+		else:
+			valuesToStore[valueList.index(value[0])]=int(value[1])
+		dataCount+=1
+		
 	print "~~~~~~~~~~~~~~~~~~~~"
 	print valuesToStore
 	if dataCount == 0:
 		return "failed"
 
-	num_fighters_string=""
-	fighter_health_string=""
-	for item in request.vars.num_fighters:
-		num_fighters_string+=item+","
-	for item in request.vars.fighter_health:
-		fighter_health_string+=item+","
+	
+	print "~~~~~~~~~~~~~~~~~~~~"
 	num_fighters_string = num_fighters_string[:-1]
 	fighter_health_string = fighter_health_string[:-1]
 	if row is not None:
@@ -151,7 +162,7 @@ def save_resources():
 			fighter_count=num_fighters_string,
 			fighter_health=fighter_health_string
 		)
-		print "\n\n", result, "\n\n"
+		#print "\n\n", result, "\n\n"
 		return result
 	else:
 		result = db.userdb.insert(
@@ -175,5 +186,5 @@ def save_resources():
 			fighter_count=num_fighters_string,
 			fighter_health=fighter_health_string
 		)
-		print "\n\n", result, "\n\n"
+		#print "\n\n", result, "\n\n"
 		return result
