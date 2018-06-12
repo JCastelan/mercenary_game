@@ -91,13 +91,17 @@ def save_resources():
 	print "~~~~~~~~~~~~~~~~~~~~"
 	print request.vars
 	print "~~~~~~~~~~~~~~~~~~~~"
+	dataCount = 0
 	for value in request.vars.itervalues():
 		if not isinstance(value, list):
 			continue
 		valuesToStore[valueList.index(value[0])]=int(value[1])
+		dataCount+=1
 		print "\t", value
 	print "~~~~~~~~~~~~~~~~~~~~"
 	print valuesToStore
+	if dataCount == 0:
+		return "failed"
 	if row is not None:
 		result = row.update_record(
 			coal=valuesToStore[0],
@@ -111,7 +115,7 @@ def save_resources():
 			wood=valuesToStore[8],
 			grass=valuesToStore[8]
 		)
-		return
+		return result
 	else:
 		result = db.userdb.insert(
 			coal=valuesToStore[0],
@@ -125,4 +129,4 @@ def save_resources():
 			wood=valuesToStore[8],
 			grass=valuesToStore[8]
 		)
-		return
+		return result
