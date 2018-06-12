@@ -4,9 +4,11 @@
     <list default="true" id="a3121111-ec48-4b3d-9e1b-04c8b2ca8ea6" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/databases/c8b669d15150d7109e5f7ab36744a5b7_userdb.table" beforeDir="false" afterPath="$PROJECT_DIR$/databases/c8b669d15150d7109e5f7ab36744a5b7_userdb.table" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/databases/c8b669d15150d7109e5f7ab36744a5b7_web2py_session_mercenary_game.table" beforeDir="false" afterPath="$PROJECT_DIR$/databases/c8b669d15150d7109e5f7ab36744a5b7_web2py_session_mercenary_game.table" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/databases/sql.log" beforeDir="false" afterPath="$PROJECT_DIR$/databases/sql.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/databases/storage.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/databases/storage.sqlite" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/js/default_index.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/default_index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/default/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/views/default/index.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -20,8 +22,8 @@
       <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/views/default/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="497">
-              <caret line="83" column="55" selection-start-line="83" selection-start-column="55" selection-end-line="83" selection-end-column="55" />
+            <state relative-caret-position="327">
+              <caret line="91" column="97" selection-start-line="91" selection-start-column="97" selection-end-line="91" selection-end-column="97" />
               <folding>
                 <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#input#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
@@ -31,19 +33,19 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="default_index.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/static/js/default_index.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="123">
+              <caret line="611" column="38" lean-forward="true" selection-start-line="611" selection-start-column="38" selection-end-line="611" selection-end-column="38" />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="api.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/controllers/api.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-1312" />
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="default_index.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/static/js/default_index.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="361">
-              <caret line="690" column="40" selection-start-line="690" selection-start-column="40" selection-end-line="690" selection-end-column="40" />
-            </state>
           </provider>
         </entry>
       </file>
@@ -77,12 +79,12 @@
       <find>view_pane</find>
       <find>update</find>
       <find>force</find>
-      <find>band</find>
       <find>wood</find>
       <find>save</find>
       <find>resource</find>
-      <find>add</find>
       <find>addToR</find>
+      <find>add</find>
+      <find>band</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -263,23 +265,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/default/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="497">
-          <caret line="83" column="55" selection-start-line="83" selection-start-column="55" selection-end-line="83" selection-end-column="55" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#input#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#input#1;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/controllers/api.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1312" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/models/tables.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-241" />
@@ -292,10 +277,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/controllers/api.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1312" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/default/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="327">
+          <caret line="91" column="97" selection-start-line="91" selection-start-column="97" selection-end-line="91" selection-end-column="97" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#input#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#input#1;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/static/js/default_index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="361">
-          <caret line="690" column="40" selection-start-line="690" selection-start-column="40" selection-end-line="690" selection-end-column="40" />
+        <state relative-caret-position="123">
+          <caret line="611" column="38" lean-forward="true" selection-start-line="611" selection-start-column="38" selection-end-line="611" selection-end-column="38" />
         </state>
       </provider>
     </entry>

@@ -87,6 +87,12 @@
                             ${iron_miner}
                             <a class="btn" v-on:click="decrement_iron_miner()"><i class="fa fa-minus" aria-hidden="true"></i></a>
                         </div>
+                        <div v-if="mithril_mine_unlocked" class="mine_iron ">
+                            Mithril miner
+                            <a class="btn" v-on:click="increment_mithril_miner()"><i class="fa fa-plus" aria-hidden="true"></i></a>
+                            ${mithril_miner}
+                            <a class="btn" v-on:click="decrement_mithril_miner()"><i class="fa fa-minus" aria-hidden="true"></i></a>
+                        </div>
 					</div>
 					<div v-if="viewing_crafting">
 						<br>
