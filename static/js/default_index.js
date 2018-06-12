@@ -326,11 +326,26 @@ var app = function() {
         equipList = ["w_sword", "i_sword","s_sword","m_sword"]
         playerInfo = ["max_health","current_health","equipped_weapon","equipped_armor"]
         $.getJSON(load_resources_url, function (data) {
-            //console.log(data );
+            console.log(data );
             dataElems=Object.entries(data);
             dataElems.forEach(function(d,i){
-                if (equipList.indexOf(d[0])>=0) {
-                    d[1] = +d[1];
+                if (equipList.indexOf(d[0])>=0) { // need to change this to band[0].inventory
+                    var item_name = ""
+                    if(d[0]=="i_sword"){
+                        item_name = "iron sword"
+                    }else if (d[0]=="w_sword"){
+                        item_name = "wooden sword"
+                    }else if (d[0]=="m_sword"){
+                        item_name = "mithril sword"
+                    }else if (d[0]=="s_sword"){
+                        item_name = "steel sword"
+                    }
+                    var single_equip= {
+                        num:+d[1],
+                        name:item_name
+                    }
+                    //d[1] = +d[1];
+                    self.vue.band[0].inventory.push(single_equip)
                     self.vue.equipment.push(d)
                 }else if (resourcesList.indexOf(d[0])>=0){
                     d[1] = +d[1];
@@ -350,25 +365,43 @@ var app = function() {
                 }else{ //other random data I guess
                     if(d[0]== "num_fighters"){
 						self.vue.num_fighters= d[1];
-						for(var i = 0; i < self.vue.num_fighters.length; i++) {
+						/*for(var i = 0; i < self.vue.num_fighters.length; i++) {
 							self.vue.num_fighters[i] = +self.vue.num_fighters[i];
-						}
+						}*/
                     } else if (d[0]=="fighter_health") {
 						self.vue.fighter_group_health=d[1];
-						for(var i = 0; i < self.vue.num_fighters.length; i++) {
+						/*for(var i = 0; i < self.vue.num_fighters.length; i++) {
 							self.vue.fighter_group_health[i] = +self.vue.fighter_group_health[i];
-						}
+						}*/
                     }else{
                         console.log("warning: did not store ", d);
                     }}});});};
 
     self.saveResources = function(){ //saves more than just resources
-        //console.log( "saving all resources")
+        console.log( "saving all resources...")
         //console.log(self.vue.resources)
+        //console.log(self.vue.num_fighters)
+        inventory_items = []
+        self.vue.band[0].inventory.forEach(function(d){
+            var item_name = d.name;
+            if(d.name=="iron sword"){
+                item_name = "i_sword"
+            }else if (d.name=="wooden sword"){
+                item_name = "w_sword"
+            }else if (d.name=="mithril sword"){
+                item_name = "m_sword"
+            }else if (d.name=="steel sword"){
+                item_name = "s_sword"
+            }
+
+            single_item = [item_name, d.num];
+            inventory_items.push(single_item);
+        })
+
         $.post(save_resources_url,
             { 
                 resources: self.vue.resources,
-                equipment: self.vue.equipment,
+                equipment: inventory_items,
                 max_health: self.vue.band[0].max_health,
                 current_health: self.vue.band[0].health,
                 equipped_weapon: self.vue.band[0].weapon.name,
