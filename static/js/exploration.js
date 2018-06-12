@@ -479,6 +479,7 @@ function simulate_enemy_attacks() {
 				APP.vue.fighter_group_health[i] = 0;
 				cur_band_member_being_attacked--;
 			}
+			APP.vue.$forceUpdate();
 		}
 	}
 	requestAnimationFrame(simulate_enemy_attacks);
