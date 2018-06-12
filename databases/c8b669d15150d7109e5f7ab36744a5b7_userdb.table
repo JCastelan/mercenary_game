@@ -1,9 +1,14 @@
 (dp0
+<<<<<<< HEAD
 S'steel'
+=======
+S'i_sword'
+>>>>>>> origin/master
 p1
 (dp2
 S'rname'
 p3
+<<<<<<< HEAD
 S'"steel"'
 p4
 sS'sortable'
@@ -12,6 +17,17 @@ I9
 sS'raw_rname'
 p6
 g1
+=======
+S'"i_sword"'
+p4
+sS'sortable'
+p5
+I13
+sS'raw_rname'
+p6
+S'i_sword'
+p7
+>>>>>>> origin/master
 sS'notnull'
 p7
 I00
@@ -28,6 +44,7 @@ I00
 sS'type'
 p12
 S'integer'
+<<<<<<< HEAD
 p13
 ssS'mithril'
 p14
@@ -40,6 +57,21 @@ I8
 sg6
 g14
 sg7
+=======
+p14
+ssS's_sword'
+p15
+(dp16
+g3
+S'"s_sword"'
+p17
+sg5
+I14
+sg6
+S's_sword'
+p18
+sg8
+>>>>>>> origin/master
 I00
 sg8
 I512
@@ -48,6 +80,7 @@ S'INTEGER'
 p17
 sg11
 I00
+<<<<<<< HEAD
 sg12
 g13
 ssS'houses'
@@ -61,6 +94,22 @@ I12
 sg6
 g18
 sg7
+=======
+sg13
+g14
+ssS'mithril'
+p20
+(dp21
+g3
+S'"mithril"'
+p22
+sg5
+I8
+sg6
+S'mithril'
+p23
+sg8
+>>>>>>> origin/master
 I00
 sg8
 I512
@@ -69,6 +118,7 @@ S'INTEGER'
 p21
 sg11
 I00
+<<<<<<< HEAD
 sg12
 g13
 ssS'leather'
@@ -82,11 +132,28 @@ I11
 sg6
 g22
 sg7
+=======
+sg13
+g14
+ssS'houses'
+p25
+(dp26
+g3
+S'"houses"'
+p27
+sg5
+I16
+sg6
+S'houses'
+p28
+sg8
+>>>>>>> origin/master
 I00
 sg8
 I512
 sg9
 S'INTEGER'
+<<<<<<< HEAD
 p25
 sg11
 I00
@@ -103,9 +170,51 @@ I15
 sg6
 g26
 sg7
+=======
+p29
+sg12
+I00
+sg13
+g14
+ssS'fighters'
+p30
+(dp31
+g3
+S'"fighters"'
+p32
+sg5
+I21
+sg6
+S'fighters'
+p33
+sg8
+I00
+sg9
+I512
+sg10
+S'INTEGER'
+p34
+sg12
+I00
+sg13
+g14
+ssS'id'
+p35
+(dp36
+g3
+S'"id"'
+p37
+sg5
+I1
+sg6
+S'id'
+p38
+sg8
+>>>>>>> origin/master
 I00
 sg8
 I512
+<<<<<<< HEAD
 sg9
 S'INTEGER'
 p29
@@ -119,19 +228,85 @@ p30
 g3
 S'"workers"'
 p32
+=======
+sg10
+S'INTEGER PRIMARY KEY AUTOINCREMENT'
+p39
+sg12
+I00
+sg13
+g38
+ssS'steel'
+p40
+(dp41
+g3
+S'"steel"'
+p42
+>>>>>>> origin/master
 sg5
-I13
+I9
 sg6
+<<<<<<< HEAD
 g30
 sg7
 I00
+=======
+S'steel'
+p43
+sg8
+I00
+sg9
+I512
+sg10
+S'INTEGER'
+p44
+sg12
+I00
+sg13
+g14
+ssS'leather'
+p45
+(dp46
+g3
+S'"leather"'
+p47
+sg5
+I11
+sg6
+S'leather'
+p48
+>>>>>>> origin/master
 sg8
 I512
+<<<<<<< HEAD
+=======
+sg10
+S'INTEGER'
+p49
+sg12
+I00
+sg13
+g14
+ssS'warriors'
+p50
+(dp51
+g3
+S'"warriors"'
+p52
+sg5
+I19
+sg6
+S'warriors'
+p53
+sg8
+I00
+>>>>>>> origin/master
 sg9
 S'INTEGER'
 p33
 sg11
 I00
+<<<<<<< HEAD
 sg12
 g13
 ssS'counter'
@@ -145,6 +320,22 @@ I5
 sg6
 g34
 sg7
+=======
+sg13
+g14
+ssS'workers'
+p55
+(dp56
+g3
+S'"workers"'
+p57
+sg5
+I17
+sg6
+S'workers'
+p58
+sg8
+>>>>>>> origin/master
 I00
 sg8
 I512
@@ -153,6 +344,7 @@ S'INTEGER'
 p37
 sg11
 I00
+<<<<<<< HEAD
 sg12
 g13
 ssS'fighters'
@@ -161,11 +353,27 @@ p38
 g3
 S'"fighters"'
 p40
+=======
+sg13
+g14
+ssS'counter'
+p60
+(dp61
+g3
+S'"counter"'
+p62
+>>>>>>> origin/master
 sg5
-I17
+I5
 sg6
+<<<<<<< HEAD
 g38
 sg7
+=======
+S'counter'
+p63
+sg8
+>>>>>>> origin/master
 I00
 sg8
 I512
@@ -174,6 +382,7 @@ S'INTEGER'
 p41
 sg11
 I00
+<<<<<<< HEAD
 sg12
 g13
 ssS'bowmen'
@@ -187,6 +396,22 @@ I16
 sg6
 g42
 sg7
+=======
+sg13
+g14
+ssS'm_sword'
+p65
+(dp66
+g3
+S'"m_sword"'
+p67
+sg5
+I15
+sg6
+S'm_sword'
+p68
+sg8
+>>>>>>> origin/master
 I00
 sg8
 I512
@@ -216,6 +441,7 @@ S'INTEGER'
 p49
 sg11
 I00
+<<<<<<< HEAD
 sg12
 g13
 ssS'created_on'
@@ -229,6 +455,22 @@ I3
 sg6
 g50
 sg7
+=======
+sg13
+g14
+ssS'bowmen'
+p81
+(dp82
+g3
+S'"bowmen"'
+p83
+sg5
+I20
+sg6
+S'bowmen'
+p84
+sg8
+>>>>>>> origin/master
 I00
 sg8
 I512
@@ -259,6 +501,7 @@ S'INTEGER'
 p58
 sg11
 I00
+<<<<<<< HEAD
 sg12
 g13
 ssS'iron'
@@ -272,6 +515,22 @@ I7
 sg6
 g59
 sg7
+=======
+sg13
+g14
+ssS'w_sword'
+p91
+(dp92
+g3
+S'"w_sword"'
+p93
+sg5
+I12
+sg6
+S'w_sword'
+p94
+sg8
+>>>>>>> origin/master
 I00
 sg8
 I512
@@ -280,6 +539,7 @@ S'INTEGER'
 p62
 sg11
 I00
+<<<<<<< HEAD
 sg12
 g13
 ssS'mages'
@@ -293,6 +553,22 @@ I14
 sg6
 g63
 sg7
+=======
+sg13
+g14
+ssS'iron'
+p96
+(dp97
+g3
+S'"iron"'
+p98
+sg5
+I7
+sg6
+S'iron'
+p99
+sg8
+>>>>>>> origin/master
 I00
 sg8
 I512
@@ -301,6 +577,7 @@ S'INTEGER'
 p66
 sg11
 I00
+<<<<<<< HEAD
 sg12
 g13
 ssS'updated_on'
@@ -309,14 +586,31 @@ p67
 g3
 S'"updated_on"'
 p69
+=======
+sg13
+g14
+ssS'mages'
+p101
+(dp102
+g3
+S'"mages"'
+p103
+>>>>>>> origin/master
 sg5
-I4
+I18
 sg6
+<<<<<<< HEAD
 g67
 sg7
+=======
+S'mages'
+p104
+sg8
+>>>>>>> origin/master
 I00
 sg8
 I512
+<<<<<<< HEAD
 sg9
 S'TIMESTAMP'
 p70
@@ -335,9 +629,31 @@ I1
 sg6
 g71
 sg7
+=======
+sg10
+S'INTEGER'
+p105
+sg12
+I00
+sg13
+g14
+ssS'updated_on'
+p106
+(dp107
+g3
+S'"updated_on"'
+p108
+sg5
+I4
+sg6
+S'updated_on'
+p109
+sg8
+>>>>>>> origin/master
 I00
 sg8
 I512
+<<<<<<< HEAD
 sg9
 S'INTEGER PRIMARY KEY AUTOINCREMENT'
 p74
@@ -345,6 +661,15 @@ sg11
 I00
 sg12
 g71
+=======
+sg10
+S'TIMESTAMP'
+p110
+sg12
+I00
+sg13
+g75
+>>>>>>> origin/master
 ssS'user_email'
 p75
 (dp76

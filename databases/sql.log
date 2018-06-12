@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 timestamp: 2018-06-12T12:32:24.999000
+=======
+timestamp: 2018-06-12T11:49:07.418693
+>>>>>>> origin/master
 CREATE TABLE "web2py_session_mercenary_game"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "locked" CHAR(1),
@@ -9,7 +13,11 @@ CREATE TABLE "web2py_session_mercenary_game"(
     "session_data" BLOB
 );
 success!
+<<<<<<< HEAD
 timestamp: 2018-06-12T12:32:25.431000
+=======
+timestamp: 2018-06-12T11:49:08.925418
+>>>>>>> origin/master
 CREATE TABLE "auth_user"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "first_name" CHAR(128),
@@ -21,21 +29,33 @@ CREATE TABLE "auth_user"(
     "registration_id" CHAR(512)
 );
 success!
+<<<<<<< HEAD
 timestamp: 2018-06-12T12:32:25.551000
+=======
+timestamp: 2018-06-12T11:49:08.962957
+>>>>>>> origin/master
 CREATE TABLE "auth_group"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "role" CHAR(512),
     "description" TEXT
 );
 success!
+<<<<<<< HEAD
 timestamp: 2018-06-12T12:32:25.737000
+=======
+timestamp: 2018-06-12T11:49:08.998068
+>>>>>>> origin/master
 CREATE TABLE "auth_membership"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "user_id" INTEGER REFERENCES "auth_user" ("id") ON DELETE CASCADE  ,
     "group_id" INTEGER REFERENCES "auth_group" ("id") ON DELETE CASCADE  
 );
 success!
+<<<<<<< HEAD
 timestamp: 2018-06-12T12:32:25.890000
+=======
+timestamp: 2018-06-12T11:49:09.049992
+>>>>>>> origin/master
 CREATE TABLE "auth_permission"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "group_id" INTEGER REFERENCES "auth_group" ("id") ON DELETE CASCADE  ,
@@ -44,7 +64,11 @@ CREATE TABLE "auth_permission"(
     "record_id" INTEGER
 );
 success!
+<<<<<<< HEAD
 timestamp: 2018-06-12T12:32:26.050000
+=======
+timestamp: 2018-06-12T11:49:09.100171
+>>>>>>> origin/master
 CREATE TABLE "auth_event"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "time_stamp" TIMESTAMP,
@@ -54,7 +78,11 @@ CREATE TABLE "auth_event"(
     "description" TEXT
 );
 success!
+<<<<<<< HEAD
 timestamp: 2018-06-12T12:32:26.253000
+=======
+timestamp: 2018-06-12T11:49:09.136044
+>>>>>>> origin/master
 CREATE TABLE "auth_cas"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "user_id" INTEGER REFERENCES "auth_user" ("id") ON DELETE CASCADE  ,
@@ -64,7 +92,11 @@ CREATE TABLE "auth_cas"(
     "renew" CHAR(1)
 );
 success!
+<<<<<<< HEAD
 timestamp: 2018-06-12T12:32:26.497000
+=======
+timestamp: 2018-06-12T11:49:09.180007
+>>>>>>> origin/master
 CREATE TABLE "userdb"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "user_email" CHAR(512),
@@ -84,4 +116,13 @@ CREATE TABLE "userdb"(
     "bowmen" INTEGER,
     "fighters" INTEGER
 );
+success!
+timestamp: 2018-06-12T12:07:18.477282
+ALTER TABLE "userdb" ADD "i_sword" INTEGER;
+timestamp: 2018-06-12T12:07:18.608381
+ALTER TABLE "userdb" ADD "s_sword" INTEGER;
+timestamp: 2018-06-12T12:07:18.749999
+ALTER TABLE "userdb" ADD "m_sword" INTEGER;
+timestamp: 2018-06-12T12:07:18.924392
+ALTER TABLE "userdb" ADD "w_sword" INTEGER;
 success!
