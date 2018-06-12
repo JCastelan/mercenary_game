@@ -270,6 +270,10 @@ var app = function() {
         // console.log( "saving all resources")
     };
 
+    self.gather_wood = function(){
+    	sel
+	}
+
     // Complete as needed.
     self.vue = new Vue({
         el: "#vue-div",
@@ -304,11 +308,13 @@ var app = function() {
 			viewing_party: false,
 			viewing_village: false,
 			viewing_assignment: false,
-            counter: 0
+            counter: 0,
 			my_name: "You",
 
             counter: 0,
-            resources: null
+            resources: null,
+			available_villagers: 0,
+			wood_gatherer: 0,
         },
         methods: {
 			closePopup: self.closePopup,
@@ -324,6 +330,7 @@ var app = function() {
 			can_equip_armor: self.can_equip_armor,
 			equip_armor: self.equip_armor,
 			unequip_armor: self.unequip_armor,
+			send_party_member_home:self.send_party_member_home,
 
 			clicked: self.clicked,
             loadCounter: self.loadCounter,
