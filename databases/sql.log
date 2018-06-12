@@ -1,5 +1,5 @@
-timestamp: 2018-04-21T20:47:04.449652
-CREATE TABLE "web2py_session_start"(
+timestamp: 2018-06-12T13:08:07.226000
+CREATE TABLE "web2py_session_mercenary_game"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "locked" CHAR(1),
     "client_ip" CHAR(64),
@@ -9,7 +9,7 @@ CREATE TABLE "web2py_session_start"(
     "session_data" BLOB
 );
 success!
-timestamp: 2018-04-21T20:47:04.467170
+timestamp: 2018-06-12T13:08:07.311000
 CREATE TABLE "auth_user"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "first_name" CHAR(128),
@@ -21,21 +21,21 @@ CREATE TABLE "auth_user"(
     "registration_id" CHAR(512)
 );
 success!
-timestamp: 2018-04-21T20:47:04.480076
+timestamp: 2018-06-12T13:08:07.401000
 CREATE TABLE "auth_group"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "role" CHAR(512),
     "description" TEXT
 );
 success!
-timestamp: 2018-04-21T20:47:04.487648
+timestamp: 2018-06-12T13:08:07.494000
 CREATE TABLE "auth_membership"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "user_id" INTEGER REFERENCES "auth_user" ("id") ON DELETE CASCADE  ,
     "group_id" INTEGER REFERENCES "auth_group" ("id") ON DELETE CASCADE  
 );
 success!
-timestamp: 2018-04-21T20:47:04.494160
+timestamp: 2018-06-12T13:08:07.559000
 CREATE TABLE "auth_permission"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "group_id" INTEGER REFERENCES "auth_group" ("id") ON DELETE CASCADE  ,
@@ -44,7 +44,7 @@ CREATE TABLE "auth_permission"(
     "record_id" INTEGER
 );
 success!
-timestamp: 2018-04-21T20:47:04.501196
+timestamp: 2018-06-12T13:08:07.618000
 CREATE TABLE "auth_event"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "time_stamp" TIMESTAMP,
@@ -54,7 +54,7 @@ CREATE TABLE "auth_event"(
     "description" TEXT
 );
 success!
-timestamp: 2018-04-21T20:47:04.507953
+timestamp: 2018-06-12T13:08:07.672000
 CREATE TABLE "auth_cas"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "user_id" INTEGER REFERENCES "auth_user" ("id") ON DELETE CASCADE  ,
@@ -64,26 +64,28 @@ CREATE TABLE "auth_cas"(
     "renew" CHAR(1)
 );
 success!
-timestamp: 2018-04-21T20:47:04.516401
-CREATE TABLE "checklist"(
+timestamp: 2018-06-12T13:08:07.943000
+CREATE TABLE "userdb"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "user_email" CHAR(512),
-    "title" CHAR(512),
-    "memo" TEXT,
-    "updated_on" TIMESTAMP
-);
-success!
-timestamp: 2018-04-21T20:52:39.210524
-ALTER TABLE "checklist" ADD "is_public" CHAR(1);
-success!
-timestamp: 2018-04-30T18:33:56.124565
-CREATE TABLE "web2py_session_mercenary_game"(
-    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
-    "locked" CHAR(1),
-    "client_ip" CHAR(64),
-    "created_datetime" TIMESTAMP,
-    "modified_datetime" TIMESTAMP,
-    "unique_key" CHAR(64),
-    "session_data" BLOB
+    "created_on" TIMESTAMP,
+    "updated_on" TIMESTAMP,
+    "counter" INTEGER,
+    "coal" INTEGER,
+    "iron" INTEGER,
+    "mithril" INTEGER,
+    "steel" INTEGER,
+    "wood" INTEGER,
+    "leather" INTEGER,
+    "w_sword" INTEGER,
+    "i_sword" INTEGER,
+    "s_sword" INTEGER,
+    "m_sword" INTEGER,
+    "houses" INTEGER,
+    "workers" INTEGER,
+    "mages" INTEGER,
+    "warriors" INTEGER,
+    "bowmen" INTEGER,
+    "fighters" INTEGER
 );
 success!
