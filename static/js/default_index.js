@@ -250,7 +250,9 @@ var app = function() {
 			self.vue.popup_buttons = [
 				{name: "Revive", onClick: function() {
 					restartGame();
-					APP.vue.show_popup = false;
+
+					self.vue.show_popup = false;
+
 				}}
 			]
 			self.vue.show_popup = true;
@@ -262,15 +264,15 @@ var app = function() {
 	};
 
 	self.send_to_village = function(i) {
+		self.unequip_boi(i);
 		self.vue.available_villagers++;
-		self.vue.num_fighters[i]--;
-		self.vue.fighter_group_health[i] -= self.vue.health_per_figher[i];
-		if(self.vue.fighter_group_health[i] < 0) {
-			self.vue.fighter_group_health[i] = 0;
+		self.vue.num_fighters[0]--;
+		self.vue.fighter_group_health[0] -= self.vue.health_per_figher[0];
+		if(self.vue.fighter_group_health[0] < 0) {
+			self.vue.fighter_group_health[0] = 0;
 		}
 		self.vue.$forceUpdate();
-		// TODO: based on which level we decremented from, add the necessary upgrade items back to the inventory
-	}
+	};
 
     // generic counter functions (for debugging purposes)
     self.loadCounter = function(){ 
@@ -293,14 +295,14 @@ var app = function() {
             });
 	};
 	
-	self.clicked = function () { //increments all counters
-		self.vue.counter++;
+	self.clicked = function () { //increments all resource counters
         self.vue.resources.forEach(function(d){
             d[1]++;
         });
-	}
+	};
 
-    self.incrementResource = function(name){ //increments only the specified counter
+    self.incrementResource = function(name){ //increments only the specified resource counter
+
         console.log(name);
         self.vue.resources.forEach(function(d){
             if( d[0] == name){
@@ -308,24 +310,73 @@ var app = function() {
                 d[1]++;
             }
         });
+
+    };
+
+    self.decrementResource = function(name){ //increments only the specified resource counter
+        console.log(name);
+        self.vue.resources.forEach(function(d){
+            if( d[0] == name){
+                console.log(d[0]);
+                d[1]--;
+            }
+        });
+
     }
 
     // real stuff
     self.loadResources = function(){ //loads more than just resources
         // console.log( "loading all stored vals")
+        resourcesList = ["coal","iron","mithril","steel","wood", "leather"];
+        equipList = ["w_sword", "i_sword","s_sword","m_sword"]
+        playerInfo = ["max_health","current_health","equipped_weapon","equipped_armor"]
         $.getJSON(load_resources_url, function (data) {
             //console.log(data );
             dataElems=Object.entries(data);
-            dataElems.forEach(function(d){
-                d[1] = +d[1];
+            dataElems.forEach(function(d,i){
+                
+                if (equipList.indexOf(d[0])>=0) {
+                    d[1] = +d[1];
+                    self.vue.equipment.push(d)
+                }else if (resourcesList.indexOf(d[0])>=0){
+                    d[1] = +d[1];
+                    self.vue.resources.push(d)
+                }else if (playerInfo.indexOf(d[0])>=0){
+                    if(d[0]== "max_health"){
+                        self.vue.band.max_health=+d[1];
+                    } else if (d[0]=="current_health") {
+                        self.vue.band.health=+d[1];
+                    } else if (d[0]=="equipped_weapon") {
+                        self.vue.band[0].weapon.name=d[1];
+                    } else if (d[0]=="equipped_armor") {
+                        self.vue.band[0].armor.name=d[1];
+                    }else{
+                        console.log("warning: did not store ", d);
+                    }
+                }else{
+                    if(d[0]== "num_fighters"){
+						self.vue.num_fighters= d[1];
+						for(var i = 0; i < self.vue.num_fighters.length; i++) {
+							self.vue.num_fighters[i] = +self.vue.num_fighters[i];
+						}
+                    } else if (d[0]=="fighter_health") {
+						self.vue.fighter_group_health=d[1];
+						for(var i = 0; i < self.vue.num_fighters.length; i++) {
+							self.vue.fighter_group_health[i] = +self.vue.fighter_group_health[i];
+						}
+                    }else{
+                        console.log("warning: did not store ", d);
+                    }
+                }
             });
-            console.log(dataElems);
-            self.vue.resources = dataElems;
+            console.log(self.vue.equipment);
+            console.log(self.vue.resources);
+            //self.vue.resources = dataElems;
         });
         
     };
 
-    self.saveResources = function(){ //save resources is basically save game
+    self.saveResources = function(){ //saves more than just resources
         //console.log( "saving all resources")
         //console.log(self.vue.resources)
         $.post(save_resources_url,
@@ -338,7 +389,7 @@ var app = function() {
     };
 
     autosave = function(){
-        window.setInterval(self.saveResources, 5000);
+        window.setInterval(self.saveResources, 60*1000);
     };
 
 	self.send_villager_to_party = function(){
@@ -348,8 +399,7 @@ var app = function() {
     		self.vue.fighter_group_health[0] += self.vue.health_per_figher[0];
     		self.vue.$forceUpdate();
 		}
-
-	}
+	};
 
 	self.increment_wood_gatherer = function(){
     	if(self.vue.available_villagers > 0){
@@ -524,56 +574,112 @@ var app = function() {
     		self.vue.available_villagers -= 1;
     		self.vue.hunter += 1;
 		}
-	}
+
+	};
 
 	self.decrement_hunter = function(){
     	if(self.vue.hunter > 0){
     		self.vue.available_villagers += 1;
     		self.vue.hunter -= 1;
 		}
-	}
+
+	};
 
 	self.increment_coal_miner = function(){
     	if(self.vue.available_villagers > 0){
     		self.vue.available_villagers -= 1;
     		self.vue.coal_miner += 1;
 		}
-	}
+
+	};
 
 	self.decrement_coal_miner = function(){
     	if(self.vue.coal_miner > 0){
     		self.vue.available_villagers += 1;
     		self.vue.coal_miner -= 1;
 		}
-	}
+
+	};
 
 	self.increment_iron_miner = function(){
     	if(self.vue.available_villagers > 0){
     		self.vue.available_villagers -= 1;
     		self.vue.iron_miner += 1;
 		}
-	}
+
+	};
 
 	self.decrement_iron_miner = function(){
     	if(self.vue.iron_miner > 0){
     		self.vue.available_villagers += 1;
     		self.vue.iron_miner -= 1;
 		}
-	}
+
+	};
 
 	self.increment_mithril_miner = function(){
     	if(self.vue.available_villagers > 0){
     		self.vue.available_villagers -= 1;
     		self.vue.mithril_miner += 1;
 		}
-	}
+
+	};
 
 	self.decrement_mithril_miner = function(){
     	if(self.vue.mithril_miner > 0){
     		self.vue.available_villagers += 1;
     		self.vue.mithril_miner -= 1;
 		}
-	}
+
+	};
+
+	self.can_equip_boi = function(index) {
+		if(!self.vue) return false;
+		if(i == 4) return false; // can't upgrade level 5 fighters
+		// find the items in the inventory
+		var found_item1 = false;
+		var found_item2 = false;
+		for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
+			if(self.vue.band[0].inventory[i].name == self.vue.upgrade_items[index][0].name) {
+				found_item1 = true;
+			}
+			if(self.vue.band[0].inventory[i].name == self.vue.upgrade_items[index][1].name) {
+				found_item2 = true;
+			}
+		}
+		return found_item1 && found_item2;
+	};
+
+	self.equip_boi = function(i) {
+		if(i != 0) {
+			addToInventory(self.vue.upgrade_items[i - 1][0]);
+			addToInventory(self.vue.upgrade_items[i - 1][1]);
+		}
+		removeFromInventory(self.vue.upgrade_items[i][0]);
+		removeFromInventory(self.vue.upgrade_items[i][1]);
+		self.vue.num_fighters[i]--;
+		self.vue.fighter_group_health[i] -= self.vue.health_per_figher[i];
+		if(self.vue.fighter_group_health[i] < 0) {
+			self.vue.fighter_group_health[i] = 0;
+		}
+		self.vue.num_fighters[i + 1]++;
+		self.vue.fighter_group_health[i + 1] += self.vue.health_per_figher[i + 1];
+		self.vue.$forceUpdate();
+	};
+
+	self.unequip_boi = function(i) {
+		if(i == 0) return;
+		addToInventory(self.vue.upgrade_items[i - 1][0]);
+		addToInventory(self.vue.upgrade_items[i - 1][1]);
+		self.vue.num_fighters[0]++;
+		self.vue.fighter_group_health[0] += self.vue.health_per_figher[0];
+		self.vue.num_fighters[i]--;
+		self.vue.fighter_group_health[i] -= self.vue.health_per_figher[i];
+		if(self.vue.fighter_group_health[i] < 0) {
+			self.vue.fighter_group_health[i] = 0;
+		}
+		self.vue.$forceUpdate();
+	};
 
     // Complete as needed.
     self.vue = new Vue({
@@ -617,11 +723,20 @@ var app = function() {
 			fighter_group_health: [20, 0, 0, 0, 0],
 			health_per_figher: [10, 15, 20, 25, 30],
 			damage_per_figher: [1, 2, 3, 4, 5],
+
+			upgrade_items: [
+				[{name: "wooden sword", is_weapon: true, damage: 2}, {name: "leather armor", is_armor: true, health_boost: 5}],
+				[{name: "iron sword", is_weapon: true, damage: 3}, {name: "iron armor", is_armor: true, health_boost: 10}],
+				[{name: "steel sword", is_weapon: true, damage: 4}, {name: "steel armor", is_armor: true, health_boost: 15}],
+				[{name: "mithril sword", is_weapon: true, damage: 5}, {name: "mithril armor", is_armor: true, health_boost: 20}],
+			],
 			num_villagers: 0,
 			cur_fighter_health: -1,
 
-            counter: 0,
-            resources: null,
+            //counter: 0,
+            resources: [],
+            equipment: [],
+
 			available_villagers: 0,
 			wood_gatherer: 0,
 			hunter: 0,
@@ -669,8 +784,9 @@ var app = function() {
 			clicked: self.clicked,
 			incrementResource: self.incrementResource,
 			
-            loadCounter: self.loadCounter,
-            saveCounter: self.saveCounter,
+
+            //loadCounter: self.loadCounter,
+            //saveCounter: self.saveCounter,
             loadResources: self.loadResources,
 			saveResources: self.saveResources,
 			
@@ -709,6 +825,11 @@ var app = function() {
 			can_craft_mithril_armor: self.can_craft_mithril_armor,
 			craft_mithril_armor: self.craft_mithril_armor,
 			get_num_craftable_mithril_armors: self.get_num_craftable_mithril_armors,
+
+
+			can_equip_boi: self.can_equip_boi,
+			equip_boi: self.equip_boi,
+			unequip_boi: self.unequip_boi,
         }
     });
 
@@ -723,7 +844,8 @@ var app = function() {
 	$("#vue-div").show();
 
 
-    self.loadCounter(); 
+
+    //self.loadCounter(); 
     self.loadResources();
     self.show_view_panel_resources();
     window.setInterval(function(){
