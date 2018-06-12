@@ -61,8 +61,8 @@
 					</div>
 					<div v-if="viewing_village">
 						<br>
-                        <a class="btn" v-on:click="send_villager_to_party()">Send to party</a>
-                        Available villagers: ${available_villagers}<br>
+                        Available villagers: ${available_villagers}<br><br>
+                        <a class="btn" v-if="available_villagers > 0" v-on:click="send_villager_to_party()">Send a boi to the party</a>
                         <div class="gather_wood ">
                             Wood Gatherer
                             <a class="btn" v-on:click="increment_wood_gatherer()"><i class="fa fa-plus" aria-hidden="true"></i></a>
@@ -97,7 +97,7 @@
 					<div v-if="viewing_crafting">
 						<br>
 						<a class="btn" v-if="can_craft_steel()" v-on:click="craft_steel">Craft Steel (${get_num_craftable_steel()} craftable)</a>
-						<br>
+						<br><br>
 						<a class="btn" v-if="can_craft_wood_sword()" v-on:click="craft_wood_sword">Craft Wooden Sword (${get_num_craftable_wood_swords()} craftable)</a>
 						<a class="btn" v-if="can_craft_iron_sword()" v-on:click="craft_iron_sword">Craft Iron Sword (${get_num_craftable_iron_swords()} craftable)</a>
 						<a class="btn" v-if="can_craft_steel_sword()" v-on:click="craft_steel_sword">Craft Steel Sword (${get_num_craftable_steel_swords()} craftable)</a>

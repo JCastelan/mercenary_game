@@ -613,8 +613,8 @@ var app = function() {
 			viewing_crafting: false,
 
 			my_name: "You",
-			num_fighters: [0, 0, 0, 0, 0], // each element is a different level of fighter
-			fighter_group_health: [0, 0, 0, 0, 0],
+			num_fighters: [2, 0, 0, 0, 0], // each element is a different level of fighter
+			fighter_group_health: [20, 0, 0, 0, 0],
 			health_per_figher: [10, 15, 20, 25, 30],
 			damage_per_figher: [1, 2, 3, 4, 5],
 			num_villagers: 0,
