@@ -31,7 +31,7 @@ var app = function() {
 	
     switch_tab = function(id){
         activated_color = 'yellow';
-        ids = ["b_res", "b_village", "b_party"];
+        ids = ["b_res", "b_village", "b_party", "b_crafting"];
         ids.forEach(function(d){
             if( d == id){
                 document.getElementById(d).classList.add(activated_color);
@@ -47,6 +47,7 @@ var app = function() {
 		self.vue.viewing_resources = true;
 		self.vue.viewing_party = false;
 		self.vue.viewing_village = false;
+		self.vue.viewing_crafting = false;
 	};
 
 	self.show_view_panel_party = function() {
@@ -54,6 +55,7 @@ var app = function() {
 		self.vue.viewing_resources = false;
 		self.vue.viewing_party = true;
 		self.vue.viewing_village = false;
+		self.vue.viewing_crafting = false;
 	};
 
 	self.show_view_panel_village = function() {
@@ -61,6 +63,15 @@ var app = function() {
 		self.vue.viewing_resources = false;
 		self.vue.viewing_party = false;
 		self.vue.viewing_village = true;
+		self.vue.viewing_crafting = false;
+	};
+
+	self.show_view_panel_crafting = function() {
+        switch_tab("b_crafting");
+		self.vue.viewing_resources = false;
+		self.vue.viewing_party = false;
+		self.vue.viewing_village = false;
+		self.vue.viewing_crafting = true;
 	};
 
 	self.can_eat_food = function(member) {
@@ -255,7 +266,7 @@ var app = function() {
 		if(self.vue.fighter_group_health[i] < 0) {
 			self.vue.fighter_group_health[i] = 0;
 		}
-		APP.vue.$forceUpdate();
+		self.vue.$forceUpdate();
 		// TODO: based on which level we decremented from, add the necessary upgrade items back to the inventory
 	}
 
@@ -326,21 +337,157 @@ var app = function() {
 
     autosave = function(){
         window.setInterval(self.saveResources, 5000);
-    }
+    };
 
 	self.increment_wood_gatherer = function(){
     	if(self.vue.available_villagers > 0){
     		self.vue.available_villagers -= 1;
     		self.vue.wood_gatherer += 1;
 		}
-	}
+	};
 
 	self.decrement_wood_gatherer = function(){
     	if(self.vue.wood_gatherer > 0){
     		self.vue.available_villagers += 1;
     		self.vue.wood_gatherer -= 1;
 		}
-	}
+	};
+
+	self.can_craft_wood_sword = function() {
+		return self.get_num_craftable_wood_swords() > 0;
+	};
+
+	self.craft_wood_sword = function() {
+		addToInventory({name: "wooden sword", is_weapon: true, damage: 2});
+		removeFromResources("wood", 1);
+		self.vue.$forceUpdate();
+	};
+
+	self.get_num_craftable_wood_swords = function() {
+		return getNumOfResource("wood");
+	};
+
+	self.can_craft_iron_sword = function() {
+		return self.get_num_craftable_iron_swords() > 0;
+	};
+
+	self.craft_iron_sword = function() {
+		addToInventory({name: "iron sword", is_weapon: true, damage: 3});
+		removeFromResources("iron", 1);
+		removeFromResources("wood", 1);
+		self.vue.$forceUpdate();
+	};
+
+	self.get_num_craftable_iron_swords = function() {
+		var num_iron = getNumOfResource("iron");
+		var num_wood = getNumOfResource("wood");
+		// return min(num_iron, num_wood)
+		return num_iron > num_wood ? num_wood : num_iron;
+	};
+
+	self.can_craft_steel_sword = function() {
+		return self.get_num_craftable_steel_swords() > 0;
+	};
+
+	self.craft_steel_sword = function() {
+		addToInventory({name: "steel sword", is_weapon: true, damage: 4});
+		removeFromResources("steel", 1);
+		removeFromResources("wood", 1);
+		self.vue.$forceUpdate();
+	};
+
+	self.get_num_craftable_steel_swords = function() {
+		var num_steel = getNumOfResource("steel");
+		var num_wood = getNumOfResource("wood");
+		// return min(num_steel, num_wood)
+		return num_steel > num_wood ? num_wood : num_steel;
+	};
+
+	self.can_craft_mithril_sword = function() {
+		return self.get_num_craftable_mithril_swords() > 0;
+	};
+
+	self.craft_mithril_sword = function() {
+		addToInventory({name: "mithril sword", is_weapon: true, damage: 5});
+		removeFromResources("mithril", 1);
+		removeFromResources("wood", 1);
+		self.vue.$forceUpdate();
+	};
+
+	self.get_num_craftable_mithril_swords = function() {
+		var num_mithril = getNumOfResource("mithril");
+		var num_wood = getNumOfResource("wood");
+		// return min(num_mithril, num_wood)
+		return num_mithril > num_wood ? num_wood : num_mithril;
+	};
+
+	self.can_craft_leather_armor = function() {
+		return self.get_num_craftable_leather_armors() > 0;
+	};
+
+	self.craft_leather_armor = function() {
+		addToInventory({name: "leather armor", is_armor: true, health_boost: 5});
+		removeFromResources("leather", 1);
+		self.vue.$forceUpdate();
+	};
+
+	self.get_num_craftable_leather_armors = function() {
+		return getNumOfResource("leather");
+	};
+
+	self.can_craft_iron_armor = function() {
+		return self.get_num_craftable_iron_armors() > 0;
+	};
+
+	self.craft_iron_armor = function() {
+		addToInventory({name: "iron armor", is_armor: true, health_boost: 10});
+		removeFromResources("iron", 1);
+		removeFromResources("leather", 1);
+		self.vue.$forceUpdate();
+	};
+
+	self.get_num_craftable_iron_armors = function() {
+		var num_iron = getNumOfResource("iron");
+		var num_leather = getNumOfResource("leather");
+		// return min(num_iron, num_leather)
+		return num_iron > num_leather ? num_leather : num_iron;
+	};
+
+	self.can_craft_steel_armor = function() {
+		return self.get_num_craftable_steel_armors() > 0;
+	};
+
+	self.craft_steel_armor = function() {
+		addToInventory({name: "steel armor", is_armor: true, health_boost: 15});
+		removeFromResources("steel", 1);
+		removeFromResources("leather", 1);
+		self.vue.$forceUpdate();
+	};
+
+	self.get_num_craftable_steel_armors = function() {
+		var num_steel = getNumOfResource("steel");
+		var num_leather = getNumOfResource("leather");
+		// return min(num_steel, num_leather)
+		return num_steel > num_leather ? num_leather : num_steel;
+	};
+
+	self.can_craft_mithril_armor = function() {
+		return self.get_num_craftable_mithril_armors() > 0;
+	};
+
+	self.craft_mithril_armor = function() {
+		addToInventory({name: "mithril armor", is_armor: true, health_boost: 20});
+		removeFromResources("mithril", 1);
+		removeFromResources("leather", 1);
+		self.vue.$forceUpdate();
+	};
+
+	self.get_num_craftable_mithril_armors = function() {
+		var num_mithril = getNumOfResource("mithril");
+		var num_leather = getNumOfResource("leather");
+		// return min(num_mithril, num_leather)
+		return num_mithril > num_leather ? num_leather : num_mithril;
+	};
 
     // Complete as needed.
     self.vue = new Vue({
@@ -360,7 +507,7 @@ var app = function() {
 					health: 10,
 					weapon: {
 						name: "fists",
-						damage: 10
+						damage: 1
 					},
 					armor: {
 						name: "nothing",
@@ -372,10 +519,13 @@ var app = function() {
 			enemy_health: 10,
 			in_battle: false,
 			player_attack_time: 16, // used for limiting player attacks
+
 			viewing_resources: false,
 			viewing_party: true,
 			viewing_village: false,
 			viewing_assignment: false,
+			viewing_crafting: false,
+
 			my_name: "You",
 			num_fighters: [0, 0, 0, 0, 0], // each element is a different level of fighter
 			fighter_group_health: [0, 0, 0, 0, 0],
@@ -396,6 +546,7 @@ var app = function() {
 			show_view_panel_resources: self.show_view_panel_resources,
 			show_view_panel_party: self.show_view_panel_party,
 			show_view_panel_village: self.show_view_panel_village,
+			show_view_panel_crafting: self.show_view_panel_crafting,
 
 			can_eat_food: self.can_eat_food,
 			eat_food: self.eat_food,
@@ -419,7 +570,39 @@ var app = function() {
             loadCounter: self.loadCounter,
             saveCounter: self.saveCounter,
             loadResources: self.loadResources,
-            saveResources: self.saveResources
+			saveResources: self.saveResources,
+			
+			can_craft_wood_sword: self.can_craft_wood_sword,
+			craft_wood_sword: self.craft_wood_sword,
+			get_num_craftable_wood_swords: self.get_num_craftable_wood_swords,
+
+			can_craft_iron_sword: self.can_craft_iron_sword,
+			craft_iron_sword: self.craft_iron_sword,
+			get_num_craftable_iron_swords: self.get_num_craftable_iron_swords,
+
+			can_craft_steel_sword: self.can_craft_steel_sword,
+			craft_steel_sword: self.craft_steel_sword,
+			get_num_craftable_steel_swords: self.get_num_craftable_steel_swords,
+
+			can_craft_mithril_sword: self.can_craft_mithril_sword,
+			craft_mithril_sword: self.craft_mithril_sword,
+			get_num_craftable_mithril_swords: self.get_num_craftable_mithril_swords,
+
+			can_craft_leather_armor: self.can_craft_leather_armor,
+			craft_leather_armor: self.craft_leather_armor,
+			get_num_craftable_leather_armors: self.get_num_craftable_leather_armors,
+
+			can_craft_iron_armor: self.can_craft_iron_armor,
+			craft_iron_armor: self.craft_iron_armor,
+			get_num_craftable_iron_armors: self.get_num_craftable_iron_armors,
+
+			can_craft_steel_armor: self.can_craft_steel_armor,
+			craft_steel_armor: self.craft_steel_armor,
+			get_num_craftable_steel_armors: self.get_num_craftable_steel_armors,
+
+			can_craft_mithril_armor: self.can_craft_mithril_armor,
+			craft_mithril_armor: self.craft_mithril_armor,
+			get_num_craftable_mithril_armors: self.get_num_craftable_mithril_armors,
         }
     });
 
@@ -449,19 +632,9 @@ jQuery(function(){APP = app();});
 
 /* General TODOs
 
-Exploration parts
-	Remake recruiting
-		For getting attacked by enemies, lets just give the group a health bar,
-		and when it gets below a multiple of the health per fighter, we decrement the number of fighters
-	Make random loot bags with random items
-
-Idle game parts
-	Be able to assign yourself and band members to certain tasks to collect resources JACK
-	Decide on how to gather resources
-	Be able to craft items using resources
-	Decide on what items, resources, and crafting recipes we're gonna put in the game
-
-Save progress
-	Store items, resources, and band members in the database in tables.py
+What needs to be done in the general order that it needs to be done
+	Make assigned villagers gather resources
+	Make crafting equipment using resources
+	Make upgrading recruits using equipment
 
 */

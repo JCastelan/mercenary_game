@@ -52,36 +52,28 @@ def load_resources():
 		# print( "\tdne")
 		loaded_data = dict(
 			coal=0,
-			copper=0,
-			fur=0,
-			grass=0,
 			iron=0,
 			mithril=0,
 			steel=0,
-			stone=0,
-			tin=0,
-			wood=0
+			wood=0,
+			leather=0
 		)
 		return response.json(loaded_data)
 	else:
 		# print("\texists")
 		loaded_data = dict(
 			coal=row.coal,
-			copper=row.copper,
-			fur=row.fur,
-			grass=row.grass,
 			iron=row.iron,
 			mithril=row.iron,
 			steel=row.steel,
-			stone=row.stone,
-			tin=row.tin,
-			wood=row.wood
+			wood=row.wood,
+			leather=row.leather
 		)
 		return response.json(loaded_data)
 
 def save_resources():
-	valueList=["coal","copper","fur","iron","mithril",   "steel","stone","tin","wood","grass"]
-	valuesToStore=[0,0,0,0,0,      0,0,0,0,0]
+	valueList=["coal","iron","mithril",   "steel","wood", "leather"]
+	valuesToStore=[0,0,0,      0,0,0,0]
 	if auth.user is None:
 		return
 	# print "save_counter!!!!!!!!!!!!!!!!!"
@@ -105,28 +97,20 @@ def save_resources():
 	if row is not None:
 		result = row.update_record(
 			coal=valuesToStore[0],
-			copper=valuesToStore[1],
-			fur=valuesToStore[2],
-			iron=valuesToStore[3],
-			mithril=valuesToStore[4],
-			steel=valuesToStore[5],
-			stone=valuesToStore[6],
-			tin=valuesToStore[7],
-			wood=valuesToStore[8],
-			grass=valuesToStore[8]
+			iron=valuesToStore[1],
+			mithril=valuesToStore[2],
+			steel=valuesToStore[3],
+			wood=valuesToStore[4],
+			leather=valuesToStore[5]
 		)
 		return result
 	else:
 		result = db.userdb.insert(
 			coal=valuesToStore[0],
-			copper=valuesToStore[1],
-			fur=valuesToStore[2],
-			iron=valuesToStore[3],
-			mithril=valuesToStore[4],
-			steel=valuesToStore[5],
-			stone=valuesToStore[6],
-			tin=valuesToStore[7],
-			wood=valuesToStore[8],
-			grass=valuesToStore[8]
+			iron=valuesToStore[1],
+			mithril=valuesToStore[2],
+			steel=valuesToStore[3],
+			wood=valuesToStore[4],
+			leather=valuesToStore[5]
 		)
 		return result
