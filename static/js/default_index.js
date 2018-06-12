@@ -242,18 +242,24 @@ var app = function() {
     self.loadResources = function(){
         // console.log( "loading all stored vals")
         $.getJSON(load_resources_url, function (data) {
-            console.log(data );
-            console.log( Object.entries(data))
-            Object.entries(data).forEach( function(d){
-                console.log(d);
-            })
-            self.vue.res_count = data;
+            //console.log(data );
+            self.vue.raw_resources = data;
             self.vue.resources = Object.entries(data);
         });
     };
 
     self.saveResources = function(){
         // console.log( "saving all resources")
+        console.log(self.vue.raw_resources)
+        console.log(self.vue.resources)
+        $.post(save_resources_url,
+            { 
+                raw_res: ["a","b",3],
+                resources: self.vue.resources
+            },
+            function (result) {
+                // console.log( result )
+            });
     };
 
     // Complete as needed.
@@ -290,6 +296,7 @@ var app = function() {
 			my_name: "You",
 
             counter: 0,
+            raw_resources: null,
             resources: null
         },
         methods: {
