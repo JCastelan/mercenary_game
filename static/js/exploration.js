@@ -210,7 +210,7 @@ function makeLootBag(bagY, bagX, items) {
 }
 
 //--EDIT BY KRON: This Function is called to create loot bags--------------------
-function spawnLootBag(x, y){
+function spawnLootBag(y, x){
 	grid[y][x].buttons = [
 		{name: "Aye a loot bag", onClick: function() {
 			makeLootBag(playerPos.y, playerPos.x, [
@@ -218,6 +218,7 @@ function spawnLootBag(x, y){
 				{name: "food", num: 2},
 				{name: "iron armor", is_armor: true, health_boost: 10, num: 1}
 			]);
+
 			APP.vue.popup_title = grid[playerPos.y][playerPos.x].title;
 			APP.vue.popup_desc = grid[playerPos.y][playerPos.x].desc;
 			APP.vue.popup_buttons = grid[playerPos.y][playerPos.x].buttons;
@@ -336,7 +337,26 @@ function initHubWorldGrid(width, height) {
 				//-EDIT BY KRON: Creates loot bags in random houses on Grid upon Hub Creation-
 				var lootChance = Math.random();
 				if (lootChance < .40) {
-					spawnLootBag(x, y);
+					spawnLootBag(y, x);
+				}
+				if (lootChance >= .40 && lootChance <=.80){
+					grid[y][x].battle = true;
+
+					grid[y][x].onDeath = function() {
+						// //EDIT BY KRON: Set a chance that there is a loot event
+						console.log("let the bodies hit the floor");
+						var lootCorpse = Math.random();
+						if (lootCorpse < .50){
+							spawnLootBag(playerPos.y, playerPos.x);
+
+						if (grid[playerPos.y][playerPos.x].char == houseChar){
+							grid[playerPos.y][playerPos.x].char = lootedChar;
+						}
+						APP.vue.popup_buttons = grid[playerPos.y][playerPos.x].buttons;
+						APP.vue.show_popup = true;
+					}
+					// //-----------------------------------------------------
+					};
 				}
 				//--------------------------------------------------------------------------
 			} else if(chance < 0.05) {
@@ -377,7 +397,9 @@ function displayGrid() {
 	gridElem.innerHTML = gridString;
 }
 
-initStartingAreaGrid();
+//test - uncomment later
+// initStartingAreaGrid();
+initHubWorldGrid(100, 40);
 displayGrid();
 
 // if player moves off the map, we put him back on
@@ -408,8 +430,15 @@ function onPlayerMove() {
 	// display generic defaults
 	if(grid[playerPos.y][playerPos.x].char == houseChar) {
 		APP.vue.popup_title = "House";
-		APP.vue.popup_desc = "You\'ve encountered a generic house.";
+
 		//--EDIT BY KRON: show buttons for House Loot Event--
+		if (grid[playerPos.y][playerPos.x].battle == true){
+			APP.vue.popup_desc = "Oh no its a house goblin!";
+		}
+		else{
+			APP.vue.popup_desc = "You\'ve encountered a generic house.";
+		}
+
 		APP.vue.popup_buttons = grid[playerPos.y][playerPos.x].buttons;
 		//--------------------------------------------------
 		APP.vue.show_popup = true;
@@ -485,14 +514,21 @@ function onPlayerMove() {
 					grid[playerPos.y][playerPos.x].battle = false;
 					APP.vue.in_battle = false;
 
-					//EDIT BY KRON: Set a chance that there is a loot event
+					// // //EDIT BY KRON: Set a chance that there is a loot event
 					// var lootCorpse = Math.random();
 					// if (lootCorpse < 1){
-					// 	spawnLootBag(playerPos.x,playerPos.y);
-					// }
-					//-----------------------------------------------------
+					// 	spawnLootBag(playerPos.y, playerPos.x);
 
+					// 	if (grid[playerPos.y][playerPos.x].char == houseChar){
+					// 		grid[playerPos.y][playerPos.x].char = lootedChar;
+					// 	}
+					// 	APP.vue.popup_buttons = grid[playerPos.y][playerPos.x].buttons;
+					// 	APP.vue.show_popup = true;
+					// }
+					// // //-----------------------------------------------------
+					console.log(JSON.stringify (grid[playerPos.y][playerPos.x]));
 					if(grid[playerPos.y][playerPos.x].onDeath) {
+						console.log("r the bodies hitting the floor?");
 						grid[playerPos.y][playerPos.x].onDeath();
 						return;
 					}
