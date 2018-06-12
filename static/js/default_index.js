@@ -686,6 +686,12 @@ var app = function() {
     self.loadCounter(); 
     self.loadResources();
     self.show_view_panel_resources();
+    window.setInterval(function(){
+        addToResources("wood",wood_gatherer)
+        addToResources("leather",hunter)
+        addToResources("coal",coal_miner)
+        addToResources("iron",iron_miner)
+    }, 1000);
     autosave();
     return self;
 };
