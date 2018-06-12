@@ -70,13 +70,13 @@
                             ${hunter}
                             <a class="btn" v-on:click="decrement_hunter()"><i class="fa fa-minus" aria-hidden="true"></i></a>
                         </div>
-                        <div class="mine_coal ">
+                        <div v-if="coal_mine_unlocked" class="mine_coal ">
                             Coal miner
                             <a class="btn" v-on:click="increment_coal_miner()"><i class="fa fa-plus" aria-hidden="true"></i></a>
                             ${coal_miner}
                             <a class="btn" v-on:click="decrement_coal_miner()"><i class="fa fa-minus" aria-hidden="true"></i></a>
                         </div>
-                        <div class="mine_iron ">
+                        <div v-if="iron_mine_unlocked" class="mine_iron ">
                             Iron miner
                             <a class="btn" v-on:click="increment_iron_miner()"><i class="fa fa-plus" aria-hidden="true"></i></a>
                             ${iron_miner}
