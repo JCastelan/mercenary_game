@@ -17,8 +17,11 @@
 		{{if auth.user is not None:}}
 			<div class="container">
 				<div class="quarter">
-					<a v-if="viewing_resources" class="btn" v-on:click="toggle_view_pane()">Resources</a>
+					<a class="btn" v-on:click="show_view_panel_resources()">Resources</a>
+					<a class="btn" v-on:click="show_view_panel_party()">Party</a>
+					<a class="btn" v-on:click="show_view_panel_village()">Village</a>
 					<div v-if="viewing_resources">
+                        <a class="btn" v-on:click="show_view_panel_resources()">Send a boi home</a>
 						Inventory:<br><br>
 						<div v-for="obj in band[0].inventory">
 							${obj.num} x ${obj.name}<br>
@@ -30,8 +33,7 @@
 							${res[1]} x ${res[0]}<br>
 						</div>
 					</div>
-					<a v-if="!viewing_resources" class="btn" v-on:click="toggle_view_pane()">Band</a>
-					<div v-if="!viewing_resources" v-for="member in band">
+					<div v-if="viewing_party" v-for="member in band">
 						Name: ${member.name}<br>
 						Max Health: ${member.max_health}<br>
 						Health: ${member.health} <a class="btn" v-if="can_eat_food(member)" v-on:click="eat_food(member)">Eat fud</a><br>
@@ -45,6 +47,9 @@
 						<a class="btn" v-if="member.armor.name != 'nothing'" v-on:click="unequip_armor(member)">Unequip</a>
 						______________________________
 						<br><br>
+					</div>
+					<div v-if="viewing_village">
+                        village is shitty
 					</div>
 				</div>
 				<div class="threequarters" id="grid">this is a grid boi</div>
