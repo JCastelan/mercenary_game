@@ -250,9 +250,7 @@ var app = function() {
 			self.vue.popup_buttons = [
 				{name: "Revive", onClick: function() {
 					restartGame();
-
 					self.vue.show_popup = false;
-
 				}}
 			]
 			self.vue.show_popup = true;
@@ -302,7 +300,6 @@ var app = function() {
 	};
 
     self.incrementResource = function(name){ //increments only the specified resource counter
-
         console.log(name);
         self.vue.resources.forEach(function(d){
             if( d[0] == name){
@@ -310,7 +307,6 @@ var app = function() {
                 d[1]++;
             }
         });
-
     };
 
     self.decrementResource = function(name){ //increments only the specified resource counter
@@ -321,7 +317,6 @@ var app = function() {
                 d[1]--;
             }
         });
-
     }
 
     // real stuff
@@ -572,7 +567,6 @@ var app = function() {
     		self.vue.available_villagers -= 1;
     		self.vue.hunter += 1;
 		}
-
 	};
 
 	self.decrement_hunter = function(){
@@ -580,7 +574,6 @@ var app = function() {
     		self.vue.available_villagers += 1;
     		self.vue.hunter -= 1;
 		}
-
 	};
 
 	self.increment_coal_miner = function(){
@@ -588,7 +581,6 @@ var app = function() {
     		self.vue.available_villagers -= 1;
     		self.vue.coal_miner += 1;
 		}
-
 	};
 
 	self.decrement_coal_miner = function(){
@@ -596,7 +588,6 @@ var app = function() {
     		self.vue.available_villagers += 1;
     		self.vue.coal_miner -= 1;
 		}
-
 	};
 
 	self.increment_iron_miner = function(){
@@ -604,7 +595,6 @@ var app = function() {
     		self.vue.available_villagers -= 1;
     		self.vue.iron_miner += 1;
 		}
-
 	};
 
 	self.decrement_iron_miner = function(){
@@ -612,7 +602,6 @@ var app = function() {
     		self.vue.available_villagers += 1;
     		self.vue.iron_miner -= 1;
 		}
-
 	};
 
 	self.increment_mithril_miner = function(){
@@ -620,7 +609,6 @@ var app = function() {
     		self.vue.available_villagers -= 1;
     		self.vue.mithril_miner += 1;
 		}
-
 	};
 
 	self.decrement_mithril_miner = function(){
@@ -628,7 +616,6 @@ var app = function() {
     		self.vue.available_villagers += 1;
     		self.vue.mithril_miner -= 1;
 		}
-
 	};
 
 	self.can_equip_boi = function(index) {
@@ -721,7 +708,6 @@ var app = function() {
 			fighter_group_health: [20, 0, 0, 0, 0],
 			health_per_figher: [10, 15, 20, 25, 30],
 			damage_per_figher: [1, 2, 3, 4, 5],
-
 			upgrade_items: [
 				[{name: "wooden sword", is_weapon: true, damage: 2}, {name: "leather armor", is_armor: true, health_boost: 5}],
 				[{name: "iron sword", is_weapon: true, damage: 3}, {name: "iron armor", is_armor: true, health_boost: 10}],
@@ -734,7 +720,6 @@ var app = function() {
             //counter: 0,
             resources: [],
             equipment: [],
-
 			available_villagers: 0,
 			wood_gatherer: 0,
 			hunter: 0,
@@ -782,7 +767,6 @@ var app = function() {
 			clicked: self.clicked,
 			incrementResource: self.incrementResource,
 			
-
             //loadCounter: self.loadCounter,
             //saveCounter: self.saveCounter,
             loadResources: self.loadResources,
@@ -824,7 +808,6 @@ var app = function() {
 			craft_mithril_armor: self.craft_mithril_armor,
 			get_num_craftable_mithril_armors: self.get_num_craftable_mithril_armors,
 
-
 			can_equip_boi: self.can_equip_boi,
 			equip_boi: self.equip_boi,
 			unequip_boi: self.unequip_boi,
@@ -840,7 +823,6 @@ var app = function() {
 	};
 	self.get_name();
 	$("#vue-div").show();
-
 
 
     //self.loadCounter(); 

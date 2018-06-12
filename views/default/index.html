@@ -54,12 +54,9 @@
 							<div v-if="num_fighters[i] != 0">
 								Number of level ${i+1} fighters: ${num_fighters[i]}<br>
 								Level ${i+1} fighters group HP: ${group_hp}<br>
-<<<<<<< HEAD
-=======
 								Level ${i+1} fighters group damage: ${num_fighters[i] * (i+1)}<br>
 								<a class="btn" v-if="can_equip_boi(i)" v-on:click="equip_boi(i)">Equip (level up) a a boi</a>
 								<a class="btn" v-if="i != 0" v-on:click="unequip_boi(i)">Unequip (level down to 1) a boi</a>
->>>>>>> 31ae1d5f0ca8d2142eea9935af90852b3404116b
 								<a class="btn" v-on:click="send_to_village(i)">Send a boi to the village</a>
 							</div>
 							<br>
@@ -139,21 +136,7 @@
 			<script src="{{=URL('static', 'js/resource_management.js')}}"></script>
 			<script src="{{=URL('static', 'js/button_stuff.js')}}"></script>
 	
-<<<<<<< HEAD
-			<div class="container padded center">
-				<div class="quarter">
-					<h2>Click the button to increment the counter</h2>
-					<a class="center btn large" v-on:click="clicked"><tt>Click Me</tt></a>
-					<a class="center btn large" v-on:click="saveCounter"><tt>Save counter</tt></a>
-					<a class="center btn large" v-on:click="saveResources"><tt>Save resources</tt></a>
-				</div>
-				<div class="threequarters">
-					<h1 class="right" id="counter">${counter}</h1>
-				</div>
-			</div>
-=======
 			
->>>>>>> 31ae1d5f0ca8d2142eea9935af90852b3404116b
 		{{else:}}
 		<!-- </div>
 		<div v-if="!logged_in"> -->

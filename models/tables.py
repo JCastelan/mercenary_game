@@ -17,7 +17,6 @@ db.define_table('userdb',
 				Field( 'user_email', default=get_user_email()),
 				Field('created_on', 'datetime', default=datetime.datetime.utcnow()),
 				Field('updated_on', 'datetime', update=datetime.datetime.utcnow()),
-
 				#player info
 				Field( 'max_health', 'integer', default=10),
 				Field( 'current_health', 'integer', default=10),
@@ -35,7 +34,6 @@ db.define_table('userdb',
 				Field( 'i_sword', 'integer', default=0),
 				Field( 's_sword', 'integer', default=0),
 				Field( 'm_sword', 'integer', default=0),
-
 
 				#human units
 				Field( 'fighter_count', 'string', default="0,0,0,0,0"),

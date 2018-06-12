@@ -51,19 +51,16 @@ def load_resources():
 	if row is None:
 		# print( "\tdne")
 		loaded_data = dict(
-
 			max_health=10,
 			current_health=10,
 			equipped_weapon="fists",
 			equipped_armor="nothing",
-
 
 			coal=0,
 			iron=0,
 			mithril=0,
 			steel=0,
 			wood=0,
-
 			leather=0,
 
 			w_sword=0,
@@ -73,26 +70,21 @@ def load_resources():
 
 			num_fighters=[0,0,0,0,0],
 			fighter_health=[0,0,0,0,0],
-
 		)
 		return response.json(loaded_data)
 	else:
 		# print("\texists")
 		loaded_data = dict(
-
 			max_health=row.max_health,
 			current_health=row.current_health,
 			equipped_weapon=row.equipped_weapon,
 			equipped_armor=row.equipped_armor,
-
 
 			coal=row.coal,
 			iron=row.iron,
 			mithril=row.iron,
 			steel=row.steel,
 			wood=row.wood,
-
-
 			leather=row.leather,
 
 			w_sword=row.w_sword,
@@ -102,7 +94,6 @@ def load_resources():
 
 			num_fighters=[x.strip() for x in row.fighter_count.split(',')],
 			fighter_health=[x.strip() for x in row.fighter_health.split(',')]
-
 		)
 		return response.json(loaded_data)
 

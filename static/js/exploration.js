@@ -82,7 +82,6 @@ function removeFromInventory(item) {
 	}
 }
 
-
 function removeFromResources(resourceName, num) {
 	if(!num) num = 1;
 	for(var i = 0; i < APP.vue.resources.length; i++) {
@@ -210,8 +209,6 @@ function makeLootBag(bagY, bagX, items) {
 	}
 }
 
-<<<<<<< HEAD
-
 //--EDIT BY KRON: This Function is called to create loot bags--------------------
 function spawnLootBag(x, y){
 	grid[y][x].buttons = [
@@ -225,14 +222,15 @@ function spawnLootBag(x, y){
 			APP.vue.popup_desc = grid[playerPos.y][playerPos.x].desc;
 			APP.vue.popup_buttons = grid[playerPos.y][playerPos.x].buttons;
 		}}];
-=======
+}
+//--------------------------------------------------------------------------------
+
 function setVisibleToExplored() {
 	for(var x = -playerViewLength; x <= playerViewLength; x++) {
 		for(var y = -playerViewLength; y <= playerViewLength; y++) {
 			grid[playerPos.y + y][playerPos.x + x].explored = true;
 		}
 	}
->>>>>>> 0a08535657b33d26fc8d86a5220dbf99315a704e
 }
 
 function initStartingAreaGrid() {
@@ -493,6 +491,7 @@ function onPlayerMove() {
 					// 	spawnLootBag(playerPos.x,playerPos.y);
 					// }
 					//-----------------------------------------------------
+
 					if(grid[playerPos.y][playerPos.x].onDeath) {
 						grid[playerPos.y][playerPos.x].onDeath();
 						return;
