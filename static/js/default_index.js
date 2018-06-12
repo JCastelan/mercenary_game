@@ -29,29 +29,35 @@ var app = function() {
 		return health;
 	};
 	
+    switch_tab = function(id){
+        activated_color = 'yellow';
+        ids = ["b_res", "b_village", "b_party"];
+        ids.forEach(function(d){
+            if( d == id){
+                document.getElementById(d).classList.add(activated_color);
+            }else{
+                document.getElementById(d).classList.remove(activated_color);
+            }
+        });
+
+    }
     activated_color = 'yellow';
 	self.show_view_panel_resources = function() {
-        document.getElementById("b_res").classList.add(activated_color);
-        document.getElementById("b_village").classList.remove(activated_color);
-        document.getElementById("b_party").classList.remove(activated_color);
+        switch_tab("b_res");
 		self.vue.viewing_resources = true;
 		self.vue.viewing_party = false;
 		self.vue.viewing_village = false;
 	};
 
 	self.show_view_panel_party = function() {
-        document.getElementById("b_party").classList.add(activated_color);
-        document.getElementById("b_res").classList.remove(activated_color);
-        document.getElementById("b_village").classList.remove(activated_color);
+        switch_tab("b_party");
 		self.vue.viewing_resources = false;
 		self.vue.viewing_party = true;
 		self.vue.viewing_village = false;
 	};
 
 	self.show_view_panel_village = function() {
-        document.getElementById("b_village").classList.add(activated_color);
-        document.getElementById("b_res").classList.remove(activated_color);
-        document.getElementById("b_party").classList.remove(activated_color);
+        switch_tab("b_village");
 		self.vue.viewing_resources = false;
 		self.vue.viewing_party = false;
 		self.vue.viewing_village = true;
@@ -307,17 +313,21 @@ var app = function() {
     };
 
     self.saveResources = function(){
-        // console.log( "saving all resources")
-        console.log(self.vue.resources)
+        //console.log( "saving all resources")
+        //console.log(self.vue.resources)
         $.post(save_resources_url,
             { 
                 resources: self.vue.resources
             },
             function (result) {
-                // console.log( result )
+                //console.log( result )
             });
     };
 
+
+    autosave = function(){
+        window.setInterval(self.saveResources, 5000);
+    }
     self.gather_wood = function(){
     	sel
 	}
@@ -415,6 +425,7 @@ var app = function() {
     self.loadCounter(); 
     self.loadResources();
     self.show_view_panel_resources();
+    autosave();
     return self;
 };
 
