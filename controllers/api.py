@@ -54,6 +54,7 @@ def load_resources():
 			coal=0,
 			copper=0,
 			fur=0,
+			grass=0,
 			iron=0,
 			mithril=0,
 			steel=0,
@@ -68,6 +69,7 @@ def load_resources():
 			coal=row.coal,
 			copper=row.copper,
 			fur=row.fur,
+			grass=row.grass,
 			iron=row.iron,
 			mithril=row.iron,
 			steel=row.steel,
@@ -78,8 +80,8 @@ def load_resources():
 		return response.json(loaded_data)
 
 def save_resources():
-	valueList=["coal","copper","fur","iron","mithril","steel","stone","tin","wood"]
-	valuesToStore=[0 ,       0,    0,     0,        0,      0,      0,    0,     0]
+	valueList=["coal","copper","fur","iron","mithril",   "steel","stone","tin","wood","grass"]
+	valuesToStore=[0,0,0,0,0,      0,0,0,0,0]
 	if auth.user is None:
 		return
 	# print "save_counter!!!!!!!!!!!!!!!!!"
@@ -106,7 +108,8 @@ def save_resources():
 			steel=valuesToStore[5],
 			stone=valuesToStore[6],
 			tin=valuesToStore[7],
-			wood=valuesToStore[8]
+			wood=valuesToStore[8],
+			grass=valuesToStore[8]
 		)
 		return
 	else:
@@ -119,6 +122,7 @@ def save_resources():
 			steel=valuesToStore[5],
 			stone=valuesToStore[6],
 			tin=valuesToStore[7],
-			wood=valuesToStore[8]
+			wood=valuesToStore[8],
+			grass=valuesToStore[8]
 		)
 		return

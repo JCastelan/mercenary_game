@@ -85,3 +85,12 @@ CREATE TABLE "userdb"(
     "fighters" INTEGER
 );
 success!
+timestamp: 2018-06-11T22:06:51.441209
+ALTER TABLE "userdb" ADD "warriors" INTEGER;
+timestamp: 2018-06-11T22:06:51.509823
+ALTER TABLE "userdb" ADD "bowmen" INTEGER;
+timestamp: 2018-06-11T22:06:51.556581
+ALTER TABLE "userdb" ADD "mages" INTEGER;
+timestamp: 2018-06-11T22:06:51.684345
+ALTER TABLE "userdb" ADD "grass" INTEGER;
+success!

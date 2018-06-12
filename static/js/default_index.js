@@ -248,12 +248,22 @@ var app = function() {
             });
 	};
 	
-	self.clicked = function () {
+	self.clicked = function () { //increments all counters
 		self.vue.counter++;
         self.vue.resources.forEach(function(d){
             d[1]++;
         });
 	}
+
+    self.incrementResource = function(name){ //increments only the specified counter
+        console.log(name);
+        self.vue.resources.forEach(function(d){
+            if( d[0] == name){
+                console.log(d[0]);
+                d[1]++;
+            }
+        });
+    }
 
     // real stuff
     self.loadResources = function(){
@@ -267,6 +277,7 @@ var app = function() {
             console.log(dataElems);
             self.vue.resources = dataElems;
         });
+        
     };
 
     self.saveResources = function(){
@@ -337,6 +348,7 @@ var app = function() {
 			unequip_armor: self.unequip_armor,
 
 			clicked: self.clicked,
+            incrementResource: self.incrementResource,
             loadCounter: self.loadCounter,
             saveCounter: self.saveCounter,
             loadResources: self.loadResources,

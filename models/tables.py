@@ -26,6 +26,7 @@ db.define_table('userdb',
 				Field( 'coal', 'integer', default=0),
 				Field( 'copper', 'integer', default=0),
 				Field( 'fur', 'integer', default=0),
+				Field( 'grass', 'integer', default=0),
 				Field( 'iron', 'integer', default=0),
 				Field( 'mithril', 'integer', default=0),
 				Field( 'steel', 'integer', default=0),
@@ -37,6 +38,9 @@ db.define_table('userdb',
 				Field( 'houses', 'integer', default=0),
 				#human units
 				Field( 'workers', 'integer', default=0),
+				Field( 'mages', 'integer', default=0),
+				Field( 'warriors', 'integer', default=0),
+				Field( 'bowmen', 'integer', default=0),
 				Field( 'fighters', 'integer', default=0)
 				)
 
