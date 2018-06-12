@@ -269,36 +269,14 @@ var app = function() {
 		self.vue.$forceUpdate();
 		// TODO: based on which level we decremented from, add the necessary upgrade items back to the inventory
 	}
-
-    // generic counter functions (for debugging purposes)
-    self.loadCounter = function(){ 
-        // console.log("getting the stored counter");
-        // console.log( self.vue.counter);
-        $.getJSON(load_counter_url, function (data) {
-            // console.log("Loaded " + data.counter + " as the counter value" );
-            self.vue.counter = data.counter;
-        });
-    };
-
-    self.saveCounter = function(){
-        // console.log("saving the counter");
-        $.post(save_counter_url,
-            { 
-                counter: self.vue.counter
-            },
-            function (result) {
-                // console.log( result )
-            });
-	};
 	
-	self.clicked = function () { //increments all counters
-		self.vue.counter++;
+	self.clicked = function () { //increments all resource counters
         self.vue.resources.forEach(function(d){
             d[1]++;
         });
 	}
 
-    self.incrementResource = function(name){ //increments only the specified counter
+    self.incrementResource = function(name){ //increments only the specified resource counter
         console.log(name);
         self.vue.resources.forEach(function(d){
             if( d[0] == name){
@@ -308,20 +286,53 @@ var app = function() {
         });
     }
 
+    self.decrementResource = function(name){ //increments only the specified resource counter
+        console.log(name);
+        self.vue.resources.forEach(function(d){
+            if( d[0] == name){
+                console.log(d[0]);
+                d[1]--;
+            }
+        });
+    }
+
     // real stuff
     self.loadResources = function(){ //loads more than just resources
         // console.log( "loading all stored vals")
-        resourcesList = ["coal","iron","mithril","steel","wood", "leather"] 
+        resourcesList = ["coal","iron","mithril","steel","wood", "leather"];
+        equipList = ["w_sword", "i_sword","s_sword","m_sword"]
+        playerInfo = ["max_health","current_health","equipped_weapon","equipped_armor"]
         $.getJSON(load_resources_url, function (data) {
             //console.log(data );
             dataElems=Object.entries(data);
             dataElems.forEach(function(d,i){
-                d[1] = +d[1];
-                if (resourcesList.indexOf(d[0])<0) {
+                
+                if (equipList.indexOf(d[0])>=0) {
+                    d[1] = +d[1];
                     self.vue.equipment.push(d)
-                }else{
-                    //console.log(d[0], i)
+                }else if (resourcesList.indexOf(d[0])>=0){
+                    d[1] = +d[1];
                     self.vue.resources.push(d)
+                }else if (playerInfo.indexOf(d[0])>=0){
+                    if(d[0]== "max_health"){
+                        self.vue.band.max_health=+d[1];
+                    } else if (d[0]=="current_health") {
+                        self.vue.band.health=+d[1];
+                    } else if (d[0]=="equipped_weapon") {
+                        self.vue.band[0].weapon.name=d[1];
+                    } else if (d[0]=="equipped_armor") {
+                        self.vue.band[0].armor.name=d[1];
+                    }else{
+                        console.log("warning: did not store ", d);
+                    }
+                }else{
+                    if(d[0]== "num_fighters"){
+                        self.vue.num_fighters= +d[1];
+                    } else if (d[0]=="fighter_health") {
+                        self.vue.health_per_figher=+d[1]; //not sure if this is the right one
+                    }else{
+                        console.log("warning: did not store ", d);
+                    }
                 }
             });
             console.log(self.vue.equipment);
@@ -344,7 +355,7 @@ var app = function() {
     };
 
     autosave = function(){
-        window.setInterval(self.saveResources, 5000);
+        window.setInterval(self.saveResources, 60*1000);
     };
 
 	self.send_villager_to_party = function(){

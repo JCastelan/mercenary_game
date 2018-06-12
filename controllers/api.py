@@ -67,12 +67,7 @@ def load_resources():
 			i_sword=0,
 			s_sword=0,
 			m_sword=0,
-
-			L0_fighter=0,
-			L1_fighter=0,
-			L2_fighter=0,
-			L3_fighter=0,
-			L4_fighter=0,
+			
 			num_fighters=[0,0,0,0,0],
 			fighter_health=[10, 15, 20, 25, 30],
 		)
