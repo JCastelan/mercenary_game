@@ -68,6 +68,13 @@ def load_resources():
 			s_sword=0,
 			m_sword=0,
 
+			food=0,
+
+			leather_armor=0,
+			iron_armor=0,
+			steel_armor=0,
+			mithril_armor=0,
+
 			num_fighters=[0,0,0,0,0],
 			fighter_health=[0,0,0,0,0],
 		)
@@ -92,14 +99,21 @@ def load_resources():
 			s_sword=row.s_sword,
 			m_sword=row.m_sword,
 
+			food=row.food,
+
+			leather_armor=row.leather_armor,
+			iron_armor=row.iron_armor,
+			steel_armor=row.steel_armor,
+			mithril_armor=row.mithril_armor,
+
 			num_fighters=[x.strip() for x in row.fighter_count.split(',')],
 			fighter_health=[x.strip() for x in row.fighter_health.split(',')]
 		)
 		return response.json(loaded_data)
 
 def save_resources():
-	valueList=["coal","iron","mithril",   "steel","wood", "leather",  "w_sword","i_sword","s_sword","m_sword"]
-	valuesToStore=[0,0,0,      0,0,0,0,       0,0,0,0]
+	valueList=["coal","iron","mithril","steel","wood","leather",  "w_sword","i_sword","s_sword","m_sword", "food",    "leather_armor","iron_armor","steel_armor","mithril_armor"]
+	valuesToStore=[0,0,0,0,0,0,  0,0,0,0,0, 0,0,0,0]
 	num_fighters_string=""
 	fighter_health_string=""
 	if auth.user is None:
@@ -114,20 +128,18 @@ def save_resources():
 	dataCount = 0
 	for key, value in request.vars.iteritems():
 		if not isinstance(value, list):
-			print "~~~\t", value
+			print "~~~not a list: \t", value
 			continue
 		print "\t", value
 		if len(value)>2:
-			print key, value
 			if key == "num_fighters[]":
-				print "num of fighters!!!!"
 				for item in value:
 					num_fighters_string+=item+","
 			elif key == "fighter_health[]":
-				print "health of fighters!!!!"
 				for item in value:
 					fighter_health_string+=item+","
 		else:
+			print key, value
 			valuesToStore[valueList.index(value[0])]=int(value[1])
 		dataCount+=1
 		
@@ -159,6 +171,13 @@ def save_resources():
 			s_sword=valuesToStore[8],
 			m_sword=valuesToStore[9],
 
+			food=valuesToStore[10],
+
+			leather_armor=valuesToStore[11],
+			iron_armor=valuesToStore[12],
+			steel_armor=valuesToStore[13],
+			mithril_armor=valuesToStore[14],
+
 			fighter_count=num_fighters_string,
 			fighter_health=fighter_health_string
 		)
@@ -182,6 +201,13 @@ def save_resources():
 			i_sword=valuesToStore[7],
 			s_sword=valuesToStore[8],
 			m_sword=valuesToStore[9],
+
+			food=valuesToStore[10],
+
+			leather_armor=valuesToStore[11],
+			iron_armor=valuesToStore[12],
+			steel_armor=valuesToStore[13],
+			mithril_armor=valuesToStore[14],
 
 			fighter_count=num_fighters_string,
 			fighter_health=fighter_health_string
