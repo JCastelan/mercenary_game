@@ -68,39 +68,37 @@ var app = function() {
 	};
 
 	self.equip_weapon = function(member) {
+		// TODO: open up a popup for equipping weapons
+			// make sure this doesn't conflict with other popups
+		// first find the best weapon
+		var best_weapon_index = -1;
+		var best_weapon_damage = 0;
 		for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
-			if(self.vue.band[0].inventory[i].is_weapon && self.vue.band[0].inventory[i].damage > member.weapon.damage) {
-				// add back our current weapon to the inventory if we have a current weapon other than fists
-				if(member.weapon.name != "fists") {
-					var weapon_num = 1;
-					for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
-						if(self.vue.band[0].inventory[i].name == member.weapon.name) {
-							weapon_num = self.vue.band[0].inventory[i].num;
-							break;
-						}
-					}
-					self.vue.band[0].inventory.push({
-						name: member.weapon.name,
-						is_weapon: member.weapon.is_weapon,
-						damage: member.weapon.damage,
-						num: weapon_num
-					});
-				}
-				// set the weapon to the new weapon
-				member.weapon = {
-					name: self.vue.band[0].inventory[i].name,
-					is_weapon: self.vue.band[0].inventory[i].is_weapon,
-					damage: self.vue.band[0].inventory[i].damage
-				};
-				// remove that weapon from the inventory
-				if(self.vue.band[0].inventory[i].num > 1) {
-					self.vue.band[0].inventory[i].num--;
-				}
-				else {
-					self.vue.band[0].inventory.splice(i, 1);
-				}
-				return;
+			if(self.vue.band[0].inventory[i].is_weapon && self.vue.band[0].inventory[i].damage > member.weapon.damage
+			&& best_weapon_damage < self.vue.band[0].inventory[i].damage) {
+				best_weapon_index = i;
+				best_weapon_damage = self.vue.band[0].inventory[i].damage;
 			}
+		}
+		if(best_weapon_index == -1) {
+			return;
+		}
+		// add back our current weapon to the inventory if we have a current weapon other than fists
+		if(member.weapon.name != "fists") {
+			self.unequip_weapon(member);
+		}
+		// set the weapon to the new weapon
+		member.weapon = {
+			name: self.vue.band[0].inventory[best_weapon_index].name,
+			is_weapon: self.vue.band[0].inventory[best_weapon_index].is_weapon,
+			damage: self.vue.band[0].inventory[best_weapon_index].damage
+		};
+		// remove that weapon from the inventory
+		if(self.vue.band[0].inventory[best_weapon_index].num > 1) {
+			self.vue.band[0].inventory[best_weapon_index].num--;
+		}
+		else {
+			self.vue.band[0].inventory.splice(best_weapon_index, 1);
 		}
 	};
 
@@ -141,41 +139,39 @@ var app = function() {
 	};
 
 	self.equip_armor = function(member) {
+		// TODO: open up a popup for equipping armor
+			// make sure this doesn't conflict with other popups
+		// first find the best armor
+		var best_armor_index = -1;
+		var best_armor_boost = 0;
 		for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
-			if(self.vue.band[0].inventory[i].is_armor && member.armor.health_boost < self.vue.band[0].inventory[i].health_boost) {
-				// add back our current armor to the inventory if we have current armor other than fists
-				if(member.armor.name != "nothing") {
-					var armor_num = 1;
-					for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
-						if(self.vue.band[0].inventory[i].name == member.armor.name) {
-							armor_num = self.vue.band[0].inventory[i].num;
-							break;
-						}
-					}
-					self.vue.band[0].inventory.push({
-						name: member.armor.name,
-						is_armor: member.armor.is_armor,
-						health_boost: member.armor.health_boost,
-						num: armor_num
-					});
-				}
-				// set the armor to the new armor
-				member.armor = {
-					name: self.vue.band[0].inventory[i].name,
-					is_armor: self.vue.band[0].inventory[i].is_armor,
-					health_boost: self.vue.band[0].inventory[i].health_boost
-				};
-				member.max_health += member.armor.health_boost;
-				member.health += member.armor.health_boost;
-				// remove that armor from the inventory
-				if(self.vue.band[0].inventory[i].num > 1) {
-					self.vue.band[0].inventory[i].num--;
-				}
-				else {
-					self.vue.band[0].inventory.splice(i, 1);
-				}
-				return;
+			if(self.vue.band[0].inventory[i].is_armor && member.armor.health_boost < self.vue.band[0].inventory[i].health_boost
+			&& best_armor_boost < self.vue.band[0].inventory[i].health_boost) {
+				best_armor_index = i;
+				best_armor_boost = self.vue.band[0].inventory[i].health_boost;
 			}
+		}
+		if(best_armor_index == -1) {
+			return;
+		}
+		// add back our current armor to the inventory if we have current armor other than fists
+		if(member.armor.name != "nothing") {
+			self.unequip_armor(member);
+		}
+		// set the armor to the new armor
+		member.armor = {
+			name: self.vue.band[0].inventory[best_armor_index].name,
+			is_armor: self.vue.band[0].inventory[best_armor_index].is_armor,
+			health_boost: self.vue.band[0].inventory[best_armor_index].health_boost
+		};
+		member.max_health += member.armor.health_boost;
+		member.health += member.armor.health_boost;
+		// remove that armor from the inventory
+		if(self.vue.band[0].inventory[best_armor_index].num > 1) {
+			self.vue.band[0].inventory[best_armor_index].num--;
+		}
+		else {
+			self.vue.band[0].inventory.splice(best_armor_index, 1);
 		}
 	};
 
@@ -206,25 +202,7 @@ var app = function() {
 			self.vue.popup_desc = "Did you think we\'d just give you free health? Nah man, u ded";
 			self.vue.popup_buttons = [
 				{name: "Revive", onClick: function() {
-					initStartingAreaGrid();
-					displayGrid();
-					APP.vue.band = [
-						{ // index 0 is you
-							name: "You",
-							max_health: 10,
-							health: 10,
-							weapon: {
-								name: "fists",
-								damage: 1
-							},
-							armor: {
-								name: "nothing",
-								health_boost: 0
-							},
-							inventory: []
-						} // any more is people you've recruited
-					];
-					APP.vue.in_battle = false;
+					restartGame();
 					APP.vue.show_popup = false;
 				}}
 			]

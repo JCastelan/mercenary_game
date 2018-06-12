@@ -21,7 +21,7 @@
 					<div v-if="viewing_resources">
 						Inventory:<br><br>
 						<div v-for="obj in band[0].inventory">
-							${obj.name} x ${obj.num}<br>
+							${obj.num} x ${obj.name}<br>
 						</div>
 						<br>
 						______________________________
@@ -33,17 +33,16 @@
 					<a v-if="!viewing_resources" class="btn" v-on:click="toggle_view_pane()">Band</a>
 					<div v-if="!viewing_resources" v-for="member in band">
 						Name: ${member.name}<br>
-						Health: ${member.health}<br>
-						Max Health: ${member.max_health}
-						<a class="btn" v-if="can_eat_food(member)" v-on:click="eat_food(member)">Eat fud</a>
-						<br>
-						Weapon: ${member.weapon.name}, dmg: ${member.weapon.damage}
+						Max Health: ${member.max_health}<br>
+						Health: ${member.health} <a class="btn" v-if="can_eat_food(member)" v-on:click="eat_food(member)">Eat fud</a><br>
+						Damage: ${member.weapon.damage}<br>
+						Weapon: ${member.weapon.name}
 						<a class="btn" v-if="can_equip_weapon(member)" v-on:click="equip_weapon(member)">Equip weapon</a>
-						<a class="btn" v-if="member.weapon.name != 'fists'" v-on:click="unequip_weapon(member)">Unequip weapon</a>
+						<a class="btn" v-if="member.weapon.name != 'fists'" v-on:click="unequip_weapon(member)">Unequip</a>
 						<br>
-						Armor: ${member.armor.name}, health boost: ${member.armor.health_boost}
+						Armor: ${member.armor.name}
 						<a class="btn" v-if="can_equip_armor(member)" v-on:click="equip_armor(member)">Equip armor</a>
-						<a class="btn" v-if="member.armor.name != 'nothing'" v-on:click="unequip_armor(member)">Unequip armor</a>
+						<a class="btn" v-if="member.armor.name != 'nothing'" v-on:click="unequip_armor(member)">Unequip</a>
 						______________________________
 						<br><br>
 					</div>

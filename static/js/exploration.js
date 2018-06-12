@@ -27,6 +27,44 @@ function clearCurrentTile() {
 	grid[playerPos.y][playerPos.x].char = emptyChar;
 }
 
+function addRecruitToBand(name) {
+	APP.vue.band.push({
+		name: name,
+		health: 10,
+		max_health: 10,
+		weapon: {
+			name: "fists",
+			damage: 1
+		},
+		armor: {
+			name: "nothing",
+			health_boost: 0
+		}
+	});
+}
+
+function restartGame() {
+	initStartingAreaGrid();
+	displayGrid();
+	APP.vue.band = [
+		{ // index 0 is you
+			name: "You",
+			max_health: 10,
+			health: 10,
+			weapon: {
+				name: "fists",
+				damage: 1
+			},
+			armor: {
+				name: "nothing",
+				health_boost: 0
+			},
+			inventory: []
+		} // any more is people you've recruited
+	];
+	APP.vue.in_battle = false;
+}
+
 function makeLootBag(bagY, bagX, items) {
 	grid[bagY][bagX].char = lootChar;
 	grid[bagY][bagX].title = "Loot Bag";
@@ -120,23 +158,8 @@ function initStartingAreaGrid() {
 		APP.vue.popup_desc = grid[playerPos.y][playerPos.x].desc;
 		grid[playerPos.y][playerPos.x].buttons =  [
 			{name: "Sure m8", onClick: function() {
-				grid[playerPos.y][playerPos.x].title = null;
-				grid[playerPos.y][playerPos.x].desc = null;
-				grid[playerPos.y][playerPos.x].buttons = null;
-				grid[playerPos.y][playerPos.x].char = emptyChar;
-				APP.vue.band.push({
-					name: "1337 hacker boi",
-					health: 10,
-					max_health: 10,
-					weapon: {
-						name: "fists",
-						damage: 1
-					},
-					armor: {
-						name: "nothing",
-						health_boost: 0
-					}
-				});
+				clearCurrentTile();
+				addRecruitToBand("1337 hacker boi");
 				APP.vue.show_popup = false;
 			}},
 			{name: "Nah man, I aint about that life", onClick: function() {
@@ -158,7 +181,8 @@ function initStartingAreaGrid() {
 			{name: "Search body", onClick: function() {
 				makeLootBag(playerPos.y, playerPos.x, [
 					{name: "iron sword", is_weapon: true, damage: 2, num: 1},
-					{name: "food", num: 2}
+					{name: "food", num: 2},
+					{name: "iron armor", is_armor: true, health_boost: 10, num: 1}
 				]);
 				grid[playerPos.y][playerPos.x].buttons.push({name: "Go to hub world", onClick: function() {
 					initHubWorldGrid(100, 40);
@@ -401,25 +425,7 @@ function simulate_enemy_attacks() {
 				APP.vue.popup_desc = "u ded boyo";
 				APP.vue.popup_buttons = [
 					{name: "Revive", onClick: function() {
-						initStartingAreaGrid();
-						displayGrid();
-						APP.vue.band = [
-							{ // index 0 is you
-								name: "You",
-								max_health: 10,
-								health: 10,
-								weapon: {
-									name: "fists",
-									damage: 1
-								},
-								armor: {
-									name: "nothing",
-									health_boost: 0
-								},
-								inventory: []
-							} // any more is people you've recruited
-						];
-						APP.vue.in_battle = false;
+						restartGame();
 						APP.vue.show_popup = false;
 					}}
 				];
