@@ -52,8 +52,6 @@ function addToInventory(item) {
 	}
 }
 
-<<<<<<< HEAD
-=======
 function removeFromInventory(item) {
 	if(!item.num) item.num = 1;
 	// find the item in the inventory
@@ -81,7 +79,7 @@ function removeFromInventory(item) {
 	}
 }
 
->>>>>>> 31ae1d5f0ca8d2142eea9935af90852b3404116b
+
 function removeFromResources(resourceName, num) {
 	if(!num) num = 1;
 	for(var i = 0; i < APP.vue.resources.length; i++) {
@@ -209,6 +207,22 @@ function makeLootBag(bagY, bagX, items) {
 	}
 }
 
+
+//--EDIT BY KRON: This Function is called to create loot bags--------------------
+function spawnLootBag(x, y){
+	grid[y][x].buttons = [
+		{name: "Aye a loot bag", onClick: function() {
+			makeLootBag(playerPos.y, playerPos.x, [
+				{name: "iron sword", is_weapon: true, damage: 2, num: 1},
+				{name: "food", num: 2},
+				{name: "iron armor", is_armor: true, health_boost: 10, num: 1}
+			]);
+			APP.vue.popup_title = grid[playerPos.y][playerPos.x].title;
+			APP.vue.popup_desc = grid[playerPos.y][playerPos.x].desc;
+			APP.vue.popup_buttons = grid[playerPos.y][playerPos.x].buttons;
+		}}];
+}
+
 function initStartingAreaGrid() {
 	grid = [];
 	gridWidth = 50;
@@ -311,17 +325,7 @@ function initHubWorldGrid(width, height) {
 				//-EDIT BY KRON: Creates loot bags in random houses on Grid upon Hub Creation-
 				var lootChance = Math.random();
 				if (lootChance < .40) {
-					grid[y][x].buttons = [
-						{name: "Aye a loot bag", onClick: function() {
-							makeLootBag(playerPos.y, playerPos.x, [
-								{name: "iron sword", is_weapon: true, damage: 2, num: 1},
-								{name: "food", num: 2},
-								{name: "iron armor", is_armor: true, health_boost: 10, num: 1}
-							]);
-						 APP.vue.popup_title = grid[playerPos.y][playerPos.x].title;
-						 APP.vue.popup_desc = grid[playerPos.y][playerPos.x].desc;
-						 APP.vue.popup_buttons = grid[playerPos.y][playerPos.x].buttons;
-						}}];
+					spawnLootBag(x, y);
 				}
 				//--------------------------------------------------------------------------
 			} else if(chance < 0.05) {
@@ -465,6 +469,12 @@ function onPlayerMove() {
 					grid[playerPos.y][playerPos.x].battle = false;
 					APP.vue.in_battle = false;
 
+					//EDIT BY KRON: Set a chance that there is a loot event
+					// var lootCorpse = Math.random();
+					// if (lootCorpse < 1){
+					// 	spawnLootBag(playerPos.x,playerPos.y);
+					// }
+					//-----------------------------------------------------
 					if(grid[playerPos.y][playerPos.x].onDeath) {
 						grid[playerPos.y][playerPos.x].onDeath();
 						return;

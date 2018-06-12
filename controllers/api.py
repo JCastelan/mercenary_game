@@ -91,11 +91,8 @@ def load_resources():
 			mithril=row.iron,
 			steel=row.steel,
 			wood=row.wood,
-<<<<<<< HEAD
 
 
-=======
->>>>>>> 8e4623abdb0acc12f25f9741e845f33afe2d817b
 			leather=row.leather,
 
 			w_sword=row.w_sword,
