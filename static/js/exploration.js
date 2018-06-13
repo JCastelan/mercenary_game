@@ -689,6 +689,50 @@ function initHubWorldGrid(width, height) {
 		];
 
 	};
+
+	//Nerdy Boyo
+	grid[playerPos.y + 2][playerPos.x + 2].char = houseChar;
+	grid[playerPos.y + 2][playerPos.x + 2].title = "Nerdy Boyo";
+	grid[playerPos.y + 2][playerPos.x + 2].desc = "You come upon a boi picking up cards off the floor. The boi looks disheveled and grim. He looks up and sees you." +
+		" Immediately he ran towards you. “Halp me please! This bully has taken my blue eyes! If you find him and teach him a lesson I’ll give you a great weapon" +
+		" grand warrior! ";
+	grid[playerPos.y + 2][playerPos.x + 2].damage = 1;
+	grid[playerPos.y + 2][playerPos.x + 2].health = 2;
+	grid[playerPos.y + 2][playerPos.x + 2].buttons =  [
+		{name: "Find the bully", onClick: function() {
+			APP.vue.popup_desc  = "You found the brat and gave the sucka a suplex. Card retrieved. Good sir! You have save the realm from this evil tyrant. " +
+				"May this weapon help you on your adventure.";
+				APP.vue.popup_buttons = [
+					{name: "Got 1 steel sword and 2 juicy twinkies ʕ ∗ •́ ڡ •̀ ∗ ʔ", onClick: function() {
+						makeLootBag(playerPos.y, playerPos.x, [
+							{name: "steel sword", is_weapon: true, damage: 4, num: 1},
+							{name: "food", num: 2},
+						]);
+						APP.vue.popup_title = grid[playerPos.y][playerPos.x].title;
+						APP.vue.popup_desc = grid[playerPos.y][playerPos.x].desc;
+						APP.vue.popup_buttons = grid[playerPos.y][playerPos.x].buttons;
+					}},
+				];
+		}},
+		{name: "Grab his remaining cards and rip them.Rob the boyo.", onClick: function() {
+			grid[playerPos.y][playerPos.x].battle=true;
+			onPlayerMove();
+		}}
+	];
+	grid[playerPos.y + 2][playerPos.x + 2].onDeath = function() {
+		APP.vue.popup_desc  = "The poor kid grovelled under your feet as you laugh maniacally";
+				APP.vue.popup_buttons = [
+					{name: "Rob the punk's twinkies", onClick: function() {
+						makeLootBag(playerPos.y, playerPos.x, [
+							{name: "food", num: 3},
+						]);
+						APP.vue.popup_title = grid[playerPos.y][playerPos.x].title;
+						APP.vue.popup_desc = grid[playerPos.y][playerPos.x].desc;
+						APP.vue.popup_buttons = grid[playerPos.y][playerPos.x].buttons;
+					}},
+				];
+
+	};
 }
 
 function displayGrid() {
