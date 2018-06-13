@@ -353,12 +353,12 @@ var app = function() {
                     }
 					if(single_equip.is_weapon) {
 						single_equip.damage = getWeaponDamageByName(single_equip.name);
+                        //console.log("This is the damage of",single_equip.name ," is ",single_equip.damage )
 					}
 					if(single_equip.is_armor) {
 						single_equip.health_boost = getArmorHealthBoostByName(single_equip.name);
 					}
                     self.vue.band[0].inventory.push(single_equip)
-                    self.vue.equipment.push(d)
                 }else if (resourcesList.indexOf(d[0])>=0){
                     d[1] = +d[1];
                     self.vue.resources.push(d)
@@ -371,6 +371,7 @@ var app = function() {
                         self.vue.band[0].weapon.name=d[1];
                         self.vue.band[0].weapon.is_weapon = true;
 						self.vue.band[0].weapon.damage = getWeaponDamageByName(self.vue.band[0].weapon.name);
+
                     } else if (d[0]=="equipped_armor") {
                         self.vue.band[0].armor.name=d[1];
                         self.vue.band[0].armor.is_armor = true;
@@ -429,7 +430,7 @@ var app = function() {
         });};
 
     self.saveResources = function(){ //saves more than just resources
-        console.log( "saving all resources...")
+        //console.log( "saving all resources...")
         //console.log(self.vue.resources)
         //console.log(self.vue.num_fighters)
         inventory_items = []
