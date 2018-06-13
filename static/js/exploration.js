@@ -158,7 +158,7 @@ function restartGame() {
 		APP.vue.band[0].inventory[i].num = 0;
 	}
 	for(var i = 0; i < APP.vue.resources.length; i++) {
-		APP.vue.resources[i].num = 0;
+		APP.vue.resources[i][1] = 0;
 	}
 
 	APP.vue.num_fighters = [0, 0, 0, 0, 0]; // each element is a different level of fighter
@@ -193,25 +193,34 @@ function makeLootBag(bagY, bagX, items) {
 			// 	APP.vue.band[0].weapon = {name: this.item_name, damage: this.damage, num: 1, is_weapon: true};
 			// } else
 			{ // otherwise add it to the inventory
-				// check if we already have 1 of that item
-				var found = false;
-				for(var j = 0; j < APP.vue.resources.length; j++) {
-					if(APP.vue.resources[j][0] == this.item_name) {
-						// if so, add to the quantity
-						APP.vue.resources[j][1]++;
-						found = true;
+				if(this.item_name == "food" || this.item_name.includes("sword") || this.item_name.includes("armor")) {
+					for(var j = 0; j < APP.vue.band[0].inventory.length; j++) {
+						if(APP.vue.band[0].inventory[j].name == this.item_name) {
+							APP.vue.band[0].inventory[j].num++;
+						}
 					}
 				}
-				// if we dont already have it, then add it
-				if(!found) {
-					APP.vue.band[0].inventory.push({
-						name: this.item_name,
-						damage: this.damage,
-						num: 1,
-						is_weapon: this.is_weapon,
-						is_armor: this.is_armor,
-						health_boost: this.health_boost
-					});
+				else {
+					// check if we already have 1 of that item
+					// var found = false;
+					for(var j = 0; j < APP.vue.resources.length; j++) {
+						if(APP.vue.resources[j][0] == this.item_name) {
+							// if so, add to the quantity
+							APP.vue.resources[j][1]++;
+							// found = true;
+						}
+					}
+					// // if we dont already have it, then add it
+					// if(!found) {
+					// 	APP.vue.band[0].inventory.push({
+					// 		name: this.item_name,
+					// 		damage: this.damage,
+					// 		num: 1,
+					// 		is_weapon: this.is_weapon,
+					// 		is_armor: this.is_armor,
+					// 		health_boost: this.health_boost
+					// 	});
+					// }
 				}
 			}
 			if(this.num > 1) {
@@ -223,7 +232,7 @@ function makeLootBag(bagY, bagX, items) {
 					grid[playerPos.y][playerPos.x].desc = "Looted.";
 					APP.vue.popup_desc = "Looted.";
 
-					grid[playerPos.y][playerPos.x].char = grid[playerPos.y][playerPos.x].oldChar
+					grid[playerPos.y][playerPos.x].char = grid[playerPos.y][playerPos.x].oldChar;
 					//-EDIT BY KRON: changes char to 'h' after a house has been looted-
 					// if (oldChar == houseChar){
 					// 	grid[playerPos.y][playerPos.x].char = lootedChar;
@@ -418,7 +427,7 @@ function initHubWorldGrid(width, height) {
 				if (lootChance < .40) {
 					spawnLootBag(y, x);
 				}
-				if (lootChance >= .40 && lootChance <=.80){
+				else if (lootChance <=.80){
 					grid[y][x].battle = true;
 					grid[y][x].onDeath = function() {		
 						console.log("let the bodies hit the floor");
@@ -474,7 +483,10 @@ function initHubWorldGrid(width, height) {
 						spawnLootBag(playerPos.y, playerPos.x);
 						APP.vue.popup_buttons = grid[playerPos.y][playerPos.x].buttons;
 						APP.vue.show_popup = true;	
-					}			
+					}
+					else {
+						APP.vue.popup_buttons = [];
+					}
 				}
 				//--------------------------------------------------------------
 			} else {
@@ -589,6 +601,7 @@ function initHubWorldGrid(width, height) {
 			"them heading north with a child";
 		APP.vue.popup_buttons = [
 			{name: "Search body", onClick: function() {
+				grid[playerPos.y][playerPos.x].oldChar = grid[playerPos.y][playerPos.x].char;
 				makeLootBag(playerPos.y, playerPos.x, [
 					{name: "iron sword", is_weapon: true, damage: 2, num: 1},
 					{name: "food", num: 2},
@@ -664,6 +677,7 @@ function initHubWorldGrid(width, height) {
 		APP.vue.popup_desc  = "Uh.. Help I have fallen and I can’t get up";
 		APP.vue.popup_buttons = [
 			{name: "Grab her wooden cane and pie", onClick: function() {
+				grid[playerPos.y][playerPos.x].oldChar = grid[playerPos.y][playerPos.x].char;
 				makeLootBag(playerPos.y, playerPos.x, [
 					{name: "wooden sword", is_weapon: true, damage: 2, num: 1},
 					{name: "food", num: 1},
