@@ -330,6 +330,7 @@ function initHubWorldGrid(width, height) {
 			}
 		}
 	}
+
 	playerPos.x = Math.floor(gridWidth / 2);
 	playerPos.y = Math.floor(gridHeight / 2);
 	lastPlayerPos.x = playerPos.x;
