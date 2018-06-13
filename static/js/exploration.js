@@ -372,7 +372,6 @@ function initHubWorldGrid(width, height) {
 			}
 		}
 	}
-
 	// final boss fight
 	grid[0][0].char = 'b';
 	grid[0][0].title = "The Storm Crows";
