@@ -16,7 +16,7 @@ var hiddenEnemyChar = 'Q';
 var itemChar = 'I';
 var lootChar = 'L';
 var bossChar = 'B';
-var lootedChar = 'h'; 
+var lootedChar = 'H';  //"Ugly but functional..." -KRON 6/12/18
 unexploredChar = 'u';
 
 var lastPlayerPos = {x: 0, y: 0};
