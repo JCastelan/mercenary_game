@@ -195,10 +195,10 @@ function makeLootBag(bagY, bagX, items) {
 			{ // otherwise add it to the inventory
 				// check if we already have 1 of that item
 				var found = false;
-				for(var j = 0; j < APP.vue.band[0].inventory.length; j++) {
-					if(APP.vue.band[0].inventory[j].name == this.item_name) {
+				for(var j = 0; j < APP.vue.resources.length; j++) {
+					if(APP.vue.resources[j][0] == this.item_name) {
 						// if so, add to the quantity
-						APP.vue.band[0].inventory[j].num++;
+						APP.vue.resources[j][1]++;
 						found = true;
 					}
 				}
