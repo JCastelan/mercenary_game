@@ -416,7 +416,6 @@ function initHubWorldGrid(width, height) {
 				//-EDIT BY KRON: Creates loot bags in random houses on Grid upon Hub Creation-
 				var lootChance = Math.random();
 				if (lootChance < .40) {
-<<<<<<< HEAD
 					spawnLootBag(y, x);
 				}
 				if (lootChance >= .40 && lootChance <=.80){
@@ -438,19 +437,7 @@ function initHubWorldGrid(width, height) {
 							APP.vue.show_popup = true;
 						}
 					};
-=======
-					grid[y][x].buttons = [
-						{name: "Aye a loot bag", onClick: function() {
-							makeLootBag(playerPos.y, playerPos.x, [
-								{name: "iron sword", is_weapon: true, damage: 3, num: 1},
-								{name: "food", num: 2},
-								{name: "iron armor", is_armor: true, health_boost: 10, num: 1}
-							]);
-						 APP.vue.popup_title = grid[playerPos.y][playerPos.x].title;
-						 APP.vue.popup_desc = grid[playerPos.y][playerPos.x].desc;
-						 APP.vue.popup_buttons = grid[playerPos.y][playerPos.x].buttons;
-						}}];
->>>>>>> 07abf20a02dbf80ae4ef821f26029c69636fcbdd
+
 				}
 				//--------------------------------------------------------------------------
 			} else if(chance < 0.05) {
@@ -461,7 +448,7 @@ function initHubWorldGrid(width, height) {
 				grid[y][x].onDeath =function(){
 					console.log("let the hidden bodies hit the floor");		
 					var hiddenLoot = Math.random();
-					if (hiddenLoot < 1){
+					if (hiddenLoot < .50){
 						spawnLootBag(playerPos.y, playerPos.x);
 						APP.vue.popup_buttons = grid[playerPos.y][playerPos.x].buttons;
 						APP.vue.show_popup = true;	
