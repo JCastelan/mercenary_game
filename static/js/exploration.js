@@ -553,6 +553,8 @@ function initHubWorldGrid(width, height) {
 	grid[playerPos.y-3][playerPos.x-3].buttons = [
 		{name: "Unlock iron ore mining", onClick: function() {
 			APP.vue.iron_mine_unlocked = true;
+			grid[playerPos.y][playerPos.x].desc = "You already unlocked this mine. You can assign villagers to mine from here.";
+			grid[playerPos.y][playerPos.x].buttons = [];
 			APP.closePopup();
 		}}
 	];
@@ -564,6 +566,8 @@ function initHubWorldGrid(width, height) {
 	grid[playerPos.y+10][playerPos.x+6].buttons = [
 		{name: "Unlock coal mining", onClick: function() {
 			APP.vue.coal_mine_unlocked = true;
+			grid[playerPos.y][playerPos.x].desc = "You already unlocked this mine. You can assign villagers to mine from here.";
+			grid[playerPos.y][playerPos.x].buttons = [];
 			APP.closePopup();
 		}}
 	];
@@ -575,6 +579,8 @@ function initHubWorldGrid(width, height) {
 	grid[playerPos.y+15][playerPos.x-30].buttons = [
 		{name: "Unlock mithril mining", onClick: function() {
 			APP.vue.mithril_mine_unlocked = true;
+			grid[playerPos.y][playerPos.x].desc = "You already unlocked this mine. You can assign villagers to mine from here.";
+			grid[playerPos.y][playerPos.x].buttons = [];
 			APP.closePopup();
 		}}
 	];
