@@ -785,13 +785,13 @@ var app = function() {
 		self.vue.$forceUpdate();
 	};
 
-	self.can_heal_fighters = function(i) {
+	self.can_heal_fighters = function(index) {
 		if(!self.vue) return false;
 		for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
 			if(self.vue.band[0].inventory[i].name == "food" && self.vue.band[0].inventory[i].num > 0) {
 				// if we find food, return true if the fighters need health
-				var num_full_health_fighters = Math.floor(self.vue.fighter_group_health[i] / self.vue.health_per_fighter[i]);
-				return num_full_health_fighters != self.vue.num_fighters[i];
+				var num_full_health_fighters = Math.floor(self.vue.fighter_group_health[index] / self.vue.health_per_fighter[index]);
+				return num_full_health_fighters != self.vue.num_fighters[index];
 			}
 		}
 		return false;
