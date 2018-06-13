@@ -341,21 +341,31 @@ function initHubWorldGrid(width, height) {
 				}
 				if (lootChance >= .40 && lootChance <=.80){
 					grid[y][x].battle = true;
-
-					grid[y][x].onDeath = function() {
-						// //EDIT BY KRON: Set a chance that there is a loot event
+					grid[y][x].onDeath = function() {		
 						console.log("let the bodies hit the floor");
 						var lootCorpse = Math.random();
 						if (lootCorpse < .50){
 							spawnLootBag(playerPos.y, playerPos.x);
 
-						if (grid[playerPos.y][playerPos.x].char == houseChar){
-							grid[playerPos.y][playerPos.x].char = lootedChar;
+							if (grid[playerPos.y][playerPos.x].char == houseChar){
+								grid[playerPos.y][playerPos.x].char = lootedChar;
+							}
+
+							APP.vue.popup_buttons = grid[playerPos.y][playerPos.x].buttons;
+							APP.vue.show_popup = true;	
+						} else{
+							if (grid[playerPos.y][playerPos.x].char == houseChar){
+								grid[playerPos.y][playerPos.x].char = lootedChar;
+							}
+
+							grid[playerPos.y][playerPos.x].buttons = [];
+							APP.vue.popup_buttons = [];
+
+							grid[playerPos.y][playerPos.x].desc = "You\'ve defeated this enemy";
+							APP.vue.popup_desc = grid[playerPos.y][playerPos.x].desc;
+							APP.vue.show_popup = true;
 						}
-						APP.vue.popup_buttons = grid[playerPos.y][playerPos.x].buttons;
-						APP.vue.show_popup = true;
-					}
-					// //-----------------------------------------------------
+				//-----------------------------------------------------
 					};
 				}
 				//--------------------------------------------------------------------------
@@ -514,24 +524,14 @@ function onPlayerMove() {
 					grid[playerPos.y][playerPos.x].battle = false;
 					APP.vue.in_battle = false;
 
-					// // //EDIT BY KRON: Set a chance that there is a loot event
-					// var lootCorpse = Math.random();
-					// if (lootCorpse < 1){
-					// 	spawnLootBag(playerPos.y, playerPos.x);
-
-					// 	if (grid[playerPos.y][playerPos.x].char == houseChar){
-					// 		grid[playerPos.y][playerPos.x].char = lootedChar;
-					// 	}
-					// 	APP.vue.popup_buttons = grid[playerPos.y][playerPos.x].buttons;
-					// 	APP.vue.show_popup = true;
-					// }
-					// // //-----------------------------------------------------
+					//EDIT BY KRON: Set a chance that there is a loot event
 					console.log(JSON.stringify (grid[playerPos.y][playerPos.x]));
 					if(grid[playerPos.y][playerPos.x].onDeath) {
 						console.log("r the bodies hitting the floor?");
 						grid[playerPos.y][playerPos.x].onDeath();
 						return;
 					}
+					//----------------------------------------------------------
 					grid[playerPos.y][playerPos.x].desc = "You\'ve defeated this enemy";
 					APP.vue.popup_desc = grid[playerPos.y][playerPos.x].desc;
 

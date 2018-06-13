@@ -92,3 +92,14 @@ CREATE TABLE "userdb"(
     "hunters" INTEGER
 );
 success!
+timestamp: 2018-06-12T17:01:37.920000
+ALTER TABLE "userdb" ADD "leather_armor" INTEGER;
+timestamp: 2018-06-12T17:01:38.012000
+ALTER TABLE "userdb" ADD "mithril_armor" INTEGER;
+timestamp: 2018-06-12T17:01:38.075000
+ALTER TABLE "userdb" ADD "iron_armor" INTEGER;
+timestamp: 2018-06-12T17:01:38.168000
+ALTER TABLE "userdb" ADD "steel_armor" INTEGER;
+timestamp: 2018-06-12T17:01:38.221000
+ALTER TABLE "userdb" ADD "food" INTEGER;
+success!
