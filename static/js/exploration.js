@@ -31,6 +31,22 @@ function clearCurrentTile() {
 	grid[playerPos.y][playerPos.x].char = emptyChar;
 }
 
+function getWeaponDamageByName(name) {
+	if(name == "fists") return 1;
+	if(name == "wooden sword") return 2;
+	if(name == "iron sword") return 3;
+	if(name == "steel sword") return 4;
+	if(name == "mithril sword") return 5;
+}
+
+function getArmorHealthBoostByName(name) {
+	if(name == "nothing") return 0;
+	if(name == "leather armor") return 5;
+	if(name == "iron armor") return 10;
+	if(name == "steel armor") return 15;
+	if(name == "mithril armor") return 20;
+}
+
 function addToInventory(item) {
 	if(!item.num) item.num = 1;
 	// find the item in the inventory
@@ -62,13 +78,13 @@ function removeFromInventory(item) {
 	for(var i = 0; i < APP.vue.band[0].inventory.length; i++) {
 		if(APP.vue.band[0].inventory[i].name == item.name) {
 			// if found, decrement num of them
-			if(APP.vue.band[0].inventory[i].num > item.num) {
+			if(APP.vue.band[0].inventory[i].num >= item.num) {
 				APP.vue.band[0].inventory[i].num -= item.num;
 			}
-			else if(APP.vue.band[0].inventory[i].num == item.num) {
-				APP.vue.band[0].inventory.splice(i, 1);
-				return;
-			}
+			// else if(APP.vue.band[0].inventory[i].num == item.num) {
+			// 	APP.vue.band[0].inventory.splice(i, 1);
+			// 	return;
+			// }
 			else {
 				console.log("NOOOOOO");
 				return;
@@ -129,25 +145,36 @@ function addRecruitToBand(name) {
 }
 
 function restartGame() {
-	initStartingAreaGrid();
+	initHubWorldGrid(100, 40);
 	displayGrid();
-	APP.vue.band = [
-		{ // index 0 is you
-			name: "You",
-			max_health: 10,
-			health: 10,
-			weapon: {
-				name: "fists",
-				damage: 1
-			},
-			armor: {
-				name: "nothing",
-				health_boost: 0
-			},
-			inventory: []
-		} // any more is people you've recruited
-	];
+	APP.vue.band[0].max_health = 10;
+	APP.vue.band[0].health = 10;
+	APP.vue.band[0].weapon.name = "fists";
+	APP.vue.band[0].weapon.damage = 1;
+	APP.vue.band[0].armor.name = "nothing";
+	APP.vue.band[0].armor.health_boost = 0;
+
+	for(var i = 0; i < APP.vue.band[0].inventory.length; i++) {
+		APP.vue.band[0].inventory[i].num = 0;
+	}
+	for(var i = 0; i < APP.vue.resources.length; i++) {
+		APP.vue.resources[i].num = 0;
+	}
+
+	APP.vue.num_fighters = [0, 0, 0, 0, 0]; // each element is a different level of fighter
+	APP.vue.fighter_group_health = [0, 0, 0, 0, 0];
+	
+	APP.vue.available_villagers = 0;
+	APP.vue.wood_gatherer = 0;
+	APP.vue.hunter = 0;
+	APP.vue.coal_miner = 0;
+	APP.vue.iron_miner = 0;
+	APP.vue.mithril_miner = 0;
+	APP.vue.coal_mine_unlocked = false;
+	APP.vue.iron_mine_unlocked = false;
+	APP.vue.mithril_mine_unlocked = false;
 	APP.vue.in_battle = false;
+	APP.saveResources();
 }
 
 function makeLootBag(bagY, bagX, items) {
@@ -278,7 +305,10 @@ function spawnLootBag(y, x ){
 function setVisibleToExplored() {
 	for(var x = -playerViewLength; x <= playerViewLength; x++) {
 		for(var y = -playerViewLength; y <= playerViewLength; y++) {
-			grid[playerPos.y + y][playerPos.x + x].explored = true;
+			if(playerPos.y + y >= 0 && playerPos.y + y < gridHeight
+			&& playerPos.x + x >= 0 && playerPos.x + x < gridWidth) {
+				grid[playerPos.y + y][playerPos.x + x].explored = true;
+			}
 		}
 	}
 }
@@ -307,7 +337,7 @@ function initStartingAreaGrid() {
 	grid[playerPos.y - 1][playerPos.x].char = emptyChar;
 
 	makeLootBag(playerPos.y - 2, playerPos.x, [
-		{name: "iron sword", is_weapon: true, damage: 2, num: 1},
+		{name: "iron sword", is_weapon: true, damage: 3, num: 1},
 		{name: "food", num: 1},
 		{name: "leather armor", is_armor: true, health_boost: 5, num: 1}
 	]);
@@ -347,7 +377,7 @@ function initStartingAreaGrid() {
 		grid[playerPos.y][playerPos.x].buttons = [
 			{name: "Search body", onClick: function() {
 				makeLootBag(playerPos.y, playerPos.x, [
-					{name: "iron sword", is_weapon: true, damage: 2, num: 1},
+					{name: "iron sword", is_weapon: true, damage: 3, num: 1},
 					{name: "food", num: 2},
 					{name: "iron armor", is_armor: true, health_boost: 10, num: 1}
 				]);
@@ -386,6 +416,7 @@ function initHubWorldGrid(width, height) {
 				//-EDIT BY KRON: Creates loot bags in random houses on Grid upon Hub Creation-
 				var lootChance = Math.random();
 				if (lootChance < .40) {
+<<<<<<< HEAD
 					spawnLootBag(y, x);
 				}
 				if (lootChance >= .40 && lootChance <=.80){
@@ -407,6 +438,19 @@ function initHubWorldGrid(width, height) {
 							APP.vue.show_popup = true;
 						}
 					};
+=======
+					grid[y][x].buttons = [
+						{name: "Aye a loot bag", onClick: function() {
+							makeLootBag(playerPos.y, playerPos.x, [
+								{name: "iron sword", is_weapon: true, damage: 3, num: 1},
+								{name: "food", num: 2},
+								{name: "iron armor", is_armor: true, health_boost: 10, num: 1}
+							]);
+						 APP.vue.popup_title = grid[playerPos.y][playerPos.x].title;
+						 APP.vue.popup_desc = grid[playerPos.y][playerPos.x].desc;
+						 APP.vue.popup_buttons = grid[playerPos.y][playerPos.x].buttons;
+						}}];
+>>>>>>> 07abf20a02dbf80ae4ef821f26029c69636fcbdd
 				}
 				//--------------------------------------------------------------------------
 			} else if(chance < 0.05) {
@@ -430,6 +474,40 @@ function initHubWorldGrid(width, height) {
 			}
 		}
 	}
+
+	// final boss fight
+	grid[0][0].char = 'b';
+	grid[0][0].title = "The Storm Crows";
+	grid[0][0].desc = "The night was silent. Cold air blows upon your skin. There in the clearing lies the noble’s child tied and gagged. Surrounding the child was the storm crows armed and ready for your arrival. In front of them was the leader Maximus Gluteus. The hulking beast towered a foot over his men. 'Child you have made a grave mistake challenging the Storm Crows. If this is where you wish to end, I will oblige you with the honor of falling to my blade. Come! Brace yourself!'";
+	grid[0][0].buttons = [
+		{name: "Fight!", onClick: function() {
+			grid[0][0].battle = true;
+			grid[0][0].damage = 20;
+			grid[0][0].cooldown = 30;
+			grid[0][0].health = 100;
+			grid[0][0].desc = "Both sides rush towards each other. Blades in hand and bloodlust in the air.";
+			grid[0][0].onDeath = function() {
+				APP.vue.popup_desc = "'Finish me..'";
+				APP.vue.popup_buttons = [
+					{name: "Execute", onClick: function() {
+						APP.vue.popup_desc = "You bring your blade down upon him. *Silence*. You stood there wondering of what have ensued. Could this be your fate one day? Suddenly a smell reach your nose. The guy defecated himself. 'Haha nah bruh. I’ll never poop in my pants when I die.'";
+						APP.vue.popup_buttons = [
+							{name: "Continue", onClick: function() {
+								APP.vue.popup_desc = "You win! https://www.youtube.com/watch?v=1Bix44C1EzY\nThanks for playing our game!";
+								APP.vue.popup_buttons = [
+									{name: "Restart", onClick: function() {
+										restartGame();
+									}}
+								];
+							}}
+						];
+					}}
+				];
+			};
+			onPlayerMove();
+		}}
+	];
+
 	playerPos.x = Math.floor(gridWidth / 2);
 	playerPos.y = Math.floor(gridHeight / 2);
 	lastPlayerPos.x = playerPos.x;
@@ -459,7 +537,8 @@ function displayGrid() {
 	gridElem.innerHTML = gridString;
 }
 
-initStartingAreaGrid();
+// initStartingAreaGrid();
+initHubWorldGrid(100, 40);
 displayGrid();
 
 // if player moves off the map, we put him back on
@@ -479,6 +558,8 @@ function playerBounds() {
 }
 
 function onPlayerMove() {
+	var enemy_health_multiplier = 3;
+
 	playerBounds();
 	if(grid[playerPos.y][playerPos.x].char == obstacleChar) {
 		playerPos.x = lastPlayerPos.x;
@@ -518,6 +599,7 @@ function onPlayerMove() {
 		APP.vue.popup_title = "Boss Battle";
 		APP.vue.popup_desc = "You\'ve encountered a generic boss battle.";
 		APP.vue.show_popup = true;
+		enemy_health_multiplier=5
 	}
 
 	// if there are specific details specified on the grid space, set the popup to display those
@@ -539,7 +621,26 @@ function onPlayerMove() {
 	if(grid[playerPos.y][playerPos.x].battle) {
 		APP.vue.in_battle = true;
 		once = false; // used to make sure we call start_enemy_attacks once
-		APP.vue.enemy_health = 10;
+		
+
+		var damage = 0; //moved this to current location so we could use it to calculate an appropriate enemy health
+		// this is for calculating damage based on the old recruiting system
+		for(var i = 0; i < APP.vue.band.length; i++) {
+			if(APP.vue.band[i].health > 0) { // TODO: keep this for resurrection if we do that
+				damage += APP.vue.band[i].weapon.damage;
+			}
+		}
+		// this is for calculating damage based on the new recruiting system
+		for(var i = 0; i < APP.vue.num_fighters.length; i++) {
+			damage += APP.vue.num_fighters[i] * (i+1);
+		}
+
+		APP.vue.enemy_health = damage*enemy_health_multiplier + Math.floor(Math.random() * (damage/2));;
+
+
+		if(grid[playerPos.y][playerPos.x].health) {
+			APP.vue.enemy_health = grid[playerPos.y][playerPos.x].health;
+		}
 		once_again = false; // used to make sure we start an interval for player attacks once
 		can_attacc = false;
 		APP.vue.player_attack_time = 60;
@@ -558,17 +659,6 @@ function onPlayerMove() {
 					enemy_cooldown = grid[playerPos.y][playerPos.x].cooldown;
 				}
 				start_enemy_attacks(enemy_damage, enemy_cooldown);
-				var damage = 0;
-				// this is for calculating damage based on the old recruiting system
-				for(var i = 0; i < APP.vue.band.length; i++) {
-					if(APP.vue.band[i].health > 0) { // TODO: keep this for resurrection if we do that
-						damage += APP.vue.band[i].weapon.damage;
-					}
-				}
-				// this is for calculating damage based on the new recruiting system
-				for(var i = 0; i < APP.vue.num_fighters.length; i++) {
-					damage += APP.vue.num_fighters[i] * (i+1);
-				}
 				APP.vue.enemy_health -= damage;
 				if(APP.vue.enemy_health <= 0) {
 					APP.vue.enemy_health = 0;
@@ -652,7 +742,11 @@ function start_enemy_attacks(damage, cooldown) {
 
 function simulate_enemy_attacks() {
 	enemy_attack_ticks++;
-	if(APP.vue.enemy_health == 0) return;
+	if(APP.vue.enemy_health == 0){
+		APP.vue.enemies_defeated++;
+		console.log(APP.vue.enemies_defeated);
+		return;
+	}
 	if(enemy_attack_ticks % enemy_attack_cooldown_ticks == 0) {
 		var i = cur_band_member_being_attacked;
 		// APP.vue.band[cur_band_member_being_attacked].health -= enemy_damage;
@@ -681,6 +775,7 @@ function simulate_enemy_attacks() {
 				APP.vue.popup_desc = "u ded boyo";
 				APP.vue.popup_buttons = [
 					{name: "Revive", onClick: function() {
+						document.getElementsByClassName("option_buttons")[0].style.opacity = 1;
 						restartGame();
 						APP.vue.show_popup = false;
 					}}
@@ -689,13 +784,13 @@ function simulate_enemy_attacks() {
 			}
 		}
 		else {
-			var old_num_alive_fighers = Math.ceil(APP.vue.fighter_group_health[i] / APP.vue.health_per_figher[i]);
+			var old_num_alive_fighters = Math.ceil(APP.vue.fighter_group_health[i] / APP.vue.health_per_fighter[i]);
 			APP.vue.fighter_group_health[i] -= enemy_damage;
-			console.log("fgh: " + APP.vue.fighter_group_health[i]);
-			var new_num_alive_fighers = Math.ceil(APP.vue.fighter_group_health[i] / APP.vue.health_per_figher[i]);
-			console.log("nnaf: " + new_num_alive_fighers);
-			if(new_num_alive_fighers != old_num_alive_fighers) {
-				// a figher died, decrement num_fighers
+			// console.log("fgh: " + APP.vue.fighter_group_health[i]);
+			var new_num_alive_fighters = Math.ceil(APP.vue.fighter_group_health[i] / APP.vue.health_per_fighter[i]);
+			// console.log("nnaf: " + new_num_alive_fighters);
+			if(new_num_alive_fighters != old_num_alive_fighters) {
+				// a fighter died, decrement num_fighters
 				APP.vue.num_fighters[i]--;
 			}
 			if(APP.vue.fighter_group_health[i] <= 0) {

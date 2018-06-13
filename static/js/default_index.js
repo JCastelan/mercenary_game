@@ -93,11 +93,11 @@ var app = function() {
 				if(member.health > member.max_health) {
 					member.health = member.max_health;
 				}
-				if(self.vue.band[0].inventory[i].num > 1) {
+				if(self.vue.band[0].inventory[i].num > 0) {
 					self.vue.band[0].inventory[i].num--;
 				}
 				else {
-					self.vue.band[0].inventory.splice(i, 1);
+					// self.vue.band[0].inventory.splice(i, 1);
 				}
 				return;
 			}
@@ -107,7 +107,7 @@ var app = function() {
 	self.can_equip_weapon = function(member) {
 		if(!self.vue) return false;
 		for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
-			if(self.vue.band[0].inventory[i].is_weapon && self.vue.band[0].inventory[i].damage > member.weapon.damage) {
+			if(self.vue.band[0].inventory[i].num > 0 && self.vue.band[0].inventory[i].is_weapon && self.vue.band[0].inventory[i].damage > member.weapon.damage) {
 				return true;
 			}
 		}
@@ -122,7 +122,7 @@ var app = function() {
 		var best_weapon_damage = 0;
 		for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
 			if(self.vue.band[0].inventory[i].is_weapon && self.vue.band[0].inventory[i].damage > member.weapon.damage
-			&& best_weapon_damage < self.vue.band[0].inventory[i].damage) {
+			&& self.vue.band[0].inventory[i].num > 0 && best_weapon_damage < self.vue.band[0].inventory[i].damage) {
 				best_weapon_index = i;
 				best_weapon_damage = self.vue.band[0].inventory[i].damage;
 			}
@@ -141,11 +141,11 @@ var app = function() {
 			damage: self.vue.band[0].inventory[best_weapon_index].damage
 		};
 		// remove that weapon from the inventory
-		if(self.vue.band[0].inventory[best_weapon_index].num > 1) {
+		if(self.vue.band[0].inventory[best_weapon_index].num > 0) {
 			self.vue.band[0].inventory[best_weapon_index].num--;
 		}
 		else {
-			self.vue.band[0].inventory.splice(best_weapon_index, 1);
+			// self.vue.band[0].inventory.splice(best_weapon_index, 1);
 		}
 	};
 
@@ -178,7 +178,7 @@ var app = function() {
 	self.can_equip_armor = function(member) {
 		if(!self.vue) return false;
 		for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
-			if(self.vue.band[0].inventory[i].is_armor && member.armor.health_boost < self.vue.band[0].inventory[i].health_boost) {
+			if(self.vue.band[0].inventory[i].num > 0 && self.vue.band[0].inventory[i].is_armor && member.armor.health_boost < self.vue.band[0].inventory[i].health_boost) {
 				return true;
 			}
 		}
@@ -193,7 +193,7 @@ var app = function() {
 		var best_armor_boost = 0;
 		for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
 			if(self.vue.band[0].inventory[i].is_armor && member.armor.health_boost < self.vue.band[0].inventory[i].health_boost
-			&& best_armor_boost < self.vue.band[0].inventory[i].health_boost) {
+			&& self.vue.band[0].inventory[i].num > 0 && best_armor_boost < self.vue.band[0].inventory[i].health_boost) {
 				best_armor_index = i;
 				best_armor_boost = self.vue.band[0].inventory[i].health_boost;
 			}
@@ -214,11 +214,11 @@ var app = function() {
 		member.max_health += member.armor.health_boost;
 		member.health += member.armor.health_boost;
 		// remove that armor from the inventory
-		if(self.vue.band[0].inventory[best_armor_index].num > 1) {
+		if(self.vue.band[0].inventory[best_armor_index].num > 0) {
 			self.vue.band[0].inventory[best_armor_index].num--;
 		}
 		else {
-			self.vue.band[0].inventory.splice(best_armor_index, 1);
+			// self.vue.band[0].inventory.splice(best_armor_index, 1);
 		}
 	};
 
@@ -270,27 +270,6 @@ var app = function() {
 			self.vue.fighter_group_health[0] = 0;
 		}
 		self.vue.$forceUpdate();
-	};
-
-    // generic counter functions (for debugging purposes)
-    self.loadCounter = function(){ 
-        // console.log("getting the stored counter");
-        // console.log( self.vue.counter);
-        $.getJSON(load_counter_url, function (data) {
-            // console.log("Loaded " + data.counter + " as the counter value" );
-            self.vue.counter = data.counter;
-        });
-    };
-
-    self.saveCounter = function(){
-        // console.log("saving the counter");
-        $.post(save_counter_url,
-            { 
-                counter: self.vue.counter
-            },
-            function (result) {
-                // console.log( result )
-            });
 	};
 	
 	self.clicked = function () { //increments all resource counters
@@ -346,10 +325,18 @@ var app = function() {
                     }
                     var single_equip= {
                         num:+d[1],
-                        name:item_name
+						name:item_name,
+						is_weapon: item_name.includes("sword"),
+						is_armor: item_name.includes("armor"),
                     }
+					if(single_equip.is_weapon) {
+						single_equip.damage = getWeaponDamageByName(single_equip.name);
+                        //console.log("This is the damage of",single_equip.name ," is ",single_equip.damage )
+					}
+					if(single_equip.is_armor) {
+						single_equip.health_boost = getArmorHealthBoostByName(single_equip.name);
+					}
                     self.vue.band[0].inventory.push(single_equip)
-                    self.vue.equipment.push(d)
                 }else if (resourcesList.indexOf(d[0])>=0){
                     d[1] = +d[1];
                     self.vue.resources.push(d)
@@ -360,8 +347,13 @@ var app = function() {
                         self.vue.band[0].health=+d[1];
                     } else if (d[0]=="equipped_weapon") {
                         self.vue.band[0].weapon.name=d[1];
+                        self.vue.band[0].weapon.is_weapon = true;
+						self.vue.band[0].weapon.damage = getWeaponDamageByName(self.vue.band[0].weapon.name);
+
                     } else if (d[0]=="equipped_armor") {
                         self.vue.band[0].armor.name=d[1];
+                        self.vue.band[0].armor.is_armor = true;
+						self.vue.band[0].armor.health_boost = getArmorHealthBoostByName(self.vue.band[0].armor.name);
                     }
                 }else if (humanUnits.indexOf(d[0])>=0){
                     if(d[0] == "available_villagers"){
@@ -378,23 +370,37 @@ var app = function() {
                         self.vue.mithril_miner=+d[1];
                     }
                 }else{ //other random data I guess
-                    if(d[0]== "num_fighters"){
+                    if (d[0]=="enemies_defeated") {
+                        self.vue.enemies_defeated=+d[1];
+                    }else if(d[0]== "num_fighters"){
+						// d[1].forEach(function(d){d=+d;});
+						// self.vue.num_fighters= d[1];
+						// for(var i = 0; i < self.vue.num_fighters.length; i++) {
+						// 	self.vue.num_fighters[i] = +self.vue.num_fighters[i];
+						// }
 						self.vue.num_fighters= d[1];
                         self.vue.num_fighters.forEach(function(e,i){
                             self.vue.num_fighters[i]=+e;
                         });
                     } else if (d[0]=="fighter_health") {
-						//self.vue.fighter_group_health=d[1];
-                        /*self.vue.fighter_group_health.forEach(function(e,i){
-                            //self.vue.fighter_group_health[i]=+e;
-                            self.vue.fighter_group_health[i]=self.vue.health_per_fighter[i]*self.vue.num_fighters[i];
-                        });*/
+						self.vue.fighter_group_health=d[1];
+                        self.vue.fighter_group_health.forEach(function(e,i){
+                            self.vue.fighter_group_health[i]=+e;
+                        });
                     }else{
                         item_name=d[0].split('_').join(' ');
                         var single_equip= {
                             num:+d[1],
-                            name:item_name
-                        }
+							name:item_name,
+							is_weapon: item_name.includes("sword"),
+							is_armor: item_name.includes("armor"),
+						}
+						if(single_equip.is_weapon) {
+							single_equip.damage = getWeaponDamageByName(single_equip.name);
+						}
+						if(single_equip.is_armor) {
+							single_equip.health_boost = getArmorHealthBoostByName(single_equip.name);
+						}
                         self.vue.band[0].inventory.push(single_equip)
                     }}});
             self.vue.fighter_group_health.forEach(function(e,i){
@@ -404,7 +410,7 @@ var app = function() {
         });};
 
     self.saveResources = function(){ //saves more than just resources
-        console.log( "saving all resources...")
+        //console.log( "saving all resources...")
         //console.log(self.vue.resources)
         //console.log(self.vue.num_fighters)
         inventory_items = []
@@ -422,8 +428,8 @@ var app = function() {
 
             single_item = [item_name, d.num];
             inventory_items.push(single_item);
-        })
-
+        });
+        console.log(inventory_items);
         $.post(save_resources_url,
             { 
                 resources: self.vue.resources,
@@ -433,13 +439,14 @@ var app = function() {
                 equipped_weapon: self.vue.band[0].weapon.name,
                 equipped_armor: self.vue.band[0].armor.name,
                 num_fighters: self.vue.num_fighters,
-                fighter_health: self.vue.health_per_fighter,
+                fighter_health: self.vue.fighter_group_health,
                 available_villagers: self.vue.available_villagers,
                 wood_gatherers: self.vue.wood_gatherer,
                 coal_miners: self.vue.coal_miner,
                 iron_miners: self.vue.iron_miner,
                 mithril_miners: self.vue.mithril_miner,
-                hunters: self.vue.hunter
+                hunters: self.vue.hunter,
+                enemies_defeated: self.vue.enemies_defeated
             },
             function (result) {
                 //console.log( result )
@@ -479,16 +486,17 @@ var app = function() {
 
 	self.craft_steel = function() {
 		addToResources("steel");
-		removeFromResources("iron", 1);
-		removeFromResources("coal", 1);
+		removeFromResources("iron", items_needed);
+		removeFromResources("coal", items_needed);
 		self.vue.$forceUpdate();
 	};
 
+    var items_needed = 5
 	self.get_num_craftable_steel = function() {
 		var num_iron = getNumOfResource("iron");
 		var num_coal = getNumOfResource("coal");
 		// return min(num_iron, num_coal)
-		return num_iron > num_coal ? num_coal : num_iron;
+		return Math.floor(num_iron > num_coal ? num_coal/items_needed : num_iron/items_needed);
 	};
 
 	self.can_craft_wood_sword = function() {
@@ -497,12 +505,12 @@ var app = function() {
 
 	self.craft_wood_sword = function() {
 		addToInventory({name: "wooden sword", is_weapon: true, damage: 2});
-		removeFromResources("wood", 1);
+		removeFromResources("wood", items_needed);
 		self.vue.$forceUpdate();
 	};
 
 	self.get_num_craftable_wood_swords = function() {
-		return getNumOfResource("wood");
+		return Math.floor(getNumOfResource("wood")/items_needed);
 	};
 
 	self.can_craft_iron_sword = function() {
@@ -511,8 +519,8 @@ var app = function() {
 
 	self.craft_iron_sword = function() {
 		addToInventory({name: "iron sword", is_weapon: true, damage: 3});
-		removeFromResources("iron", 1);
-		removeFromResources("wood", 1);
+		removeFromResources("iron", items_needed);
+		removeFromResources("wood", items_needed);
 		self.vue.$forceUpdate();
 	};
 
@@ -520,7 +528,7 @@ var app = function() {
 		var num_iron = getNumOfResource("iron");
 		var num_wood = getNumOfResource("wood");
 		// return min(num_iron, num_wood)
-		return num_iron > num_wood ? num_wood : num_iron;
+		return Math.floor(num_iron > num_wood ? num_wood/items_needed : num_iron/items_needed);
 	};
 
 	self.can_craft_steel_sword = function() {
@@ -529,8 +537,8 @@ var app = function() {
 
 	self.craft_steel_sword = function() {
 		addToInventory({name: "steel sword", is_weapon: true, damage: 4});
-		removeFromResources("steel", 1);
-		removeFromResources("wood", 1);
+		removeFromResources("steel", items_needed);
+		removeFromResources("wood", items_needed);
 		self.vue.$forceUpdate();
 	};
 
@@ -538,7 +546,7 @@ var app = function() {
 		var num_steel = getNumOfResource("steel");
 		var num_wood = getNumOfResource("wood");
 		// return min(num_steel, num_wood)
-		return num_steel > num_wood ? num_wood : num_steel;
+		return Math.floor(num_steel > num_wood ? num_wood/items_needed : num_steel/items_needed);
 	};
 
 	self.can_craft_mithril_sword = function() {
@@ -547,8 +555,8 @@ var app = function() {
 
 	self.craft_mithril_sword = function() {
 		addToInventory({name: "mithril sword", is_weapon: true, damage: 5});
-		removeFromResources("mithril", 1);
-		removeFromResources("wood", 1);
+		removeFromResources("mithril", items_needed);
+		removeFromResources("wood", items_needed);
 		self.vue.$forceUpdate();
 	};
 
@@ -556,7 +564,7 @@ var app = function() {
 		var num_mithril = getNumOfResource("mithril");
 		var num_wood = getNumOfResource("wood");
 		// return min(num_mithril, num_wood)
-		return num_mithril > num_wood ? num_wood : num_mithril;
+		return Math.floor(num_mithril > num_wood ? num_wood/items_needed : num_mithril/items_needed);
 	};
 
 	self.can_craft_leather_armor = function() {
@@ -565,12 +573,12 @@ var app = function() {
 
 	self.craft_leather_armor = function() {
 		addToInventory({name: "leather armor", is_armor: true, health_boost: 5});
-		removeFromResources("leather", 1);
+		removeFromResources("leather", items_needed);
 		self.vue.$forceUpdate();
 	};
 
 	self.get_num_craftable_leather_armors = function() {
-		return getNumOfResource("leather");
+		return Math.floor(getNumOfResource("leather")/items_needed);
 	};
 
 	self.can_craft_iron_armor = function() {
@@ -579,8 +587,8 @@ var app = function() {
 
 	self.craft_iron_armor = function() {
 		addToInventory({name: "iron armor", is_armor: true, health_boost: 10});
-		removeFromResources("iron", 1);
-		removeFromResources("leather", 1);
+		removeFromResources("iron", items_needed);
+		removeFromResources("leather", items_needed);
 		self.vue.$forceUpdate();
 	};
 
@@ -588,7 +596,7 @@ var app = function() {
 		var num_iron = getNumOfResource("iron");
 		var num_leather = getNumOfResource("leather");
 		// return min(num_iron, num_leather)
-		return num_iron > num_leather ? num_leather : num_iron;
+		return Math.floor(num_iron > num_leather ? num_leather/items_needed : num_iron/items_needed);
 	};
 
 	self.can_craft_steel_armor = function() {
@@ -597,8 +605,8 @@ var app = function() {
 
 	self.craft_steel_armor = function() {
 		addToInventory({name: "steel armor", is_armor: true, health_boost: 15});
-		removeFromResources("steel", 1);
-		removeFromResources("leather", 1);
+		removeFromResources("steel", items_needed);
+		removeFromResources("leather", items_needed);
 		self.vue.$forceUpdate();
 	};
 
@@ -606,7 +614,7 @@ var app = function() {
 		var num_steel = getNumOfResource("steel");
 		var num_leather = getNumOfResource("leather");
 		// return min(num_steel, num_leather)
-		return num_steel > num_leather ? num_leather : num_steel;
+		return Math.floor(num_steel > num_leather ? num_leather/items_needed : num_steel/items_needed);
 	};
 
 	self.can_craft_mithril_armor = function() {
@@ -615,8 +623,8 @@ var app = function() {
 
 	self.craft_mithril_armor = function() {
 		addToInventory({name: "mithril armor", is_armor: true, health_boost: 20});
-		removeFromResources("mithril", 1);
-		removeFromResources("leather", 1);
+		removeFromResources("mithril", items_needed);
+		removeFromResources("leather", items_needed);
 		self.vue.$forceUpdate();
 	};
 
@@ -624,7 +632,7 @@ var app = function() {
 		var num_mithril = getNumOfResource("mithril");
 		var num_leather = getNumOfResource("leather");
 		// return min(num_mithril, num_leather)
-		return num_mithril > num_leather ? num_leather : num_mithril;
+		return Math.floor(num_mithril > num_leather ? num_leather/items_needed : num_mithril/items_needed);
 	};
 
 	self.increment_hunter = function(){
@@ -686,35 +694,60 @@ var app = function() {
 	self.can_equip_boi = function(index) {
 		if(!self.vue) return false;
 		if(index == 4) return false; // can't upgrade level 5 fighters
-		// find the items in the inventory
-		var found_item1 = false;
-		var found_item2 = false;
-		for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
-			if(self.vue.band[0].inventory[i].name == self.vue.upgrade_items[index][0].name) {
-				found_item1 = true;
-			}
-			if(self.vue.band[0].inventory[i].name == self.vue.upgrade_items[index][1].name) {
-				found_item2 = true;
+		for(var j = index; j < self.vue.upgrade_items.length; j++) {
+			// find the items in the inventory
+			var found_item1 = false;
+			var found_item2 = false;
+			for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
+				if(self.vue.band[0].inventory[i].name == self.vue.upgrade_items[j][0].name
+				&& self.vue.band[0].inventory[i].num > 0) {
+					found_item1 = true;
+				}
+				if(self.vue.band[0].inventory[i].name == self.vue.upgrade_items[j][1].name
+				&& self.vue.band[0].inventory[i].num > 0) {
+					found_item2 = true;
+				}
+				if(found_item1 && found_item2) {
+					return true;
+				}
 			}
 		}
-		return found_item1 && found_item2;
+		return false;
 	};
 
-	self.equip_boi = function(i) {
-		if(i != 0) {
-			addToInventory(self.vue.upgrade_items[i - 1][0]);
-			addToInventory(self.vue.upgrade_items[i - 1][1]);
+	self.equip_boi = function(index) {
+		if(index != 0) {
+			addToInventory(self.vue.upgrade_items[index - 1][0]);
+			addToInventory(self.vue.upgrade_items[index - 1][1]);
 		}
-		removeFromInventory(self.vue.upgrade_items[i][0]);
-		removeFromInventory(self.vue.upgrade_items[i][1]);
-		self.vue.num_fighters[i]--;
-		self.vue.fighter_group_health[i] -= self.vue.health_per_fighter[i];
-		if(self.vue.fighter_group_health[i] < 0) {
-			self.vue.fighter_group_health[i] = 0;
+		for(var j = index; j < self.vue.upgrade_items.length; j++) {
+			// find the items in the inventory
+			var found_item1 = false;
+			var found_item2 = false;
+			for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
+				if(self.vue.band[0].inventory[i].name == self.vue.upgrade_items[j][0].name
+				&& self.vue.band[0].inventory[i].num > 0) {
+					found_item1 = true;
+				}
+				if(self.vue.band[0].inventory[i].name == self.vue.upgrade_items[j][1].name
+				&& self.vue.band[0].inventory[i].num > 0) {
+					found_item2 = true;
+				}
+				if(found_item1 && found_item2) {
+					removeFromInventory(self.vue.upgrade_items[j][0]);
+					removeFromInventory(self.vue.upgrade_items[j][1]);
+					self.vue.num_fighters[index]--;
+					self.vue.fighter_group_health[index] -= self.vue.health_per_fighter[index];
+					if(self.vue.fighter_group_health[index] < 0) {
+						self.vue.fighter_group_health[index] = 0;
+					}
+					self.vue.num_fighters[j + 1]++;
+					self.vue.fighter_group_health[j + 1] += self.vue.health_per_fighter[j + 1];
+					self.vue.$forceUpdate();
+					return;
+				}
+			}
 		}
-		self.vue.num_fighters[i + 1]++;
-		self.vue.fighter_group_health[i + 1] += self.vue.health_per_fighter[i + 1];
-		self.vue.$forceUpdate();
 	};
 
 	self.unequip_boi = function(i) {
@@ -729,6 +762,26 @@ var app = function() {
 			self.vue.fighter_group_health[i] = 0;
 		}
 		self.vue.$forceUpdate();
+	};
+
+	self.can_heal_fighters = function(index) {
+		if(!self.vue) return false;
+		for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
+			if(self.vue.band[0].inventory[i].name == "food" && self.vue.band[0].inventory[i].num > 0) {
+				// if we find food, return true if the fighters need health
+				var num_full_health_fighters = Math.floor(self.vue.fighter_group_health[index] / self.vue.health_per_fighter[index]);
+				return num_full_health_fighters != self.vue.num_fighters[index];
+			}
+		}
+		return false;
+	};
+
+	self.heal_fighters = function(i) {
+		removeFromInventory({name:"food", num: 1});
+		self.vue.fighter_group_health[i] += 5;
+		if(self.vue.fighter_group_health[i] > self.vue.num_fighters[i] * self.vue.health_per_fighter[i]) {
+			self.vue.fighter_group_health[i] = self.vue.num_fighters[i] * self.vue.health_per_fighter[i];
+		}
 	};
 
     // Complete as needed.
@@ -769,10 +822,11 @@ var app = function() {
 			viewing_crafting: false,
 
 			my_name: "You",
-			num_fighters: [2, 0, 0, 0, 0], // each element is a different level of fighter
-			fighter_group_health: [20, 0, 0, 0, 0],
+			num_fighters: [0, 0, 0, 0, 0], // each element is a different level of fighter
+			fighter_group_health: [0, 0, 0, 0, 0],
+
 			health_per_fighter: [10, 15, 20, 25, 30],
-			damage_per_figher: [1, 2, 3, 4, 5],
+			damage_per_fighter: [1, 2, 3, 4, 5],
 			upgrade_items: [
 				[{name: "wooden sword", is_weapon: true, damage: 2}, {name: "leather armor", is_armor: true, health_boost: 5}],
 				[{name: "iron sword", is_weapon: true, damage: 3}, {name: "iron armor", is_armor: true, health_boost: 10}],
@@ -794,6 +848,7 @@ var app = function() {
 			coal_mine_unlocked: false,
 			iron_mine_unlocked: false,
             mithril_mine_unlocked: false,
+            enemies_defeated:0
         },
         methods: {
 			closePopup: self.closePopup,
@@ -876,6 +931,9 @@ var app = function() {
 			can_equip_boi: self.can_equip_boi,
 			equip_boi: self.equip_boi,
 			unequip_boi: self.unequip_boi,
+
+			can_heal_fighters: self.can_heal_fighters,
+			heal_fighters: self.heal_fighters,
         }
     });
 
@@ -900,7 +958,7 @@ var app = function() {
         addToResources("coal",self.vue.coal_miner);
 		addToResources("iron",self.vue.iron_miner);
 		self.vue.$forceUpdate();
-    }, 1000);
+    }, 5*1000);
     autosave();
     return self;
 };
@@ -909,4 +967,8 @@ var APP = null;
 
 // This will make everything accessible from the js console;
 // for instance, self.x above would be accessible as APP.x
-jQuery(function(){APP = app();});
+jQuery(function() {
+	APP = app();
+	initHubWorldGrid(100, 40);
+	displayGrid();
+});
