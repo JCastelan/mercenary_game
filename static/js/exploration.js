@@ -62,13 +62,13 @@ function removeFromInventory(item) {
 	for(var i = 0; i < APP.vue.band[0].inventory.length; i++) {
 		if(APP.vue.band[0].inventory[i].name == item.name) {
 			// if found, decrement num of them
-			if(APP.vue.band[0].inventory[i].num > item.num) {
+			if(APP.vue.band[0].inventory[i].num >= item.num) {
 				APP.vue.band[0].inventory[i].num -= item.num;
 			}
-			else if(APP.vue.band[0].inventory[i].num == item.num) {
-				APP.vue.band[0].inventory.splice(i, 1);
-				return;
-			}
+			// else if(APP.vue.band[0].inventory[i].num == item.num) {
+			// 	APP.vue.band[0].inventory.splice(i, 1);
+			// 	return;
+			// }
 			else {
 				console.log("NOOOOOO");
 				return;

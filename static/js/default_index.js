@@ -94,11 +94,11 @@ var app = function() {
 				if(member.health > member.max_health) {
 					member.health = member.max_health;
 				}
-				if(self.vue.band[0].inventory[i].num > 1) {
+				if(self.vue.band[0].inventory[i].num > 0) {
 					self.vue.band[0].inventory[i].num--;
 				}
 				else {
-					self.vue.band[0].inventory.splice(i, 1);
+					// self.vue.band[0].inventory.splice(i, 1);
 				}
 				return;
 			}
@@ -108,7 +108,7 @@ var app = function() {
 	self.can_equip_weapon = function(member) {
 		if(!self.vue) return false;
 		for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
-			if(self.vue.band[0].inventory[i].is_weapon && self.vue.band[0].inventory[i].damage > member.weapon.damage) {
+			if(self.vue.band[0].inventory[i].num > 0 && self.vue.band[0].inventory[i].is_weapon && self.vue.band[0].inventory[i].damage > member.weapon.damage) {
 				return true;
 			}
 		}
@@ -123,7 +123,7 @@ var app = function() {
 		var best_weapon_damage = 0;
 		for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
 			if(self.vue.band[0].inventory[i].is_weapon && self.vue.band[0].inventory[i].damage > member.weapon.damage
-			&& best_weapon_damage < self.vue.band[0].inventory[i].damage) {
+			&& self.vue.band[0].inventory[i].num > 0 && best_weapon_damage < self.vue.band[0].inventory[i].damage) {
 				best_weapon_index = i;
 				best_weapon_damage = self.vue.band[0].inventory[i].damage;
 			}
@@ -142,11 +142,11 @@ var app = function() {
 			damage: self.vue.band[0].inventory[best_weapon_index].damage
 		};
 		// remove that weapon from the inventory
-		if(self.vue.band[0].inventory[best_weapon_index].num > 1) {
+		if(self.vue.band[0].inventory[best_weapon_index].num > 0) {
 			self.vue.band[0].inventory[best_weapon_index].num--;
 		}
 		else {
-			self.vue.band[0].inventory.splice(best_weapon_index, 1);
+			// self.vue.band[0].inventory.splice(best_weapon_index, 1);
 		}
 	};
 
@@ -179,7 +179,7 @@ var app = function() {
 	self.can_equip_armor = function(member) {
 		if(!self.vue) return false;
 		for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
-			if(self.vue.band[0].inventory[i].is_armor && member.armor.health_boost < self.vue.band[0].inventory[i].health_boost) {
+			if(self.vue.band[0].inventory[i].num > 0 && self.vue.band[0].inventory[i].is_armor && member.armor.health_boost < self.vue.band[0].inventory[i].health_boost) {
 				return true;
 			}
 		}
@@ -194,7 +194,7 @@ var app = function() {
 		var best_armor_boost = 0;
 		for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
 			if(self.vue.band[0].inventory[i].is_armor && member.armor.health_boost < self.vue.band[0].inventory[i].health_boost
-			&& best_armor_boost < self.vue.band[0].inventory[i].health_boost) {
+			&& self.vue.band[0].inventory[i].num > 0 && best_armor_boost < self.vue.band[0].inventory[i].health_boost) {
 				best_armor_index = i;
 				best_armor_boost = self.vue.band[0].inventory[i].health_boost;
 			}
@@ -215,11 +215,11 @@ var app = function() {
 		member.max_health += member.armor.health_boost;
 		member.health += member.armor.health_boost;
 		// remove that armor from the inventory
-		if(self.vue.band[0].inventory[best_armor_index].num > 1) {
+		if(self.vue.band[0].inventory[best_armor_index].num > 0) {
 			self.vue.band[0].inventory[best_armor_index].num--;
 		}
 		else {
-			self.vue.band[0].inventory.splice(best_armor_index, 1);
+			// self.vue.band[0].inventory.splice(best_armor_index, 1);
 		}
 	};
 
@@ -346,8 +346,22 @@ var app = function() {
                     }
                     var single_equip= {
                         num:+d[1],
-                        name:item_name
+						name:item_name,
+						is_weapon: item_name.includes("sword"),
+						is_armor: item_name.includes("armor"),
                     }
+					if(single_equip.is_weapon) {
+						if(single_equip.name == "wooden sword") single_equip.damage = 2;
+						if(single_equip.name == "iron sword") single_equip.damage = 3;
+						if(single_equip.name == "steel sword") single_equip.damage = 4;
+						if(single_equip.name == "mithril sword") single_equip.damage = 5;
+					}
+					if(single_equip.is_armor) {
+						if(single_equip.name == "leather armor") single_equip.health_boost = 5;
+						if(single_equip.name == "iron armor") single_equip.health_boost = 10;
+						if(single_equip.name == "steel armor") single_equip.health_boost = 15;
+						if(single_equip.name == "mithril armor") single_equip.health_boost = 20;
+					}
                     self.vue.band[0].inventory.push(single_equip)
                     self.vue.equipment.push(d)
                 }else if (resourcesList.indexOf(d[0])>=0){
@@ -380,8 +394,22 @@ var app = function() {
                         item_name=d[0].split('_').join(' ');
                         var single_equip= {
                             num:+d[1],
-                            name:item_name
-                        }
+							name:item_name,
+							is_weapon: item_name.includes("sword"),
+							is_armor: item_name.includes("armor"),
+						}
+						if(single_equip.is_weapon) {
+							if(single_equip.name == "wooden sword") single_equip.damage = 2;
+							if(single_equip.name == "iron sword") single_equip.damage = 3;
+							if(single_equip.name == "steel sword") single_equip.damage = 4;
+							if(single_equip.name == "mithril sword") single_equip.damage = 5;
+						}
+						if(single_equip.is_armor) {
+							if(single_equip.name == "leather armor") single_equip.health_boost = 5;
+							if(single_equip.name == "iron armor") single_equip.health_boost = 10;
+							if(single_equip.name == "steel armor") single_equip.health_boost = 15;
+							if(single_equip.name == "mithril armor") single_equip.health_boost = 20;
+						}
                         self.vue.band[0].inventory.push(single_equip)
                     }}});});};
 
@@ -667,10 +695,12 @@ var app = function() {
 		var found_item1 = false;
 		var found_item2 = false;
 		for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
-			if(self.vue.band[0].inventory[i].name == self.vue.upgrade_items[index][0].name) {
+			if(self.vue.band[0].inventory[i].name == self.vue.upgrade_items[index][0].name
+			&& self.vue.band[0].inventory[i].num > 0) {
 				found_item1 = true;
 			}
-			if(self.vue.band[0].inventory[i].name == self.vue.upgrade_items[index][1].name) {
+			if(self.vue.band[0].inventory[i].name == self.vue.upgrade_items[index][1].name
+			&& self.vue.band[0].inventory[i].num > 0) {
 				found_item2 = true;
 			}
 		}
