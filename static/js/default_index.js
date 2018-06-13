@@ -24,7 +24,9 @@ var app = function() {
 		}
 		// this for is from the new way of recruiting
 		for(var i = 0; i < self.vue.fighter_group_health.length; i++) {
-			health += self.vue.fighter_group_health[i];
+            if(self.vue.fighter_group_health[i]>0){
+			     health += self.vue.fighter_group_health[i];
+            }
 		}
 		return health;
 	};
@@ -411,6 +413,9 @@ var app = function() {
         });};
 
     self.saveResources = function(){ //saves more than just resources
+        self.vue.num_fighters.forEach(function(d,i){
+            if( d < 0){self.vue.num_fighters[i]=0}
+        });
         //console.log( "saving all resources...")
         //console.log(self.vue.resources)
         //console.log(self.vue.num_fighters)
@@ -430,7 +435,7 @@ var app = function() {
             single_item = [item_name, d.num];
             inventory_items.push(single_item);
         });
-        console.log(inventory_items);
+        //console.log(inventory_items);
         $.post(save_resources_url,
             { 
                 resources: self.vue.resources,

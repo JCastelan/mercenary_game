@@ -517,7 +517,7 @@ function onPlayerMove() {
 		APP.vue.enemy_health = damage*enemy_health_multiplier + Math.floor(Math.random() * (damage/2));;
 
 
-		if(grid[playerPos.y][playerPos.x].health) {
+		if(grid[playerPos.y][playerPos.x].health > APP.vue.enemy_health) { 
 			APP.vue.enemy_health = grid[playerPos.y][playerPos.x].health;
 		}
 		once_again = false; // used to make sure we start an interval for player attacks once
@@ -529,11 +529,13 @@ function onPlayerMove() {
 				if(!can_attacc) return;
 				can_attacc = false;
 				APP.vue.player_attack_time = 0;
-				var enemy_damage = 1;
+				var enemy_damage = Math.floor(APP.vue.band[0].max_health/11);
 				var enemy_cooldown = 60;
 				if(grid[playerPos.y][playerPos.x].damage) {
 					enemy_damage = grid[playerPos.y][playerPos.x].damage;
 				}
+
+
 				if(grid[playerPos.y][playerPos.x].cooldown) {
 					enemy_cooldown = grid[playerPos.y][playerPos.x].cooldown;
 				}
@@ -586,7 +588,7 @@ function limit_player_attacks() {
 
 var enemy_attack_ticks = 0;
 var enemy_attack_cooldown_ticks = 0;
-var enemy_damage = 1;
+//var enemy_damage = 1;
 var cur_band_member_being_attacked = 0;
 var once = false;
 
