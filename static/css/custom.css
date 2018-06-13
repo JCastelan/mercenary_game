@@ -32,3 +32,12 @@ a:not(.btn):not(.noeffect):after {background-color:#26a69a}
 /* .not_padded {
 	padding: -10px !important;
 } */
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid black;
+    margin: 1em 0;
+    padding: 0;
+}

@@ -272,27 +272,6 @@ var app = function() {
 		}
 		self.vue.$forceUpdate();
 	};
-
-    // generic counter functions (for debugging purposes)
-    self.loadCounter = function(){ 
-        // console.log("getting the stored counter");
-        // console.log( self.vue.counter);
-        $.getJSON(load_counter_url, function (data) {
-            // console.log("Loaded " + data.counter + " as the counter value" );
-            self.vue.counter = data.counter;
-        });
-    };
-
-    self.saveCounter = function(){
-        // console.log("saving the counter");
-        $.post(save_counter_url,
-            { 
-                counter: self.vue.counter
-            },
-            function (result) {
-                // console.log( result )
-            });
-	};
 	
 	self.clicked = function () { //increments all resource counters
         self.vue.resources.forEach(function(d){
@@ -508,16 +487,17 @@ var app = function() {
 
 	self.craft_steel = function() {
 		addToResources("steel");
-		removeFromResources("iron", 1);
-		removeFromResources("coal", 1);
+		removeFromResources("iron", items_needed);
+		removeFromResources("coal", items_needed);
 		self.vue.$forceUpdate();
 	};
 
+    var items_needed = 5
 	self.get_num_craftable_steel = function() {
 		var num_iron = getNumOfResource("iron");
 		var num_coal = getNumOfResource("coal");
 		// return min(num_iron, num_coal)
-		return num_iron > num_coal ? num_coal : num_iron;
+		return Math.floor(num_iron > num_coal ? num_coal/items_needed : num_iron/items_needed);
 	};
 
 	self.can_craft_wood_sword = function() {
@@ -526,12 +506,12 @@ var app = function() {
 
 	self.craft_wood_sword = function() {
 		addToInventory({name: "wooden sword", is_weapon: true, damage: 2});
-		removeFromResources("wood", 1);
+		removeFromResources("wood", items_needed);
 		self.vue.$forceUpdate();
 	};
 
 	self.get_num_craftable_wood_swords = function() {
-		return getNumOfResource("wood");
+		return Math.floor(getNumOfResource("wood")/items_needed);
 	};
 
 	self.can_craft_iron_sword = function() {
@@ -540,8 +520,8 @@ var app = function() {
 
 	self.craft_iron_sword = function() {
 		addToInventory({name: "iron sword", is_weapon: true, damage: 3});
-		removeFromResources("iron", 1);
-		removeFromResources("wood", 1);
+		removeFromResources("iron", items_needed);
+		removeFromResources("wood", items_needed);
 		self.vue.$forceUpdate();
 	};
 
@@ -549,7 +529,7 @@ var app = function() {
 		var num_iron = getNumOfResource("iron");
 		var num_wood = getNumOfResource("wood");
 		// return min(num_iron, num_wood)
-		return num_iron > num_wood ? num_wood : num_iron;
+		return Math.floor(num_iron > num_wood ? num_wood/items_needed : num_iron/items_needed);
 	};
 
 	self.can_craft_steel_sword = function() {
@@ -558,8 +538,8 @@ var app = function() {
 
 	self.craft_steel_sword = function() {
 		addToInventory({name: "steel sword", is_weapon: true, damage: 4});
-		removeFromResources("steel", 1);
-		removeFromResources("wood", 1);
+		removeFromResources("steel", items_needed);
+		removeFromResources("wood", items_needed);
 		self.vue.$forceUpdate();
 	};
 
@@ -567,7 +547,7 @@ var app = function() {
 		var num_steel = getNumOfResource("steel");
 		var num_wood = getNumOfResource("wood");
 		// return min(num_steel, num_wood)
-		return num_steel > num_wood ? num_wood : num_steel;
+		return Math.floor(num_steel > num_wood ? num_wood/items_needed : num_steel/items_needed);
 	};
 
 	self.can_craft_mithril_sword = function() {
@@ -576,8 +556,8 @@ var app = function() {
 
 	self.craft_mithril_sword = function() {
 		addToInventory({name: "mithril sword", is_weapon: true, damage: 5});
-		removeFromResources("mithril", 1);
-		removeFromResources("wood", 1);
+		removeFromResources("mithril", items_needed);
+		removeFromResources("wood", items_needed);
 		self.vue.$forceUpdate();
 	};
 
@@ -585,7 +565,7 @@ var app = function() {
 		var num_mithril = getNumOfResource("mithril");
 		var num_wood = getNumOfResource("wood");
 		// return min(num_mithril, num_wood)
-		return num_mithril > num_wood ? num_wood : num_mithril;
+		return Math.floor(num_mithril > num_wood ? num_wood/items_needed : num_mithril/items_needed);
 	};
 
 	self.can_craft_leather_armor = function() {
@@ -594,12 +574,12 @@ var app = function() {
 
 	self.craft_leather_armor = function() {
 		addToInventory({name: "leather armor", is_armor: true, health_boost: 5});
-		removeFromResources("leather", 1);
+		removeFromResources("leather", items_needed);
 		self.vue.$forceUpdate();
 	};
 
 	self.get_num_craftable_leather_armors = function() {
-		return getNumOfResource("leather");
+		return Math.floor(getNumOfResource("leather")/items_needed);
 	};
 
 	self.can_craft_iron_armor = function() {
@@ -608,8 +588,8 @@ var app = function() {
 
 	self.craft_iron_armor = function() {
 		addToInventory({name: "iron armor", is_armor: true, health_boost: 10});
-		removeFromResources("iron", 1);
-		removeFromResources("leather", 1);
+		removeFromResources("iron", items_needed);
+		removeFromResources("leather", items_needed);
 		self.vue.$forceUpdate();
 	};
 
@@ -617,7 +597,7 @@ var app = function() {
 		var num_iron = getNumOfResource("iron");
 		var num_leather = getNumOfResource("leather");
 		// return min(num_iron, num_leather)
-		return num_iron > num_leather ? num_leather : num_iron;
+		return Math.floor(num_iron > num_leather ? num_leather/items_needed : num_iron/items_needed);
 	};
 
 	self.can_craft_steel_armor = function() {
@@ -626,8 +606,8 @@ var app = function() {
 
 	self.craft_steel_armor = function() {
 		addToInventory({name: "steel armor", is_armor: true, health_boost: 15});
-		removeFromResources("steel", 1);
-		removeFromResources("leather", 1);
+		removeFromResources("steel", items_needed);
+		removeFromResources("leather", items_needed);
 		self.vue.$forceUpdate();
 	};
 
@@ -635,7 +615,7 @@ var app = function() {
 		var num_steel = getNumOfResource("steel");
 		var num_leather = getNumOfResource("leather");
 		// return min(num_steel, num_leather)
-		return num_steel > num_leather ? num_leather : num_steel;
+		return Math.floor(num_steel > num_leather ? num_leather/items_needed : num_steel/items_needed);
 	};
 
 	self.can_craft_mithril_armor = function() {
@@ -644,8 +624,8 @@ var app = function() {
 
 	self.craft_mithril_armor = function() {
 		addToInventory({name: "mithril armor", is_armor: true, health_boost: 20});
-		removeFromResources("mithril", 1);
-		removeFromResources("leather", 1);
+		removeFromResources("mithril", items_needed);
+		removeFromResources("leather", items_needed);
 		self.vue.$forceUpdate();
 	};
 
@@ -653,7 +633,7 @@ var app = function() {
 		var num_mithril = getNumOfResource("mithril");
 		var num_leather = getNumOfResource("leather");
 		// return min(num_mithril, num_leather)
-		return num_mithril > num_leather ? num_leather : num_mithril;
+		return Math.floor(num_mithril > num_leather ? num_leather/items_needed : num_mithril/items_needed);
 	};
 
 	self.increment_hunter = function(){
@@ -978,7 +958,7 @@ var app = function() {
         addToResources("coal",self.vue.coal_miner);
 		addToResources("iron",self.vue.iron_miner);
 		self.vue.$forceUpdate();
-    }, 1000);
+    }, 5*1000);
     autosave();
     return self;
 };
