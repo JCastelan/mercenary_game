@@ -121,16 +121,16 @@ def save_resources():
 	# print "save_counter!!!!!!!!!!!!!!!!!"
 	q=(db.userdb.user_email ==auth.user.email)
 	row=db(q).select().first()
-	print "~~~~~~~~~~~~~~~~~~~~"
-	print "~~~~~~~~~~~~~~~~~~~~"
-	print request.vars
-	print "~~~~~~~~~~~~~~~~~~~~"
+	print "~~~~~~~~~~~~~~~~~~~~Saving Resources~~~~~~~~~~~~~~~~~~~~"
+	#print "~~~~~~~~~~~~~~~~~~~~"
+	#print request.vars
+	#print "~~~~~~~~~~~~~~~~~~~~"
 	dataCount = 0
 	for key, value in request.vars.iteritems():
 		if not isinstance(value, list):
-			print "~~~not a list: \t", value
+			#print "~~~not a list: \t", value
 			continue
-		print "\t", value
+		#print "\t", value
 		if len(value)>2:
 			if key == "num_fighters[]":
 				for item in value:
@@ -139,17 +139,17 @@ def save_resources():
 				for item in value:
 					fighter_health_string+=item+","
 		else:
-			print key, value
+			#print key, value
 			valuesToStore[valueList.index(value[0])]=int(value[1])
 		dataCount+=1
 		
-	print "~~~~~~~~~~~~~~~~~~~~"
-	print valuesToStore
+	#print "~~~~~~~~~~~~~~~~~~~~"
+	#print valuesToStore
 	if dataCount == 0:
 		return "failed"
 
 	
-	print "~~~~~~~~~~~~~~~~~~~~"
+	#print "~~~~~~~~~~~~~~~~~~~~"
 	num_fighters_string = num_fighters_string[:-1]
 	fighter_health_string = fighter_health_string[:-1]
 	if row is not None:
