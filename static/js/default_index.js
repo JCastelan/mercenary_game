@@ -352,16 +352,10 @@ var app = function() {
 						is_armor: item_name.includes("armor"),
                     }
 					if(single_equip.is_weapon) {
-						if(single_equip.name == "wooden sword") single_equip.damage = 2;
-						if(single_equip.name == "iron sword") single_equip.damage = 3;
-						if(single_equip.name == "steel sword") single_equip.damage = 4;
-						if(single_equip.name == "mithril sword") single_equip.damage = 5;
+						single_equip.damage = getWeaponDamageByName(single_equip.name);
 					}
 					if(single_equip.is_armor) {
-						if(single_equip.name == "leather armor") single_equip.health_boost = 5;
-						if(single_equip.name == "iron armor") single_equip.health_boost = 10;
-						if(single_equip.name == "steel armor") single_equip.health_boost = 15;
-						if(single_equip.name == "mithril armor") single_equip.health_boost = 20;
+						single_equip.health_boost = getArmorHealthBoostByName(single_equip.name);
 					}
                     self.vue.band[0].inventory.push(single_equip)
                     self.vue.equipment.push(d)
@@ -375,8 +369,12 @@ var app = function() {
                         self.vue.band[0].health=+d[1];
                     } else if (d[0]=="equipped_weapon") {
                         self.vue.band[0].weapon.name=d[1];
+                        self.vue.band[0].weapon.is_weapon = true;
+						self.vue.band[0].weapon.damage = getWeaponDamageByName(self.vue.band[0].weapon.name);
                     } else if (d[0]=="equipped_armor") {
                         self.vue.band[0].armor.name=d[1];
+                        self.vue.band[0].armor.is_armor = true;
+						self.vue.band[0].armor.health_boost = getArmorHealthBoostByName(self.vue.band[0].armor.name);
                     }
                 }else if (humanUnits.indexOf(d[0])>=0){
                     if(d[0] == "available_villagers"){
@@ -417,16 +415,10 @@ var app = function() {
 							is_armor: item_name.includes("armor"),
 						}
 						if(single_equip.is_weapon) {
-							if(single_equip.name == "wooden sword") single_equip.damage = 2;
-							if(single_equip.name == "iron sword") single_equip.damage = 3;
-							if(single_equip.name == "steel sword") single_equip.damage = 4;
-							if(single_equip.name == "mithril sword") single_equip.damage = 5;
+							single_equip.damage = getWeaponDamageByName(single_equip.name);
 						}
 						if(single_equip.is_armor) {
-							if(single_equip.name == "leather armor") single_equip.health_boost = 5;
-							if(single_equip.name == "iron armor") single_equip.health_boost = 10;
-							if(single_equip.name == "steel armor") single_equip.health_boost = 15;
-							if(single_equip.name == "mithril armor") single_equip.health_boost = 20;
+							single_equip.health_boost = getArmorHealthBoostByName(single_equip.name);
 						}
                         self.vue.band[0].inventory.push(single_equip)
                     }}});
@@ -773,8 +765,8 @@ var app = function() {
 		for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
 			if(self.vue.band[0].inventory[i].name == "food" && self.vue.band[0].inventory[i].num > 0) {
 				// if we find food, return true if the fighters need health
-				var num_full_health_fighers = Math.floor(self.vue.fighter_group_health[i] / self.vue.health_per_figher[i]);
-				return num_full_health_fighers != self.vue.num_fighters[i];
+				var num_full_health_fighters = Math.floor(self.vue.fighter_group_health[i] / self.vue.health_per_fighter[i]);
+				return num_full_health_fighters != self.vue.num_fighters[i];
 			}
 		}
 		return false;
@@ -783,8 +775,8 @@ var app = function() {
 	self.heal_fighters = function(i) {
 		removeFromInventory({name:"food", num: 1});
 		self.vue.fighter_group_health[i] += 5;
-		if(self.vue.fighter_group_health[i] > self.vue.num_fighters[i] * self.vue.health_per_figher[i]) {
-			self.vue.fighter_group_health[i] = self.vue.num_fighters[i] * self.vue.health_per_figher[i];
+		if(self.vue.fighter_group_health[i] > self.vue.num_fighters[i] * self.vue.health_per_fighter[i]) {
+			self.vue.fighter_group_health[i] = self.vue.num_fighters[i] * self.vue.health_per_fighter[i];
 		}
 	};
 
@@ -829,7 +821,7 @@ var app = function() {
 			num_fighters: [2, 0, 0, 0, 0], // each element is a different level of fighter
 			fighter_group_health: [20, 0, 0, 0, 0],
 			health_per_fighter: [10, 15, 20, 25, 30],
-			damage_per_figher: [1, 2, 3, 4, 5],
+			damage_per_fighter: [1, 2, 3, 4, 5],
 			upgrade_items: [
 				[{name: "wooden sword", is_weapon: true, damage: 2}, {name: "leather armor", is_armor: true, health_boost: 5}],
 				[{name: "iron sword", is_weapon: true, damage: 3}, {name: "iron armor", is_armor: true, health_boost: 10}],

@@ -31,6 +31,20 @@ function clearCurrentTile() {
 	grid[playerPos.y][playerPos.x].char = emptyChar;
 }
 
+function getWeaponDamageByName(name) {
+	if(name == "wooden sword") return 2;
+	if(name == "iron sword") return 3;
+	if(name == "steel sword") return 4;
+	if(name == "mithril sword") return 5;
+}
+
+function getArmorHealthBoostByName(name) {
+	if(name == "leather armor") return 5;
+	if(name == "iron armor") return 10;
+	if(name == "steel armor") return 15;
+	if(name == "mithril armor") return 20;
+}
+
 function addToInventory(item) {
 	if(!item.num) item.num = 1;
 	// find the item in the inventory
@@ -592,13 +606,13 @@ function simulate_enemy_attacks() {
 			}
 		}
 		else {
-			var old_num_alive_fighers = Math.ceil(APP.vue.fighter_group_health[i] / APP.vue.health_per_figher[i]);
+			var old_num_alive_fighters = Math.ceil(APP.vue.fighter_group_health[i] / APP.vue.health_per_fighter[i]);
 			APP.vue.fighter_group_health[i] -= enemy_damage;
 			// console.log("fgh: " + APP.vue.fighter_group_health[i]);
-			var new_num_alive_fighers = Math.ceil(APP.vue.fighter_group_health[i] / APP.vue.health_per_figher[i]);
-			// console.log("nnaf: " + new_num_alive_fighers);
-			if(new_num_alive_fighers != old_num_alive_fighers) {
-				// a figher died, decrement num_fighers
+			var new_num_alive_fighters = Math.ceil(APP.vue.fighter_group_health[i] / APP.vue.health_per_fighter[i]);
+			// console.log("nnaf: " + new_num_alive_fighters);
+			if(new_num_alive_fighters != old_num_alive_fighters) {
+				// a fighter died, decrement num_fighters
 				APP.vue.num_fighters[i]--;
 			}
 			if(APP.vue.fighter_group_health[i] <= 0) {
