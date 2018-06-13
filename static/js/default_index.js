@@ -265,7 +265,7 @@ var app = function() {
 		self.unequip_boi(i);
 		self.vue.available_villagers++;
 		self.vue.num_fighters[0]--;
-		self.vue.fighter_group_health[0] -= self.vue.health_per_figher[0];
+		self.vue.fighter_group_health[0] -= self.vue.health_per_fighter[0];
 		if(self.vue.fighter_group_health[0] < 0) {
 			self.vue.fighter_group_health[0] = 0;
 		}
@@ -325,6 +325,7 @@ var app = function() {
         resourcesList = ["coal","iron","mithril","steel","wood", "leather"];
         equipList = ["w_sword", "i_sword","s_sword","m_sword"]
         playerInfo = ["max_health","current_health","equipped_weapon","equipped_armor"]
+        humanUnits = ["available_villagers","wood_gatherer","coal_miner","iron_miner","mithril_miner","hunter"]
         $.getJSON(load_resources_url, function (data) {
             console.log(data );
             dataElems=Object.entries(data);
@@ -362,6 +363,20 @@ var app = function() {
                     } else if (d[0]=="equipped_armor") {
                         self.vue.band[0].armor.name=d[1];
                     }
+                }else if (humanUnits.indexOf(d[0])>=0){
+                    if(d[0] == "available_villagers"){
+                        self.vue.available_villagers=+d[1];
+                    }else if( d[0] == "wood_gatherer"){
+                        self.vue.wood_gatherer=+d[1];
+                    }else if( d[0] == "hunter"){
+                        self.vue.hunter=+d[1];
+                    }else if( d[0] == "coal_miner"){
+                        self.vue.coal_miner=+d[1];
+                    }else if( d[0] == "iron_miner"){
+                        self.vue.iron_miner=+d[1];
+                    }else if( d[0] == "mithril_miner"){
+                        self.vue.mithril_miner=+d[1];
+                    }
                 }else{ //other random data I guess
                     if(d[0]== "num_fighters"){
 						self.vue.num_fighters= d[1];
@@ -369,10 +384,11 @@ var app = function() {
                             self.vue.num_fighters[i]=+e;
                         });
                     } else if (d[0]=="fighter_health") {
-						self.vue.fighter_group_health=d[1];
-                        self.vue.fighter_group_health.forEach(function(e,i){
-                            self.vue.fighter_group_health[i]=+e;
-                        });
+						//self.vue.fighter_group_health=d[1];
+                        /*self.vue.fighter_group_health.forEach(function(e,i){
+                            //self.vue.fighter_group_health[i]=+e;
+                            self.vue.fighter_group_health[i]=self.vue.health_per_fighter[i]*self.vue.num_fighters[i];
+                        });*/
                     }else{
                         item_name=d[0].split('_').join(' ');
                         var single_equip= {
@@ -380,7 +396,12 @@ var app = function() {
                             name:item_name
                         }
                         self.vue.band[0].inventory.push(single_equip)
-                    }}});});};
+                    }}});
+            self.vue.fighter_group_health.forEach(function(e,i){
+                //self.vue.fighter_group_health[i]=+e;
+                self.vue.fighter_group_health[i]=self.vue.health_per_fighter[i]*self.vue.num_fighters[i];
+            });
+        });};
 
     self.saveResources = function(){ //saves more than just resources
         console.log( "saving all resources...")
@@ -412,7 +433,13 @@ var app = function() {
                 equipped_weapon: self.vue.band[0].weapon.name,
                 equipped_armor: self.vue.band[0].armor.name,
                 num_fighters: self.vue.num_fighters,
-                fighter_health: self.vue.health_per_figher
+                fighter_health: self.vue.health_per_fighter,
+                available_villagers: self.vue.available_villagers,
+                wood_gatherers: self.vue.wood_gatherer,
+                coal_miners: self.vue.coal_miner,
+                iron_miners: self.vue.iron_miner,
+                mithril_miners: self.vue.mithril_miner,
+                hunters: self.vue.hunter
             },
             function (result) {
                 //console.log( result )
@@ -427,7 +454,7 @@ var app = function() {
     	if(self.vue.available_villagers > 0){
     		self.vue.available_villagers -= 1;
     		self.vue.num_fighters[0] += 1;
-    		self.vue.fighter_group_health[0] += self.vue.health_per_figher[0];
+    		self.vue.fighter_group_health[0] += self.vue.health_per_fighter[0];
     		self.vue.$forceUpdate();
 		}
 	};
@@ -658,7 +685,7 @@ var app = function() {
 
 	self.can_equip_boi = function(index) {
 		if(!self.vue) return false;
-		if(i == 4) return false; // can't upgrade level 5 fighters
+		if(index == 4) return false; // can't upgrade level 5 fighters
 		// find the items in the inventory
 		var found_item1 = false;
 		var found_item2 = false;
@@ -681,12 +708,12 @@ var app = function() {
 		removeFromInventory(self.vue.upgrade_items[i][0]);
 		removeFromInventory(self.vue.upgrade_items[i][1]);
 		self.vue.num_fighters[i]--;
-		self.vue.fighter_group_health[i] -= self.vue.health_per_figher[i];
+		self.vue.fighter_group_health[i] -= self.vue.health_per_fighter[i];
 		if(self.vue.fighter_group_health[i] < 0) {
 			self.vue.fighter_group_health[i] = 0;
 		}
 		self.vue.num_fighters[i + 1]++;
-		self.vue.fighter_group_health[i + 1] += self.vue.health_per_figher[i + 1];
+		self.vue.fighter_group_health[i + 1] += self.vue.health_per_fighter[i + 1];
 		self.vue.$forceUpdate();
 	};
 
@@ -695,9 +722,9 @@ var app = function() {
 		addToInventory(self.vue.upgrade_items[i - 1][0]);
 		addToInventory(self.vue.upgrade_items[i - 1][1]);
 		self.vue.num_fighters[0]++;
-		self.vue.fighter_group_health[0] += self.vue.health_per_figher[0];
+		self.vue.fighter_group_health[0] += self.vue.health_per_fighter[0];
 		self.vue.num_fighters[i]--;
-		self.vue.fighter_group_health[i] -= self.vue.health_per_figher[i];
+		self.vue.fighter_group_health[i] -= self.vue.health_per_fighter[i];
 		if(self.vue.fighter_group_health[i] < 0) {
 			self.vue.fighter_group_health[i] = 0;
 		}
@@ -744,7 +771,7 @@ var app = function() {
 			my_name: "You",
 			num_fighters: [2, 0, 0, 0, 0], // each element is a different level of fighter
 			fighter_group_health: [20, 0, 0, 0, 0],
-			health_per_figher: [10, 15, 20, 25, 30],
+			health_per_fighter: [10, 15, 20, 25, 30],
 			damage_per_figher: [1, 2, 3, 4, 5],
 			upgrade_items: [
 				[{name: "wooden sword", is_weapon: true, damage: 2}, {name: "leather armor", is_armor: true, health_boost: 5}],

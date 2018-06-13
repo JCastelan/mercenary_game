@@ -48,9 +48,11 @@ db.define_table('userdb',
 				Field( 'fighter_count', 'string', default="0,0,0,0,0"),
 				Field( 'fighter_health', 'string', default="0,0,0,0,0"),
 
-				Field( 'c_miners', 'integer', default=0),
-				Field( 'i_miners', 'integer', default=0),
-				Field( 'm_miners', 'integer', default=0),
+				Field( 'available_villagers', 'integer', default=0),
+				Field( 'wood_gatherers', 'integer', default=0),
+				Field( 'coal_miners', 'integer', default=0),
+				Field( 'iron_miners', 'integer', default=0),
+				Field( 'mithril_miners', 'integer', default=0),
 				Field( 'hunters', 'integer', default=0),
 				)
 
