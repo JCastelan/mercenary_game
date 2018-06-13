@@ -32,6 +32,7 @@ function clearCurrentTile() {
 }
 
 function getWeaponDamageByName(name) {
+	if(name == "fists") return 1;
 	if(name == "wooden sword") return 2;
 	if(name == "iron sword") return 3;
 	if(name == "steel sword") return 4;
@@ -39,6 +40,7 @@ function getWeaponDamageByName(name) {
 }
 
 function getArmorHealthBoostByName(name) {
+	if(name == "nothing") return 0;
 	if(name == "leather armor") return 5;
 	if(name == "iron armor") return 10;
 	if(name == "steel armor") return 15;

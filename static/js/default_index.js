@@ -709,41 +709,62 @@ var app = function() {
 	};
 
 	self.can_equip_boi = function(index) {
-		// TODO: make it so you can skip a level
 		if(!self.vue) return false;
 		if(index == 4) return false; // can't upgrade level 5 fighters
-		// find the items in the inventory
-		var found_item1 = false;
-		var found_item2 = false;
-		for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
-			if(self.vue.band[0].inventory[i].name == self.vue.upgrade_items[index][0].name
-			&& self.vue.band[0].inventory[i].num > 0) {
-				found_item1 = true;
-			}
-			if(self.vue.band[0].inventory[i].name == self.vue.upgrade_items[index][1].name
-			&& self.vue.band[0].inventory[i].num > 0) {
-				found_item2 = true;
+		for(var j = index; j < self.vue.upgrade_items.length; j++) {
+			// find the items in the inventory
+			var found_item1 = false;
+			var found_item2 = false;
+			for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
+				if(self.vue.band[0].inventory[i].name == self.vue.upgrade_items[j][0].name
+				&& self.vue.band[0].inventory[i].num > 0) {
+					found_item1 = true;
+				}
+				if(self.vue.band[0].inventory[i].name == self.vue.upgrade_items[j][1].name
+				&& self.vue.band[0].inventory[i].num > 0) {
+					found_item2 = true;
+				}
+				if(found_item1 && found_item2) {
+					return true;
+				}
 			}
 		}
-		return found_item1 && found_item2;
+		return false;
 	};
 
-	self.equip_boi = function(i) {
-		// TODO: make it so you can skip a level
-		if(i != 0) {
-			addToInventory(self.vue.upgrade_items[i - 1][0]);
-			addToInventory(self.vue.upgrade_items[i - 1][1]);
+	self.equip_boi = function(index) {
+		if(index != 0) {
+			addToInventory(self.vue.upgrade_items[index - 1][0]);
+			addToInventory(self.vue.upgrade_items[index - 1][1]);
 		}
-		removeFromInventory(self.vue.upgrade_items[i][0]);
-		removeFromInventory(self.vue.upgrade_items[i][1]);
-		self.vue.num_fighters[i]--;
-		self.vue.fighter_group_health[i] -= self.vue.health_per_fighter[i];
-		if(self.vue.fighter_group_health[i] < 0) {
-			self.vue.fighter_group_health[i] = 0;
+		for(var j = index; j < self.vue.upgrade_items.length; j++) {
+			// find the items in the inventory
+			var found_item1 = false;
+			var found_item2 = false;
+			for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
+				if(self.vue.band[0].inventory[i].name == self.vue.upgrade_items[j][0].name
+				&& self.vue.band[0].inventory[i].num > 0) {
+					found_item1 = true;
+				}
+				if(self.vue.band[0].inventory[i].name == self.vue.upgrade_items[j][1].name
+				&& self.vue.band[0].inventory[i].num > 0) {
+					found_item2 = true;
+				}
+				if(found_item1 && found_item2) {
+					removeFromInventory(self.vue.upgrade_items[j][0]);
+					removeFromInventory(self.vue.upgrade_items[j][1]);
+					self.vue.num_fighters[index]--;
+					self.vue.fighter_group_health[index] -= self.vue.health_per_fighter[index];
+					if(self.vue.fighter_group_health[index] < 0) {
+						self.vue.fighter_group_health[index] = 0;
+					}
+					self.vue.num_fighters[j + 1]++;
+					self.vue.fighter_group_health[j + 1] += self.vue.health_per_fighter[j + 1];
+					self.vue.$forceUpdate();
+					return;
+				}
+			}
 		}
-		self.vue.num_fighters[i + 1]++;
-		self.vue.fighter_group_health[i + 1] += self.vue.health_per_fighter[i + 1];
-		self.vue.$forceUpdate();
 	};
 
 	self.unequip_boi = function(i) {
