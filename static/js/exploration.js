@@ -150,7 +150,7 @@ function restartGame() {
 	APP.vue.in_battle = false;
 }
 
-function makeLootBag(bagY, bagX, items) {
+function makeLootBag(bagY, bagX, oldChar, items) {
 	grid[bagY][bagX].char = lootChar;
 	grid[bagY][bagX].title = "Loot Bag";
 	grid[bagY][bagX].desc = "You conveniently found a loot bag with some goodies inside. Would you like to take some?";
@@ -195,11 +195,13 @@ function makeLootBag(bagY, bagX, items) {
 				if(grid[playerPos.y][playerPos.x].buttons.length == 0) {
 					grid[playerPos.y][playerPos.x].desc = "Looted.";
 					APP.vue.popup_desc = "Looted.";
+
 					//-EDIT BY KRON: changes char to 'h' after a house has been looted-
-					if (grid[playerPos.y][playerPos.x].char != null){
+					if (oldChar == houseChar){
 						grid[playerPos.y][playerPos.x].char = lootedChar;
-					}
-					else{
+					} else if (oldChar == hiddenEnemyChar){
+						grid[playerPos.y][playerPos.x].char = emptyChar;
+					}else{
 						clearCurrentTile(); 
 					}
 					//----------------------------------------------------------------
@@ -252,7 +254,7 @@ function spawnLootBag(y, x ){
 
 	grid[y][x].buttons = [
 		{name: "Aye a loot bag", onClick: function() {
-			makeLootBag(playerPos.y, playerPos.x, [
+			makeLootBag(playerPos.y, playerPos.x, grid[playerPos.y][playerPos.x].char, [
 				{name: loot[0], num: num1},
 				{name: loot[1], num: num2},
 				{name: loot[2], num: num3}
@@ -262,6 +264,7 @@ function spawnLootBag(y, x ){
 			APP.vue.popup_desc = grid[playerPos.y][playerPos.x].desc;
 			APP.vue.popup_buttons = grid[playerPos.y][playerPos.x].buttons;
 		}}];
+
 }
 //--------------------------------------------------------------------------------
 
@@ -296,7 +299,7 @@ function initStartingAreaGrid() {
 	// make path to boss with an iron sword and an enemy along the way
 	grid[playerPos.y - 1][playerPos.x].char = emptyChar;
 
-	makeLootBag(playerPos.y - 2, playerPos.x, [
+	makeLootBag(playerPos.y - 2, playerPos.x, grid[playerPos.y][playerPos.x].char, [
 		{name: "iron sword", is_weapon: true, damage: 2, num: 1},
 		{name: "food", num: 1},
 		{name: "leather armor", is_armor: true, health_boost: 5, num: 1}
@@ -336,7 +339,7 @@ function initStartingAreaGrid() {
 		grid[playerPos.y][playerPos.x].desc = "You defeated Donny.";
 		grid[playerPos.y][playerPos.x].buttons = [
 			{name: "Search body", onClick: function() {
-				makeLootBag(playerPos.y, playerPos.x, [
+				makeLootBag(playerPos.y, playerPos.x, grid[playerPos.y][playerPos.x].char, [
 					{name: "iron sword", is_weapon: true, damage: 2, num: 1},
 					{name: "food", num: 2},
 					{name: "iron armor", is_armor: true, health_boost: 10, num: 1}
@@ -377,8 +380,9 @@ function initHubWorldGrid(width, height) {
 				var lootChance = Math.random();
 				if (lootChance < .40) {
 					spawnLootBag(y, x);
-				}
-				if (lootChance >= .40 && lootChance <=.85){
+					//sets houseChar to 'h' after it has been looted
+					grid[playerPos.y][playerPos.x].char = lootedChar;
+				}else if (lootChance >= .40 && lootChance <=.80){
 					grid[y][x].battle = true;
 					grid[y][x].onDeath = function() {		
 						console.log("let the bodies hit the floor");
@@ -386,17 +390,9 @@ function initHubWorldGrid(width, height) {
 						if (lootCorpse < .50){
 							spawnLootBag(playerPos.y, playerPos.x);
 
-							if (grid[playerPos.y][playerPos.x].char == houseChar){
-								grid[playerPos.y][playerPos.x].char = lootedChar;
-							}
-
 							APP.vue.popup_buttons = grid[playerPos.y][playerPos.x].buttons;
 							APP.vue.show_popup = true;	
 						} else{						
-							if (grid[playerPos.y][playerPos.x].char == houseChar){
-								grid[playerPos.y][playerPos.x].char = lootedChar;
-							}
-
 							grid[playerPos.y][playerPos.x].buttons = [];
 							APP.vue.popup_buttons = [];
 
@@ -405,6 +401,9 @@ function initHubWorldGrid(width, height) {
 							APP.vue.show_popup = true;
 						}
 					};
+				}else{
+					console.log("U Messed up in initHubWorldGrid");
+					grid[playerPos.y][playerPos.x].char = lootedChar;
 				}
 				//--------------------------------------------------------------------------
 			} else if(chance < 0.05) {
@@ -424,6 +423,7 @@ function initHubWorldGrid(width, height) {
 				//--------------------------------------------------------------
 			} else {
 				grid[y].push({char: emptyChar, explored: false});
+
 			}
 		}
 	}
