@@ -404,12 +404,63 @@ function initHubWorldGrid(width, height) {
 			onPlayerMove();
 		}}
 	];
+	//Starting point
+	 APP.vue.popup_title ="Beginnings";
+	 APP.vue.popup_desc = "3 days ago the noble house Lancaster was hit by an unfortunate event. Their only child Victor Lancaster was kidnapped during the night" +
+		 "by a mysterious group. A call was then sent out to the people of Midland. Anyone who is able to bring back the child unharmed will be greatly rewarded with" +
+		 "gold and ranking. You know you're close. Maybe people around here know something.";
+	 APP.vue.popup_buttons = [
+		{name: "Onwards!", onClick: function() {
+			clearCurrentTile();
+			APP.vue.show_popup = false;
+		}},
+	 ];
+	 APP.vue.show_popup = true;
 
 	playerPos.x = Math.floor(gridWidth / 2);
 	playerPos.y = Math.floor(gridHeight / 2);
 	lastPlayerPos.x = playerPos.x;
 	lastPlayerPos.y = playerPos.y;
 	setVisibleToExplored();
+
+
+	//Cheeky bugger at farmville
+	grid[playerPos.y][playerPos.x+3].char = houseChar;
+	grid[playerPos.y][playerPos.x+3].title = "Cheeky bugger at Farmville";
+	grid[playerPos.y][playerPos.x+3].desc = "A burning farm stands before you. You then hear a laugh from a man holding a wine bottle. Well butcher's hook wha' we 'ave 'ere. A cheeky bugger who doesn'' knah 'ah 'er keep 'heir hooter aaah' ov uvver " +
+		"people's business.";
+	grid[playerPos.y][playerPos.x+3].damage = 1;
+	grid[playerPos.y][playerPos.x+3].health = 4;
+	grid[playerPos.y][playerPos.x+3].buttons =  [
+		{name: "What?", onClick: function() {
+			grid[playerPos.y][playerPos.x].battle=true;
+			onPlayerMove();
+		}},
+		{name: "Time to rekt this boi ", onClick: function() {
+			grid[playerPos.y][playerPos.x].battle=true;
+			onPlayerMove();
+		}}
+	];
+	grid[playerPos.y][playerPos.x+3].onDeath = function() {
+		APP.vue.popup_desc  = "Damn.. my gu's are ou' ov my body..'his suck. A farmer approached thanking you and tells you that their were more of" +
+			"them heading north with a child";
+		APP.vue.popup_buttons = [
+			{name: "Search body", onClick: function() {
+				makeLootBag(playerPos.y, playerPos.x, [
+					{name: "iron sword", is_weapon: true, damage: 2, num: 1},
+					{name: "food", num: 2},
+					{name: "iron armor", is_armor: true, health_boost: 10, num: 1}
+				]);
+				APP.vue.popup_title = grid[playerPos.y][playerPos.x].title;
+				APP.vue.popup_desc = grid[playerPos.y][playerPos.x].desc;
+				APP.vue.popup_buttons = grid[playerPos.y][playerPos.x].buttons;
+			}},
+		];
+
+	};
+	//Sad Toshi
+	
+
 }
 
 function displayGrid() {
@@ -435,8 +486,8 @@ function displayGrid() {
 }
 
 // initStartingAreaGrid();
-initHubWorldGrid(100, 40);
-displayGrid();
+// initHubWorldGrid(100, 40);
+// displayGrid();
 
 // if player moves off the map, we put him back on
 function playerBounds() {
@@ -510,8 +561,6 @@ function onPlayerMove() {
 	if(grid[playerPos.y][playerPos.x].battle) {
 		APP.vue.in_battle = true;
 		once = false; // used to make sure we call start_enemy_attacks once
-		
-
 		var damage = 0; //moved this to current location so we could use it to calculate an appropriate enemy health
 		// this is for calculating damage based on the old recruiting system
 		for(var i = 0; i < APP.vue.band.length; i++) {
@@ -525,7 +574,6 @@ function onPlayerMove() {
 		}
 
 		APP.vue.enemy_health = damage*enemy_health_multiplier + Math.floor(Math.random() * (damage/2));;
-
 
 		if(grid[playerPos.y][playerPos.x].health > APP.vue.enemy_health) { 
 			APP.vue.enemy_health = grid[playerPos.y][playerPos.x].health;
