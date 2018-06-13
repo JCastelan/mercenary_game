@@ -456,6 +456,8 @@ function playerBounds() {
 }
 
 function onPlayerMove() {
+	var enemy_health_multiplier = 3;
+
 	playerBounds();
 	if(grid[playerPos.y][playerPos.x].char == obstacleChar) {
 		playerPos.x = lastPlayerPos.x;
@@ -487,6 +489,7 @@ function onPlayerMove() {
 		APP.vue.popup_title = "Boss Battle";
 		APP.vue.popup_desc = "You\'ve encountered a generic boss battle.";
 		APP.vue.show_popup = true;
+		enemy_health_multiplier=5
 	}
 
 	// if there are specific details specified on the grid space, set the popup to display those
@@ -508,7 +511,23 @@ function onPlayerMove() {
 	if(grid[playerPos.y][playerPos.x].battle) {
 		APP.vue.in_battle = true;
 		once = false; // used to make sure we call start_enemy_attacks once
-		APP.vue.enemy_health = 10;
+		
+
+		var damage = 0; //moved this to current location so we could use it to calculate an appropriate enemy health
+		// this is for calculating damage based on the old recruiting system
+		for(var i = 0; i < APP.vue.band.length; i++) {
+			if(APP.vue.band[i].health > 0) { // TODO: keep this for resurrection if we do that
+				damage += APP.vue.band[i].weapon.damage;
+			}
+		}
+		// this is for calculating damage based on the new recruiting system
+		for(var i = 0; i < APP.vue.num_fighters.length; i++) {
+			damage += APP.vue.num_fighters[i] * (i+1);
+		}
+
+		APP.vue.enemy_health = damage*enemy_health_multiplier + Math.floor(Math.random() * (damage/2));;
+
+
 		if(grid[playerPos.y][playerPos.x].health) {
 			APP.vue.enemy_health = grid[playerPos.y][playerPos.x].health;
 		}
@@ -530,17 +549,6 @@ function onPlayerMove() {
 					enemy_cooldown = grid[playerPos.y][playerPos.x].cooldown;
 				}
 				start_enemy_attacks(enemy_damage, enemy_cooldown);
-				var damage = 0;
-				// this is for calculating damage based on the old recruiting system
-				for(var i = 0; i < APP.vue.band.length; i++) {
-					if(APP.vue.band[i].health > 0) { // TODO: keep this for resurrection if we do that
-						damage += APP.vue.band[i].weapon.damage;
-					}
-				}
-				// this is for calculating damage based on the new recruiting system
-				for(var i = 0; i < APP.vue.num_fighters.length; i++) {
-					damage += APP.vue.num_fighters[i] * (i+1);
-				}
 				APP.vue.enemy_health -= damage;
 				if(APP.vue.enemy_health <= 0) {
 					APP.vue.enemy_health = 0;
@@ -620,7 +628,11 @@ function start_enemy_attacks(damage, cooldown) {
 
 function simulate_enemy_attacks() {
 	enemy_attack_ticks++;
-	if(APP.vue.enemy_health == 0) return;
+	if(APP.vue.enemy_health == 0){
+		APP.vue.enemies_defeated++;
+		console.log(APP.vue.enemies_defeated);
+		return;
+	}
 	if(enemy_attack_ticks % enemy_attack_cooldown_ticks == 0) {
 		var i = cur_band_member_being_attacked;
 		// APP.vue.band[cur_band_member_being_attacked].health -= enemy_damage;
