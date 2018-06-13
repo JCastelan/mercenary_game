@@ -362,6 +362,28 @@ function initHubWorldGrid(width, height) {
 						 APP.vue.popup_buttons = grid[playerPos.y][playerPos.x].buttons;
 						}}];
 				}
+				else if(lootChance < .9) {
+					grid[y][x].desc = "You meet a friendly stranger. He greets you and welcomes you into his home. After a talk over a meal, he talks about his dream to become a mercenary. He asks if he can join you.";
+					grid[y][x].buttons = [
+						{name: "Yes", onClick: function() {
+							clearCurrentTile();
+							addRecruitToBand();
+							APP.closePopup();
+						}},
+						{name: "No", onClick: function() {
+							grid[playerPos.y][playerPos.x].desc = "The now familiar stranger greets you again and puts forth his previous offer to join your band of mercenaries";
+							grid[playerPos.y][playerPos.x].buttons = [
+								{name: "Yes", onClick: function() {
+									addRecruitToBand();
+								}},
+								{name: "No", onClick: function() {
+									APP.closePopup();
+								}}
+							];
+							APP.closePopup();
+						}}
+					];
+				}
 				//--------------------------------------------------------------------------
 			} else if(chance < 0.05) {
 				// TODO: randomize the enemy names and stories
@@ -406,8 +428,8 @@ function initHubWorldGrid(width, height) {
 	];
 	//Starting point
 	 APP.vue.popup_title ="Beginnings";
-	 APP.vue.popup_desc = "3 days ago the noble house Lancaster was hit by an unfortunate event. Their only child Victor Lancaster was kidnapped during the night" +
-		 "by a mysterious group. A call was then sent out to the people of Midland. Anyone who is able to bring back the child unharmed will be greatly rewarded with" +
+	 APP.vue.popup_desc = "3 days ago the noble house Lancaster was hit by an unfortunate event. Their only child Victor Lancaster was kidnapped during the night " +
+		 "by a mysterious group. A call was then sent out to the people of Midland. Anyone who is able to bring back the child unharmed will be greatly rewarded with " +
 		 "gold and ranking. You know you're close. Maybe people around here know something.";
 	 APP.vue.popup_buttons = [
 		{name: "Onwards!", onClick: function() {
@@ -423,6 +445,38 @@ function initHubWorldGrid(width, height) {
 	lastPlayerPos.y = playerPos.y;
 	setVisibleToExplored();
 
+	// make iron mine
+	grid[playerPos.y-3][playerPos.x-3].char = "I";
+	grid[playerPos.y-3][playerPos.x-3].title = "Iron Mine";
+	grid[playerPos.y-3][playerPos.x-3].desc = "You found the iron mine!";
+	grid[playerPos.y-3][playerPos.x-3].buttons = [
+		{name: "Unlock iron ore mining", onClick: function() {
+			APP.vue.iron_mine_unlocked = true;
+			APP.closePopup();
+		}}
+	];
+
+	// make coal mine
+	grid[playerPos.y+10][playerPos.x+6].char = "C";
+	grid[playerPos.y+10][playerPos.x+6].title = "Coal Mine";
+	grid[playerPos.y+10][playerPos.x+6].desc = "You found the coal mine!";
+	grid[playerPos.y+10][playerPos.x+6].buttons = [
+		{name: "Unlock coal mining", onClick: function() {
+			APP.vue.coal_mine_unlocked = true;
+			APP.closePopup();
+		}}
+	];
+
+	// make mithril mine
+	grid[playerPos.y+15][playerPos.x-30].char = "M";
+	grid[playerPos.y+15][playerPos.x-30].title = "Mithril Mine";
+	grid[playerPos.y+15][playerPos.x-30].desc = "You found the mithril mine!";
+	grid[playerPos.y+15][playerPos.x-30].buttons = [
+		{name: "Unlock mithril mining", onClick: function() {
+			APP.vue.mithril_mine_unlocked = true;
+			APP.closePopup();
+		}}
+	];
 
 	//Cheeky bugger at farmville
 	grid[playerPos.y][playerPos.x+3].char = houseChar;
@@ -442,7 +496,7 @@ function initHubWorldGrid(width, height) {
 		}}
 	];
 	grid[playerPos.y][playerPos.x+3].onDeath = function() {
-		APP.vue.popup_desc  = "Damn.. my gu's are ou' ov my body..'his suck. A farmer approached thanking you and tells you that their were more of" +
+		APP.vue.popup_desc  = "Damn.. my gu's are ou' ov my body..'his suck. A farmer approached thanking you and tells you that their were more of " +
 			"them heading north with a child";
 		APP.vue.popup_buttons = [
 			{name: "Search body", onClick: function() {
@@ -587,7 +641,7 @@ function onPlayerMove() {
 				if(!can_attacc) return;
 				can_attacc = false;
 				APP.vue.player_attack_time = 0;
-				var enemy_damage = Math.floor(APP.vue.band[0].max_health/11);
+				var enemy_damage = 1;//Math.floor(APP.vue.band[0].max_health/11);
 				var enemy_cooldown = 60;
 				if(grid[playerPos.y][playerPos.x].damage) {
 					enemy_damage = grid[playerPos.y][playerPos.x].damage;
