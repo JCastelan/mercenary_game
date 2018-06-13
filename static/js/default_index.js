@@ -365,14 +365,14 @@ var app = function() {
                 }else{ //other random data I guess
                     if(d[0]== "num_fighters"){
 						self.vue.num_fighters= d[1];
-						/*for(var i = 0; i < self.vue.num_fighters.length; i++) {
-							self.vue.num_fighters[i] = +self.vue.num_fighters[i];
-						}*/
+                        self.vue.num_fighters.forEach(function(e,i){
+                            self.vue.num_fighters[i]=+e;
+                        });
                     } else if (d[0]=="fighter_health") {
 						self.vue.fighter_group_health=d[1];
-						/*for(var i = 0; i < self.vue.num_fighters.length; i++) {
-							self.vue.fighter_group_health[i] = +self.vue.fighter_group_health[i];
-						}*/
+                        self.vue.fighter_group_health.forEach(function(e,i){
+                            self.vue.fighter_group_health[i]=+e;
+                        });
                     }else{
                         item_name=d[0].split('_').join(' ');
                         var single_equip= {
