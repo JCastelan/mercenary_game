@@ -35,6 +35,15 @@ db.define_table('userdb',
 				Field( 's_sword', 'integer', default=0),
 				Field( 'm_sword', 'integer', default=0),
 
+				#armor
+				Field( 'leather_armor', 'integer', default=0),
+				Field( 'iron_armor', 'integer', default=0),
+				Field( 'steel_armor', 'integer', default=0),
+				Field( 'mithril_armor', 'integer', default=0),
+
+				#other items
+				Field( 'food', 'integer', default=0),
+
 				#human units
 				Field( 'fighter_count', 'string', default="0,0,0,0,0"),
 				Field( 'fighter_health', 'string', default="0,0,0,0,0"),

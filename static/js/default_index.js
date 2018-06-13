@@ -340,12 +340,14 @@ var app = function() {
                         item_name = "mithril sword"
                     }else if (d[0]=="s_sword"){
                         item_name = "steel sword"
+                    }else{
+                        item_name=d[0].split('_').join(' ');
+                        console.log(item_name);
                     }
                     var single_equip= {
                         num:+d[1],
                         name:item_name
                     }
-                    //d[1] = +d[1];
                     self.vue.band[0].inventory.push(single_equip)
                     self.vue.equipment.push(d)
                 }else if (resourcesList.indexOf(d[0])>=0){
@@ -360,8 +362,6 @@ var app = function() {
                         self.vue.band[0].weapon.name=d[1];
                     } else if (d[0]=="equipped_armor") {
                         self.vue.band[0].armor.name=d[1];
-                    }else{
-                        console.log("warning: did not store ", d);
                     }
                 }else{ //other random data I guess
                     if(d[0]== "num_fighters"){
@@ -377,7 +377,12 @@ var app = function() {
 							self.vue.fighter_group_health[i] = +self.vue.fighter_group_health[i];
 						}
                     }else{
-                        console.log("warning: did not store ", d);
+                        item_name=d[0].split('_').join(' ');
+                        var single_equip= {
+                            num:+d[1],
+                            name:item_name
+                        }
+                        self.vue.band[0].inventory.push(single_equip)
                     }}});});};
 
     self.saveResources = function(){ //saves more than just resources
@@ -386,7 +391,7 @@ var app = function() {
         //console.log(self.vue.num_fighters)
         inventory_items = []
         self.vue.band[0].inventory.forEach(function(d){
-            var item_name = d.name;
+            var item_name = d.name.split(' ').join('_');
             if(d.name=="iron sword"){
                 item_name = "i_sword"
             }else if (d.name=="wooden sword"){
