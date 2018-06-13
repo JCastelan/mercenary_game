@@ -58,6 +58,7 @@
 								<a class="btn" v-if="can_equip_boi(i)" v-on:click="equip_boi(i)">Equip (level up) a a boi</a>
 								<a class="btn" v-if="i != 0" v-on:click="unequip_boi(i)">Unequip (level down to 1) a boi</a>
 								<a class="btn" v-on:click="send_to_village(i)">Send a boi to the village</a>
+								<a class="btn" v-if="can_heal_fighters(i)" v-on:click="heal_fighters(i)">Heal fighters</a>
 							</div>
 							<br>
 						</div>

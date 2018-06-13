@@ -747,6 +747,26 @@ var app = function() {
 		self.vue.$forceUpdate();
 	};
 
+	self.can_heal_fighters = function(i) {
+		if(!self.vue) return false;
+		for(var i = 0; i < self.vue.band[0].inventory.length; i++) {
+			if(self.vue.band[0].inventory[i].name == "food" && self.vue.band[0].inventory[i].num > 0) {
+				// if we find food, return true if the fighters need health
+				var num_full_health_fighers = Math.floor(self.vue.fighter_group_health[i] / self.vue.health_per_figher[i]);
+				return num_full_health_fighers != self.vue.num_fighters[i];
+			}
+		}
+		return false;
+	};
+
+	self.heal_fighters = function(i) {
+		removeFromInventory({name:"food", num: 1});
+		self.vue.fighter_group_health[i] += 5;
+		if(self.vue.fighter_group_health[i] > self.vue.num_fighters[i] * self.vue.health_per_figher[i]) {
+			self.vue.fighter_group_health[i] = self.vue.num_fighters[i] * self.vue.health_per_figher[i];
+		}
+	};
+
     // Complete as needed.
     self.vue = new Vue({
         el: "#vue-div",
@@ -892,6 +912,9 @@ var app = function() {
 			can_equip_boi: self.can_equip_boi,
 			equip_boi: self.equip_boi,
 			unequip_boi: self.unequip_boi,
+
+			can_heal_fighters: self.can_heal_fighters,
+			heal_fighters: self.heal_fighters,
         }
     });
 

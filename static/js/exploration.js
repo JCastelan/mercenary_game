@@ -244,7 +244,7 @@ function initStartingAreaGrid() {
 	grid[playerPos.y - 1][playerPos.x].char = emptyChar;
 
 	makeLootBag(playerPos.y - 2, playerPos.x, [
-		{name: "iron sword", is_weapon: true, damage: 2, num: 1},
+		{name: "iron sword", is_weapon: true, damage: 3, num: 1},
 		{name: "food", num: 1},
 		{name: "leather armor", is_armor: true, health_boost: 5, num: 1}
 	]);
@@ -284,7 +284,7 @@ function initStartingAreaGrid() {
 		grid[playerPos.y][playerPos.x].buttons = [
 			{name: "Search body", onClick: function() {
 				makeLootBag(playerPos.y, playerPos.x, [
-					{name: "iron sword", is_weapon: true, damage: 2, num: 1},
+					{name: "iron sword", is_weapon: true, damage: 3, num: 1},
 					{name: "food", num: 2},
 					{name: "iron armor", is_armor: true, health_boost: 10, num: 1}
 				]);
@@ -326,7 +326,7 @@ function initHubWorldGrid(width, height) {
 					grid[y][x].buttons = [
 						{name: "Aye a loot bag", onClick: function() {
 							makeLootBag(playerPos.y, playerPos.x, [
-								{name: "iron sword", is_weapon: true, damage: 2, num: 1},
+								{name: "iron sword", is_weapon: true, damage: 3, num: 1},
 								{name: "food", num: 2},
 								{name: "iron armor", is_armor: true, health_boost: 10, num: 1}
 							]);
