@@ -32,7 +32,7 @@ function clearCurrentTile() {
 }
 
 function getWeaponDamageByName(name) {
-	if(name == "fists") return 1;
+	if(name == "fists") return 10;
 	if(name == "wooden sword") return 2;
 	if(name == "iron sword") return 3;
 	if(name == "steel sword") return 4;
@@ -145,6 +145,7 @@ function addRecruitToBand(name) {
 }
 
 function restartGame() {
+	// TODO: fix this now that we got saving and loading resources and a bunch of stuff
 	initStartingAreaGrid();
 	displayGrid();
 	APP.vue.band = [
@@ -361,6 +362,39 @@ function initHubWorldGrid(width, height) {
 			}
 		}
 	}
+
+	// final boss fight
+	grid[0][0].title = "The Storm Crows";
+	grid[0][0].desc = "The night was silent. Cold air blows upon your skin. There in the clearing lies the noble’s child tied and gagged. Surrounding the child was the storm crows armed and ready for your arrival. In front of them was the leader Maximus Gluteus. The hulking beast towered a foot over his men. 'Child you have made a grave mistake challenging the Storm Crows. If this is where you wish to end, I will oblige you with the honor of falling to my blade. Come! Brace yourself!'";
+	grid[0][0].buttons = [
+		{name: "Fight!", onClick: function() {
+			grid[0][0].battle = true;
+			grid[0][0].damage = 20;
+			grid[0][0].cooldown = 30;
+			grid[0][0].health = 100;
+			grid[0][0].desc = "Both sides rush towards each other. Blades in hand and bloodlust in the air.";
+			grid[0][0].onDeath = function() {
+				APP.vue.popup_desc = "'Finish me..'";
+				APP.vue.popup_buttons = [
+					{name: "Execute", onClick: function() {
+						APP.vue.popup_desc = "You bring your blade down upon him. *Silence*. You stood there wondering of what have ensued. Could this be your fate one day? Suddenly a smell reach your nose. The guy defecated himself. 'Haha nah bruh. I’ll never poop in my pants when I die.'";
+						APP.vue.popup_buttons = [
+							{name: "Continue", onClick: function() {
+								APP.vue.popup_desc = "You win! https://www.youtube.com/watch?v=1Bix44C1EzY\nThanks for playing our game!";
+								APP.vue.popup_buttons = [
+									{name: "Restart", onClick: function() {
+										restartGame();
+									}}
+								];
+							}}
+						];
+					}}
+				];
+			};
+			onPlayerMove();
+		}}
+	];
+
 	playerPos.x = Math.floor(gridWidth / 2);
 	playerPos.y = Math.floor(gridHeight / 2);
 	lastPlayerPos.x = playerPos.x;
@@ -390,7 +424,8 @@ function displayGrid() {
 	gridElem.innerHTML = gridString;
 }
 
-initStartingAreaGrid();
+// initStartingAreaGrid();
+initHubWorldGrid(100, 40);
 displayGrid();
 
 // if player moves off the map, we put him back on
@@ -463,6 +498,9 @@ function onPlayerMove() {
 		APP.vue.in_battle = true;
 		once = false; // used to make sure we call start_enemy_attacks once
 		APP.vue.enemy_health = 10;
+		if(grid[playerPos.y][playerPos.x].health) {
+			APP.vue.enemy_health = grid[playerPos.y][playerPos.x].health;
+		}
 		once_again = false; // used to make sure we start an interval for player attacks once
 		can_attacc = false;
 		APP.vue.player_attack_time = 60;
@@ -600,6 +638,7 @@ function simulate_enemy_attacks() {
 				APP.vue.popup_desc = "u ded boyo";
 				APP.vue.popup_buttons = [
 					{name: "Revive", onClick: function() {
+						document.getElementsByClassName("option_buttons")[0].style.opacity = 1;
 						restartGame();
 						APP.vue.show_popup = false;
 					}}
