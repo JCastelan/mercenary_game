@@ -145,10 +145,9 @@ function addRecruitToBand(name) {
 }
 
 function restartGame() {
-	// TODO: fix this now that we got saving and loading resources and a bunch of stuff
-	initStartingAreaGrid();
+	initHubWorldGrid(100, 40);
 	displayGrid();
-	APP.vue.band = [
+	band: [
 		{ // index 0 is you
 			name: "You",
 			max_health: 10,
@@ -164,7 +163,22 @@ function restartGame() {
 			inventory: []
 		} // any more is people you've recruited
 	];
-	APP.vue.in_battle = false;
+
+	APP.vue.num_fighters = [0, 0, 0, 0, 0]; // each element is a different level of fighter
+	APP.vue.fighter_group_health = [0, 0, 0, 0, 0];
+	
+	APP.vue.resources = [];
+	APP.vue.available_villagers = 0;
+	APP.vue.wood_gatherer = 0;
+	APP.vue.hunter = 0;
+	APP.vue.coal_miner = 0;
+	APP.vue.iron_miner = 0;
+	APP.vue.mithril_miner = 0;
+	APP.vue.coal_mine_unlocked = false;
+	APP.vue.iron_mine_unlocked = false;
+	APP.vue.mithril_mine_unlocked = false;
+	APP.vue.APP.vue.in_battle = false;
+	APP.saveResources();
 }
 
 function makeLootBag(bagY, bagX, items) {
