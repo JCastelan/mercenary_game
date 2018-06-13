@@ -52,7 +52,7 @@
 							<hr/>
 							<br><br>
 							<div v-for="(group_hp, i) in fighter_group_health">
-								<div v-if="num_fighters[i] != 0">
+								<div v-if="num_fighters[i] > 0">
 									Number of level ${i+1} fighters: ${num_fighters[i]}<br>
 									Level ${i+1} fighters group HP: ${group_hp}<br>
 									Level ${i+1} fighters group damage: ${num_fighters[i] * (i+1)}<br>
