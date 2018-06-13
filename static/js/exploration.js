@@ -496,6 +496,7 @@ function onPlayerMove() {
 		}
 		else{
 			APP.vue.popup_desc = "You\'ve encountered a generic house.";
+			grid[playerPos.y][playerPos.x].char = lootedChar
 		}
 		APP.vue.popup_buttons = grid[playerPos.y][playerPos.x].buttons;
 		//--------------------------------------------------
