@@ -353,7 +353,7 @@ var app = function() {
                     }
 					if(single_equip.is_weapon) {
 						single_equip.damage = getWeaponDamageByName(single_equip.name);
-                        console.log("This is the damage of",single_equip.name ," is ",single_equip.damage )
+                        //console.log("This is the damage of",single_equip.name ," is ",single_equip.damage )
 					}
 					if(single_equip.is_armor) {
 						single_equip.health_boost = getArmorHealthBoostByName(single_equip.name);
