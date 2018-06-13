@@ -210,52 +210,52 @@ function makeLootBag(bagY, bagX, items) {
 }
 
 //--EDIT BY KRON: This Function is called to create loot bags--------------------
-function spawnLootBag(y, x){
+function spawnLootBag(y, x ){
 	// TODO: Adust function so that the bag loots items based on probability
 	/* Probability of obtaining resources from loot bags
 	*	Resource     %
 	*	________________
-	*	mithril 	.05
+	*	mithril 	.01
 	*	steel 		.10
 	*	iron 		.10
-	*	leather 	.15
-	*	coal 		.20
-	*	wood 		.20
-	*	food 		.20
+	*	leather 	.16
+	*	coal 		.21
+	*	wood 		.21
+	*	food 		.21
 	*/
 
 	var resourceList = ["mithril","steel","iron","leather","coal", "wood", "food"];
 	var loot = [];
 
+	var num1 = Math.round(Math.random() * 4 + 1);
+	var num2 = Math.round(Math.random() * 4 + 1);
+	var num3 = Math.round(Math.random() * 4 + 1);
+	
 	for ( i = 0; i < 3; i++){
 		randomResource = Math.random();
-		if (randomResource < .05){
+		if (randomResource < .01){
 			loot[i] = resourceList[0]; 
-		}else if (randomResource >= 0.05 && randomResource < .15){
+		}else if (randomResource >= 0.01 && randomResource < .11){
 			loot[i] = resourceList[1]; 
-		}else if (randomResource >= 0.15 && randomResource < .25){
+		}else if (randomResource >= 0.11 && randomResource < .21){
 			loot[i] = resourceList[2]; 
-		}else if (randomResource >= 0.25 && randomResource < .40){
+		}else if (randomResource >= 0.21 && randomResource < .37){
 			loot[i] = resourceList[3];
-		}else if (randomResource >= 0.40 && randomResource < .60){
+		}else if (randomResource >= 0.37 && randomResource < .58){
 			loot[i] = resourceList[4];
-		}else if (randomResource >= 0.60 && randomResource < .80){
+		}else if (randomResource >= 0.58 && randomResource < .79){
 			loot[i] = resourceList[5];
 		}else{
 			loot[i] = resourceList[6];
 		}
 	}
 
-
-
-
-
 	grid[y][x].buttons = [
 		{name: "Aye a loot bag", onClick: function() {
 			makeLootBag(playerPos.y, playerPos.x, [
-				{name: loot[0], num: 1},
-				{name: loot[1], num: 2},
-				{name: loot[2], num: 2}
+				{name: loot[0], num: num1},
+				{name: loot[1], num: num2},
+				{name: loot[2], num: num3}
 			]);
 
 			APP.vue.popup_title = grid[playerPos.y][playerPos.x].title;
@@ -378,7 +378,7 @@ function initHubWorldGrid(width, height) {
 				if (lootChance < .40) {
 					spawnLootBag(y, x);
 				}
-				if (lootChance >= .40 && lootChance <=.80){
+				if (lootChance >= .40 && lootChance <=.85){
 					grid[y][x].battle = true;
 					grid[y][x].onDeath = function() {		
 						console.log("let the bodies hit the floor");
@@ -392,7 +392,7 @@ function initHubWorldGrid(width, height) {
 
 							APP.vue.popup_buttons = grid[playerPos.y][playerPos.x].buttons;
 							APP.vue.show_popup = true;	
-						} else{
+						} else{						
 							if (grid[playerPos.y][playerPos.x].char == houseChar){
 								grid[playerPos.y][playerPos.x].char = lootedChar;
 							}
@@ -411,6 +411,17 @@ function initHubWorldGrid(width, height) {
 				// TODO: randomize the enemy names and stories
 				// TODO: clear this tile onDeath
 				grid[y].push({char: hiddenEnemyChar, battle: true, explored: false});
+				//-EDIT BY KRON: hiddenLoot Chance-------------------------------
+				grid[y][x].onDeath =function(){
+					console.log("let the hidden bodies hit the floor");		
+					var hiddenLoot = Math.random();
+					if (hiddenLoot < 1){
+						spawnLootBag(playerPos.y, playerPos.x);
+						APP.vue.popup_buttons = grid[playerPos.y][playerPos.x].buttons;
+						APP.vue.show_popup = true;	
+					}			
+				}
+				//--------------------------------------------------------------
 			} else {
 				grid[y].push({char: emptyChar, explored: false});
 			}
@@ -565,7 +576,7 @@ function onPlayerMove() {
 					//EDIT BY KRON: Set a chance that there is a loot event
 					console.log(JSON.stringify (grid[playerPos.y][playerPos.x]));
 					if(grid[playerPos.y][playerPos.x].onDeath) {
-						console.log("r the bodies hitting the floor?");
+						console.log("r the bodies hitting the floor?");		
 						grid[playerPos.y][playerPos.x].onDeath();
 						return;
 					}
