@@ -1,4 +1,4 @@
-timestamp: 2018-06-12T22:21:38.426000
+timestamp: 2018-06-12T22:38:32.004000
 CREATE TABLE "web2py_session_mercenary_game"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "locked" CHAR(1),
@@ -9,7 +9,7 @@ CREATE TABLE "web2py_session_mercenary_game"(
     "session_data" BLOB
 );
 success!
-timestamp: 2018-06-12T22:21:38.673000
+timestamp: 2018-06-12T22:38:32.355000
 CREATE TABLE "auth_user"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "first_name" CHAR(128),
@@ -21,21 +21,21 @@ CREATE TABLE "auth_user"(
     "registration_id" CHAR(512)
 );
 success!
-timestamp: 2018-06-12T22:21:38.842000
+timestamp: 2018-06-12T22:38:32.505000
 CREATE TABLE "auth_group"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "role" CHAR(512),
     "description" TEXT
 );
 success!
-timestamp: 2018-06-12T22:21:39.029000
+timestamp: 2018-06-12T22:38:32.648000
 CREATE TABLE "auth_membership"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "user_id" INTEGER REFERENCES "auth_user" ("id") ON DELETE CASCADE  ,
     "group_id" INTEGER REFERENCES "auth_group" ("id") ON DELETE CASCADE  
 );
 success!
-timestamp: 2018-06-12T22:21:39.170000
+timestamp: 2018-06-12T22:38:32.797000
 CREATE TABLE "auth_permission"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "group_id" INTEGER REFERENCES "auth_group" ("id") ON DELETE CASCADE  ,
@@ -44,7 +44,7 @@ CREATE TABLE "auth_permission"(
     "record_id" INTEGER
 );
 success!
-timestamp: 2018-06-12T22:21:39.336000
+timestamp: 2018-06-12T22:38:32.977000
 CREATE TABLE "auth_event"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "time_stamp" TIMESTAMP,
@@ -54,7 +54,7 @@ CREATE TABLE "auth_event"(
     "description" TEXT
 );
 success!
-timestamp: 2018-06-12T22:21:39.496000
+timestamp: 2018-06-12T22:38:33.188000
 CREATE TABLE "auth_cas"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "user_id" INTEGER REFERENCES "auth_user" ("id") ON DELETE CASCADE  ,
@@ -64,7 +64,7 @@ CREATE TABLE "auth_cas"(
     "renew" CHAR(1)
 );
 success!
-timestamp: 2018-06-12T22:21:39.800000
+timestamp: 2018-06-12T22:38:33.399000
 CREATE TABLE "userdb"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "user_email" CHAR(512),
