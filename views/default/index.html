@@ -125,7 +125,7 @@
 			<div id="popup-event" v-if="show_popup">
 				<a class="left btn" v-on:click="closePopup()">(Esc) Close</a>
 				<input style="width:500px" class="not_padded center" :disabled="true" v-model="popup_title"></input>
-				<textarea style="width:594px" class="not_padded" :disabled="true" v-model="popup_desc"></textarea>
+				<textarea  rows="5" style="width:594px" class="not_padded" :disabled="true" v-model="popup_desc"></textarea>
 				<br><br>
 				<div v-for="(button, i) in popup_buttons">
 					<a v-if="button.num" class="btn option_buttons" v-on:click="button.onClick()">(${i+1}) ${button.name} x ${button.num}</a>
