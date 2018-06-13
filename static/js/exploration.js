@@ -32,7 +32,7 @@ function clearCurrentTile() {
 }
 
 function getWeaponDamageByName(name) {
-	if(name == "fists") return 10;
+	if(name == "fists") return 1;
 	if(name == "wooden sword") return 2;
 	if(name == "iron sword") return 3;
 	if(name == "steel sword") return 4;
@@ -145,26 +145,36 @@ function addRecruitToBand(name) {
 }
 
 function restartGame() {
-	// TODO: fix this now that we got saving and loading resources and a bunch of stuff
-	initStartingAreaGrid();
+	initHubWorldGrid(100, 40);
 	displayGrid();
-	APP.vue.band = [
-		{ // index 0 is you
-			name: "You",
-			max_health: 10,
-			health: 10,
-			weapon: {
-				name: "fists",
-				damage: 1
-			},
-			armor: {
-				name: "nothing",
-				health_boost: 0
-			},
-			inventory: []
-		} // any more is people you've recruited
-	];
+	APP.vue.band[0].max_health = 10;
+	APP.vue.band[0].health = 10;
+	APP.vue.band[0].weapon.name = "fists";
+	APP.vue.band[0].weapon.damage = 1;
+	APP.vue.band[0].armor.name = "nothing";
+	APP.vue.band[0].armor.health_boost = 0;
+
+	for(var i = 0; i < APP.vue.band[0].inventory.length; i++) {
+		APP.vue.band[0].inventory[i].num = 0;
+	}
+	for(var i = 0; i < APP.vue.resources.length; i++) {
+		APP.vue.resources[i].num = 0;
+	}
+
+	APP.vue.num_fighters = [0, 0, 0, 0, 0]; // each element is a different level of fighter
+	APP.vue.fighter_group_health = [0, 0, 0, 0, 0];
+	
+	APP.vue.available_villagers = 0;
+	APP.vue.wood_gatherer = 0;
+	APP.vue.hunter = 0;
+	APP.vue.coal_miner = 0;
+	APP.vue.iron_miner = 0;
+	APP.vue.mithril_miner = 0;
+	APP.vue.coal_mine_unlocked = false;
+	APP.vue.iron_mine_unlocked = false;
+	APP.vue.mithril_mine_unlocked = false;
 	APP.vue.in_battle = false;
+	APP.saveResources();
 }
 
 function makeLootBag(bagY, bagX, items) {
@@ -364,6 +374,7 @@ function initHubWorldGrid(width, height) {
 	}
 
 	// final boss fight
+	grid[0][0].char = 'b';
 	grid[0][0].title = "The Storm Crows";
 	grid[0][0].desc = "The night was silent. Cold air blows upon your skin. There in the clearing lies the noble’s child tied and gagged. Surrounding the child was the storm crows armed and ready for your arrival. In front of them was the leader Maximus Gluteus. The hulking beast towered a foot over his men. 'Child you have made a grave mistake challenging the Storm Crows. If this is where you wish to end, I will oblige you with the honor of falling to my blade. Come! Brace yourself!'";
 	grid[0][0].buttons = [
