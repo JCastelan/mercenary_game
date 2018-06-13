@@ -749,7 +749,7 @@ var app = function() {
 					health: 10,
 					weapon: {
 						name: "fists",
-						damage: 10 //test -uncomment later
+						damage: 1
 					},
 					armor: {
 						name: "nothing",

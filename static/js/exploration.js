@@ -150,7 +150,7 @@ function restartGame() {
 	APP.vue.in_battle = false;
 }
 
-function makeLootBag(bagY, bagX, oldChar, items) {
+function makeLootBag(bagY, bagX, items) {
 	grid[bagY][bagX].char = lootChar;
 	grid[bagY][bagX].title = "Loot Bag";
 	grid[bagY][bagX].desc = "You conveniently found a loot bag with some goodies inside. Would you like to take some?";
@@ -196,14 +196,17 @@ function makeLootBag(bagY, bagX, oldChar, items) {
 					grid[playerPos.y][playerPos.x].desc = "Looted.";
 					APP.vue.popup_desc = "Looted.";
 
+					grid[playerPos.y][playerPos.x].char = grid[playerPos.y][playerPos.x].oldChar
 					//-EDIT BY KRON: changes char to 'h' after a house has been looted-
-					if (oldChar == houseChar){
-						grid[playerPos.y][playerPos.x].char = lootedChar;
-					} else if (oldChar == hiddenEnemyChar){
-						grid[playerPos.y][playerPos.x].char = emptyChar;
-					}else{
-						clearCurrentTile(); 
-					}
+					// if (oldChar == houseChar){
+					// 	grid[playerPos.y][playerPos.x].char = lootedChar;
+					// } else if (oldChar == hiddenEnemyChar){
+					// 	grid[playerPos.y][playerPos.x].char = emptyChar;
+					// }else if (oldChar == lootChar){
+					// 	 grid[playerPos.y][playerPos.x].char = lootedChar;
+					// }else{
+					// 	clearCurrentTile();
+					// }
 					//----------------------------------------------------------------
 				}
 			}
@@ -252,13 +255,17 @@ function spawnLootBag(y, x ){
 		}
 	}
 
+	
 	grid[y][x].buttons = [
 		{name: "Aye a loot bag", onClick: function() {
-			makeLootBag(playerPos.y, playerPos.x, grid[playerPos.y][playerPos.x].char, [
+			grid[playerPos.y][playerPos.x].oldChar = grid[playerPos.y][playerPos.x].char;
+			makeLootBag(playerPos.y, playerPos.x,  [
 				{name: loot[0], num: num1},
 				{name: loot[1], num: num2},
 				{name: loot[2], num: num3}
 			]);
+
+			console.log(JSON.stringify(grid[playerPos.y][playerPos.x].char));
 
 			APP.vue.popup_title = grid[playerPos.y][playerPos.x].title;
 			APP.vue.popup_desc = grid[playerPos.y][playerPos.x].desc;
@@ -299,7 +306,7 @@ function initStartingAreaGrid() {
 	// make path to boss with an iron sword and an enemy along the way
 	grid[playerPos.y - 1][playerPos.x].char = emptyChar;
 
-	makeLootBag(playerPos.y - 2, playerPos.x, grid[playerPos.y][playerPos.x].char, [
+	makeLootBag(playerPos.y - 2, playerPos.x, [
 		{name: "iron sword", is_weapon: true, damage: 2, num: 1},
 		{name: "food", num: 1},
 		{name: "leather armor", is_armor: true, health_boost: 5, num: 1}
@@ -339,7 +346,7 @@ function initStartingAreaGrid() {
 		grid[playerPos.y][playerPos.x].desc = "You defeated Donny.";
 		grid[playerPos.y][playerPos.x].buttons = [
 			{name: "Search body", onClick: function() {
-				makeLootBag(playerPos.y, playerPos.x, grid[playerPos.y][playerPos.x].char, [
+				makeLootBag(playerPos.y, playerPos.x, [
 					{name: "iron sword", is_weapon: true, damage: 2, num: 1},
 					{name: "food", num: 2},
 					{name: "iron armor", is_armor: true, health_boost: 10, num: 1}
@@ -380,9 +387,8 @@ function initHubWorldGrid(width, height) {
 				var lootChance = Math.random();
 				if (lootChance < .40) {
 					spawnLootBag(y, x);
-					//sets houseChar to 'h' after it has been looted
-					grid[playerPos.y][playerPos.x].char = lootedChar;
-				}else if (lootChance >= .40 && lootChance <=.80){
+				}
+				if (lootChance >= .40 && lootChance <=.80){
 					grid[y][x].battle = true;
 					grid[y][x].onDeath = function() {		
 						console.log("let the bodies hit the floor");
@@ -401,9 +407,6 @@ function initHubWorldGrid(width, height) {
 							APP.vue.show_popup = true;
 						}
 					};
-				}else{
-					console.log("U Messed up in initHubWorldGrid");
-					grid[playerPos.y][playerPos.x].char = lootedChar;
 				}
 				//--------------------------------------------------------------------------
 			} else if(chance < 0.05) {
@@ -456,9 +459,7 @@ function displayGrid() {
 	gridElem.innerHTML = gridString;
 }
 
-//test - uncomment later
-// initStartingAreaGrid();
-initHubWorldGrid(100, 40);
+initStartingAreaGrid();
 displayGrid();
 
 // if player moves off the map, we put him back on
@@ -496,7 +497,7 @@ function onPlayerMove() {
 		}
 		else{
 			APP.vue.popup_desc = "You\'ve encountered a generic house.";
-			grid[playerPos.y][playerPos.x].char = lootedChar
+			grid[playerPos.y][playerPos.x].char = lootedChar;
 		}
 		APP.vue.popup_buttons = grid[playerPos.y][playerPos.x].buttons;
 		//--------------------------------------------------
