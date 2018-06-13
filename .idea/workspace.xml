@@ -3,9 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="a3121111-ec48-4b3d-9e1b-04c8b2ca8ea6" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/default_index.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/default_index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/databases/sql.log" beforeDir="false" afterPath="$PROJECT_DIR$/databases/sql.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/js/exploration.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/exploration.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/default/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/views/default/index.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -39,8 +38,8 @@
       <file leaf-file-name="default_index.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/static/js/default_index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2546">
-              <caret line="714" column="22" selection-start-line="714" selection-start-column="18" selection-end-line="714" selection-end-column="22" />
+            <state relative-caret-position="177">
+              <caret line="749" column="29" selection-start-line="749" selection-start-column="25" selection-end-line="749" selection-end-column="29" />
             </state>
           </provider>
         </entry>
@@ -48,8 +47,8 @@
       <file leaf-file-name="exploration.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/static/js/exploration.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="140">
-              <caret line="370" column="47" selection-start-line="370" selection-start-column="47" selection-end-line="370" selection-end-column="47" />
+            <state relative-caret-position="134">
+              <caret line="453" column="41" selection-start-line="453" selection-start-column="41" selection-end-line="453" selection-end-column="41" />
             </state>
           </provider>
         </entry>
@@ -84,7 +83,6 @@
       <find>view_pane</find>
       <find>update</find>
       <find>force</find>
-      <find>wood</find>
       <find>save</find>
       <find>addToR</find>
       <find>resource</find>
@@ -104,6 +102,8 @@
       <find>setInte</find>
       <find>desc</find>
       <find>popup_buttons</find>
+      <find>restart</find>
+      <find>wood</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -363,15 +363,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/static/js/default_index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2546">
-          <caret line="714" column="22" selection-start-line="714" selection-start-column="18" selection-end-line="714" selection-end-column="22" />
+        <state relative-caret-position="177">
+          <caret line="749" column="29" selection-start-line="749" selection-start-column="25" selection-end-line="749" selection-end-column="29" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/static/js/exploration.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="140">
-          <caret line="370" column="47" selection-start-line="370" selection-start-column="47" selection-end-line="370" selection-end-column="47" />
+        <state relative-caret-position="134">
+          <caret line="453" column="41" selection-start-line="453" selection-start-column="41" selection-end-line="453" selection-end-column="41" />
         </state>
       </provider>
     </entry>

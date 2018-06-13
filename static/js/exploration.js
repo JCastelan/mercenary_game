@@ -512,9 +512,80 @@ function initHubWorldGrid(width, height) {
 		];
 
 	};
-	//Sad Toshi
-	
 
+	//Sad Toshi
+	grid[playerPos.y + 6][playerPos.x - 3].char = houseChar;
+	grid[playerPos.y + 6][playerPos.x - 3].title = "Sad Toshi (つ﹏<)";
+	grid[playerPos.y + 6][playerPos.x - 3].desc = "You come upon a man sitting alone at a bench.*Sniff* *Sniff*, ohh it’s all my fault";
+	grid[playerPos.y + 6][playerPos.x - 3].damage = 1;
+	grid[playerPos.y + 6][playerPos.x - 3].health = 8;
+	grid[playerPos.y + 6][playerPos.x - 3].buttons =  [
+		{name: "Comfort the fella", onClick: function() {
+				APP.vue.popup_desc  = "Thanks man I needed that. Toshi joins your squaaa"
+				APP.vue.popup_buttons = [
+					{name: "High five Toshi and keep movin", onClick: function() {
+						clearCurrentTile();
+						addRecruitToBand("Sad Toshi (つ﹏<)");
+						APP.vue.show_popup = false;
+					}},
+				];
+		}},
+		{name: "I’mma make his life worse (☞ﾟヮﾟ)☞", onClick: function() {
+			grid[playerPos.y][playerPos.x].battle=true;
+			onPlayerMove();
+		}}
+	];
+	grid[playerPos.y + 6][playerPos.x - 3].onDeath = function() {
+		APP.vue.popup_desc  = "You smacked him around and made him ran away. You felt kind of a dick";
+		APP.vue.popup_buttons = [
+			{name: "Let's get out of here", onClick: function() {
+				clearCurrentTile();
+				APP.vue.show_popup = false;
+			}},
+		];
+
+	};
+
+	//Granny with the candy
+	grid[playerPos.y + 7][playerPos.x+1].char = houseChar;
+	grid[playerPos.y + 7][playerPos.x+1].title = "Granny with the candy";
+	grid[playerPos.y + 7][playerPos.x+1].desc = "You are invited to a candy made house.You look like you need some candy child";
+	grid[playerPos.y + 7][playerPos.x+1].damage = 2;
+	grid[playerPos.y + 7][playerPos.x+1].health = 5;
+	grid[playerPos.y + 7][playerPos.x+1].buttons =  [
+		{name: "Eat candy", onClick: function() {
+			APP.vue.band[0].health -= 2;
+			if(APP.vue.band[0].health <= 0){
+				APP.vue.popup_desc  = "You gobbled them candy like a little pudgy fat kid. Ohh you feel lightheaded and all went black";
+				APP.vue.popup_buttons = [
+					{name: "Pretty sure your dead", onClick: function() {
+						clearCurrentTile();
+						APP.vue.show_popup = false;
+					}},
+				];
+				restartGame()
+			}
+		}},
+		{name: "It’s clobberin time!", onClick: function() {
+			grid[playerPos.y][playerPos.x].battle=true;
+			onPlayerMove();
+		}}
+	];
+	grid[playerPos.y + 7][playerPos.x+1].onDeath = function() {
+		APP.vue.popup_desc  = "Uh.. Help I have fallen and I can’t get up";
+		APP.vue.popup_buttons = [
+			{name: "Grab her wooden cane and pie", onClick: function() {
+				makeLootBag(playerPos.y, playerPos.x, [
+					{name: "wooden sword", is_weapon: true, damage: 2, num: 1},
+					{name: "food", num: 1},
+				]);
+				APP.vue.popup_title = grid[playerPos.y][playerPos.x].title;
+				APP.vue.popup_desc = grid[playerPos.y][playerPos.x].desc;
+				APP.vue.popup_buttons = grid[playerPos.y][playerPos.x].buttons;
+			}},
+		];
+
+	};
 }
 
 function displayGrid() {
