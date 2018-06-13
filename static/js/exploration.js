@@ -396,6 +396,9 @@ function initHubWorldGrid(width, height) {
 		];
 
 	};
+	//Sad Toshi
+	
+
 }
 
 function displayGrid() {
