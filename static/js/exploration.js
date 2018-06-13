@@ -16,7 +16,7 @@ var hiddenEnemyChar = 'Q';
 var itemChar = 'I';
 var lootChar = 'L';
 var bossChar = 'B';
-var lootedChar = 'h'; //KRON wuz here
+var lootedChar = 'h'; 
 unexploredChar = 'u';
 
 var lastPlayerPos = {x: 0, y: 0};
@@ -211,12 +211,51 @@ function makeLootBag(bagY, bagX, items) {
 
 //--EDIT BY KRON: This Function is called to create loot bags--------------------
 function spawnLootBag(y, x){
+	// TODO: Adust function so that the bag loots items based on probability
+	/* Probability of obtaining resources from loot bags
+	*	Resource     %
+	*	________________
+	*	mithril 	.05
+	*	steel 		.10
+	*	iron 		.10
+	*	leather 	.15
+	*	coal 		.20
+	*	wood 		.20
+	*	food 		.20
+	*/
+
+	var resourceList = ["mithril","steel","iron","leather","coal", "wood", "food"];
+	var loot = [];
+
+	for ( i = 0; i < 3; i++){
+		randomResource = Math.random();
+		if (randomResource < .05){
+			loot[i] = resourceList[0]; 
+		}else if (randomResource >= 0.05 && randomResource < .15){
+			loot[i] = resourceList[1]; 
+		}else if (randomResource >= 0.15 && randomResource < .25){
+			loot[i] = resourceList[2]; 
+		}else if (randomResource >= 0.25 && randomResource < .40){
+			loot[i] = resourceList[3];
+		}else if (randomResource >= 0.40 && randomResource < .60){
+			loot[i] = resourceList[4];
+		}else if (randomResource >= 0.60 && randomResource < .80){
+			loot[i] = resourceList[5];
+		}else{
+			loot[i] = resourceList[6];
+		}
+	}
+
+
+
+
+
 	grid[y][x].buttons = [
 		{name: "Aye a loot bag", onClick: function() {
 			makeLootBag(playerPos.y, playerPos.x, [
-				{name: "iron sword", is_weapon: true, damage: 2, num: 1},
-				{name: "food", num: 2},
-				{name: "iron armor", is_armor: true, health_boost: 10, num: 1}
+				{name: loot[0], num: 1},
+				{name: loot[1], num: 2},
+				{name: loot[2], num: 2}
 			]);
 
 			APP.vue.popup_title = grid[playerPos.y][playerPos.x].title;
@@ -365,7 +404,6 @@ function initHubWorldGrid(width, height) {
 							APP.vue.popup_desc = grid[playerPos.y][playerPos.x].desc;
 							APP.vue.show_popup = true;
 						}
-				//-----------------------------------------------------
 					};
 				}
 				//--------------------------------------------------------------------------
@@ -448,9 +486,9 @@ function onPlayerMove() {
 		else{
 			APP.vue.popup_desc = "You\'ve encountered a generic house.";
 		}
-
 		APP.vue.popup_buttons = grid[playerPos.y][playerPos.x].buttons;
 		//--------------------------------------------------
+
 		APP.vue.show_popup = true;
 	}
 	if(grid[playerPos.y][playerPos.x].char == enemyChar) {
