@@ -25,14 +25,14 @@
 						<br>
 						Inventory:<br><br>
 						<div v-for="obj in band[0].inventory">
-							${obj.num} x ${obj.name}<br>
+							<div v-if="obj.num>0">${obj.num} x ${obj.name}<br></div>
 						</div>
 						<br>
 						______________________________
 						<br><br>
 						Resources:<br><br>
 						<div v-for="res in resources">
-							${res[1]} x ${res[0]}<br>
+							<div v-if="res[1]>0">${res[1]} x ${res[0]}<br></div>
 						</div>
 					</div>
 					<div v-if="viewing_party" v-for="member in band">
