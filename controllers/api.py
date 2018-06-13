@@ -75,6 +75,13 @@ def load_resources():
 			steel_armor=0,
 			mithril_armor=0,
 
+			available_villagers=0,
+			wood_gatherer=0,
+			hunter=0,
+			coal_miner=0,
+			iron_miner=0,
+			mithril_miner=0,
+
 			num_fighters=[0,0,0,0,0],
 			fighter_health=[0,0,0,0,0],
 		)
@@ -106,14 +113,21 @@ def load_resources():
 			steel_armor=row.steel_armor,
 			mithril_armor=row.mithril_armor,
 
+			available_villagers=row.available_villagers,
+			wood_gatherer=row.wood_gatherers,
+			hunter=row.hunters,
+			coal_miner=row.coal_miners,
+			iron_miner=row.iron_miners,
+			mithril_miner=row.mithril_miners,
+
 			num_fighters=[x.strip() for x in row.fighter_count.split(',')],
 			fighter_health=[x.strip() for x in row.fighter_health.split(',')]
 		)
 		return response.json(loaded_data)
 
 def save_resources():
-	valueList=["coal","iron","mithril","steel","wood","leather",  "w_sword","i_sword","s_sword","m_sword", "food",    "leather_armor","iron_armor","steel_armor","mithril_armor"]
-	valuesToStore=[0,0,0,0,0,0,  0,0,0,0,0, 0,0,0,0]
+	valueList=["coal","iron","mithril","steel","wood","leather",  "w_sword","i_sword","s_sword","m_sword", "food",    "leather_armor","iron_armor","steel_armor","mithril_armor",     "available_villagers","wood_gatherer","hunter","coal_miner","iron_miner","mithril_miner" ]
+	valuesToStore=[0,0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,   0,0,0,0,0,0]
 	num_fighters_string=""
 	fighter_health_string=""
 	if auth.user is None:
@@ -178,6 +192,13 @@ def save_resources():
 			steel_armor=valuesToStore[13],
 			mithril_armor=valuesToStore[14],
 
+			available_villagers=request.vars.available_villagers,
+			wood_gatherers=request.vars.wood_gatherers,
+			coal_miners=request.vars.coal_miners,
+			iron_miners=request.vars.iron_miners,
+			mithril_miners=request.vars.mithril_miners,
+			hunters=request.vars.hunters,
+
 			fighter_count=num_fighters_string,
 			fighter_health=fighter_health_string
 		)
@@ -208,6 +229,13 @@ def save_resources():
 			iron_armor=valuesToStore[12],
 			steel_armor=valuesToStore[13],
 			mithril_armor=valuesToStore[14],
+
+			available_villagers=request.vars.available_villagers,
+			wood_gatherers=request.vars.wood_gatherers,
+			coal_miners=request.vars.coal_miners,
+			iron_miners=request.vars.iron_miners,
+			mithril_miners=request.vars.mithril_miners,
+			hunters=request.vars.hunters,
 
 			fighter_count=num_fighters_string,
 			fighter_health=fighter_health_string
