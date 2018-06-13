@@ -571,7 +571,11 @@ function start_enemy_attacks(damage, cooldown) {
 
 function simulate_enemy_attacks() {
 	enemy_attack_ticks++;
-	if(APP.vue.enemy_health == 0) return;
+	if(APP.vue.enemy_health == 0){
+		APP.vue.enemies_defeated++;
+		console.log(APP.vue.enemies_defeated);
+		return;
+	}
 	if(enemy_attack_ticks % enemy_attack_cooldown_ticks == 0) {
 		var i = cur_band_member_being_attacked;
 		// APP.vue.band[cur_band_member_being_attacked].health -= enemy_damage;

@@ -84,6 +84,7 @@ def load_resources():
 
 			num_fighters=[0,0,0,0,0],
 			fighter_health=[0,0,0,0,0],
+			enemies_defeated=0
 		)
 		return response.json(loaded_data)
 	else:
@@ -121,7 +122,8 @@ def load_resources():
 			mithril_miner=row.mithril_miners,
 
 			num_fighters=[x.strip() for x in row.fighter_count.split(',')],
-			fighter_health=[x.strip() for x in row.fighter_health.split(',')]
+			fighter_health=[x.strip() for x in row.fighter_health.split(',')],
+			enemies_defeated=row.enemies_defeated
 		)
 		return response.json(loaded_data)
 
@@ -137,7 +139,7 @@ def save_resources():
 	row=db(q).select().first()
 	print "~~~~~~~~~~~~~~~~~~~~Saving Resources~~~~~~~~~~~~~~~~~~~~"
 	#print "~~~~~~~~~~~~~~~~~~~~"
-	#print request.vars
+	#print request.vars.enemies_defeated
 	#print "~~~~~~~~~~~~~~~~~~~~"
 	dataCount = 0
 	for key, value in request.vars.iteritems():
@@ -152,7 +154,7 @@ def save_resources():
 			elif key == "fighter_health[]":
 				for item in value:
 					fighter_health_string+=item+","
-		else:
+		if value[0] in valueList:
 			#print key, value
 			valuesToStore[valueList.index(value[0])]=int(value[1])
 		dataCount+=1
@@ -200,7 +202,9 @@ def save_resources():
 			hunters=request.vars.hunters,
 
 			fighter_count=num_fighters_string,
-			fighter_health=fighter_health_string
+			fighter_health=fighter_health_string,
+
+			enemies_defeated=request.vars.enemies_defeated
 		)
 		#print "\n\n", result, "\n\n"
 		return result
@@ -238,7 +242,9 @@ def save_resources():
 			hunters=request.vars.hunters,
 
 			fighter_count=num_fighters_string,
-			fighter_health=fighter_health_string
+			fighter_health=fighter_health_string,
+
+			enemies_defeated=request.vars.enemies_defeated
 		)
 		#print "\n\n", result, "\n\n"
 		return result

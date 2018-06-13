@@ -54,6 +54,9 @@ db.define_table('userdb',
 				Field( 'iron_miners', 'integer', default=0),
 				Field( 'mithril_miners', 'integer', default=0),
 				Field( 'hunters', 'integer', default=0),
+
+				#random stats
+				Field( 'enemies_defeated', 'integer', default=0)
 				)
 
 #some db entries we might need: wood, iron, coal, worker, armyUnit, houses, etc.

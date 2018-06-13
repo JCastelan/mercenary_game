@@ -392,7 +392,9 @@ var app = function() {
                         self.vue.mithril_miner=+d[1];
                     }
                 }else{ //other random data I guess
-                    if(d[0]== "num_fighters"){
+                    if (d[0]=="enemies_defeated") {
+                        self.vue.enemies_defeated=+d[1];
+                    }else if(d[0]== "num_fighters"){
 						// d[1].forEach(function(d){d=+d;});
 						// self.vue.num_fighters= d[1];
 						// for(var i = 0; i < self.vue.num_fighters.length; i++) {
@@ -448,8 +450,8 @@ var app = function() {
 
             single_item = [item_name, d.num];
             inventory_items.push(single_item);
-        })
-
+        });
+        console.log(inventory_items);
         $.post(save_resources_url,
             { 
                 resources: self.vue.resources,
@@ -465,7 +467,8 @@ var app = function() {
                 coal_miners: self.vue.coal_miner,
                 iron_miners: self.vue.iron_miner,
                 mithril_miners: self.vue.mithril_miner,
-                hunters: self.vue.hunter
+                hunters: self.vue.hunter,
+                enemies_defeated: self.vue.enemies_defeated
             },
             function (result) {
                 //console.log( result )
@@ -865,6 +868,7 @@ var app = function() {
 			coal_mine_unlocked: false,
 			iron_mine_unlocked: false,
             mithril_mine_unlocked: false,
+            enemies_defeated:0
         },
         methods: {
 			closePopup: self.closePopup,
