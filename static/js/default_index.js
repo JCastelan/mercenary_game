@@ -326,51 +326,93 @@ var app = function() {
         equipList = ["w_sword", "i_sword","s_sword","m_sword"]
         playerInfo = ["max_health","current_health","equipped_weapon","equipped_armor"]
         $.getJSON(load_resources_url, function (data) {
-            //console.log(data );
+            console.log(data );
             dataElems=Object.entries(data);
             dataElems.forEach(function(d,i){
-                
-                if (equipList.indexOf(d[0])>=0) {
-                    d[1] = +d[1];
+                if (equipList.indexOf(d[0])>=0) { // need to change this to band[0].inventory
+                    var item_name = ""
+                    if(d[0]=="i_sword"){
+                        item_name = "iron sword"
+                    }else if (d[0]=="w_sword"){
+                        item_name = "wooden sword"
+                    }else if (d[0]=="m_sword"){
+                        item_name = "mithril sword"
+                    }else if (d[0]=="s_sword"){
+                        item_name = "steel sword"
+                    }else{
+                        item_name=d[0].split('_').join(' ');
+                        console.log(item_name);
+                    }
+                    var single_equip= {
+                        num:+d[1],
+                        name:item_name
+                    }
+                    self.vue.band[0].inventory.push(single_equip)
                     self.vue.equipment.push(d)
                 }else if (resourcesList.indexOf(d[0])>=0){
                     d[1] = +d[1];
                     self.vue.resources.push(d)
                 }else if (playerInfo.indexOf(d[0])>=0){
                     if(d[0]== "max_health"){
-                        self.vue.band.max_health=+d[1];
+                        self.vue.band[0].max_health=+d[1];
                     } else if (d[0]=="current_health") {
-                        self.vue.band.health=+d[1];
+                        self.vue.band[0].health=+d[1];
                     } else if (d[0]=="equipped_weapon") {
                         self.vue.band[0].weapon.name=d[1];
                     } else if (d[0]=="equipped_armor") {
                         self.vue.band[0].armor.name=d[1];
-                    }else{
-                        console.log("warning: did not store ", d);
                     }
-                }else{
+                }else{ //other random data I guess
                     if(d[0]== "num_fighters"){
-                        self.vue.num_fighters= +d[1];
+						self.vue.num_fighters= d[1];
+                        self.vue.num_fighters.forEach(function(e,i){
+                            self.vue.num_fighters[i]=+e;
+                        });
                     } else if (d[0]=="fighter_health") {
-                        self.vue.health_per_figher=+d[1]; //not sure if this is the right one
+						self.vue.fighter_group_health=d[1];
+                        self.vue.fighter_group_health.forEach(function(e,i){
+                            self.vue.fighter_group_health[i]=+e;
+                        });
                     }else{
-                        console.log("warning: did not store ", d);
-                    }
-                }
-            });
-            console.log(self.vue.equipment);
-            console.log(self.vue.resources);
-            //self.vue.resources = dataElems;
-        });
-        
-    };
+                        item_name=d[0].split('_').join(' ');
+                        var single_equip= {
+                            num:+d[1],
+                            name:item_name
+                        }
+                        self.vue.band[0].inventory.push(single_equip)
+                    }}});});};
 
     self.saveResources = function(){ //saves more than just resources
-        //console.log( "saving all resources")
+        console.log( "saving all resources...")
         //console.log(self.vue.resources)
+        //console.log(self.vue.num_fighters)
+        inventory_items = []
+        self.vue.band[0].inventory.forEach(function(d){
+            var item_name = d.name.split(' ').join('_');
+            if(d.name=="iron sword"){
+                item_name = "i_sword"
+            }else if (d.name=="wooden sword"){
+                item_name = "w_sword"
+            }else if (d.name=="mithril sword"){
+                item_name = "m_sword"
+            }else if (d.name=="steel sword"){
+                item_name = "s_sword"
+            }
+
+            single_item = [item_name, d.num];
+            inventory_items.push(single_item);
+        })
+
         $.post(save_resources_url,
             { 
-                resources: self.vue.resources
+                resources: self.vue.resources,
+                equipment: inventory_items,
+                max_health: self.vue.band[0].max_health,
+                current_health: self.vue.band[0].health,
+                equipped_weapon: self.vue.band[0].weapon.name,
+                equipped_armor: self.vue.band[0].armor.name,
+                num_fighters: self.vue.num_fighters,
+                fighter_health: self.vue.health_per_figher
             },
             function (result) {
                 //console.log( result )
@@ -378,7 +420,7 @@ var app = function() {
     };
 
     autosave = function(){
-        window.setInterval(self.saveResources, 60*1000);
+        window.setInterval(self.saveResources, 5*1000);
     };
 
 	self.send_villager_to_party = function(){
@@ -841,12 +883,3 @@ var APP = null;
 // This will make everything accessible from the js console;
 // for instance, self.x above would be accessible as APP.x
 jQuery(function(){APP = app();});
-
-/* General TODOs
-
-What needs to be done in the general order that it needs to be done
-	Make assigned villagers gather resources
-	Make crafting equipment using resources
-	Make upgrading recruits using equipment
-
-*/

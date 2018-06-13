@@ -17,9 +17,12 @@ var itemChar = 'I';
 var lootChar = 'L';
 var bossChar = 'B';
 var lootedChar = 'h'; //KRON wuz here
+unexploredChar = 'u';
 
 var lastPlayerPos = {x: 0, y: 0};
 var playerPos = {x: 0, y: 0};
+
+var playerViewLength = 4; // how many tiles out from their position can the player see
 
 function clearCurrentTile() {
 	grid[playerPos.y][playerPos.x].title = null;
@@ -206,6 +209,14 @@ function makeLootBag(bagY, bagX, items) {
 	}
 }
 
+function setVisibleToExplored() {
+	for(var x = -playerViewLength; x <= playerViewLength; x++) {
+		for(var y = -playerViewLength; y <= playerViewLength; y++) {
+			grid[playerPos.y + y][playerPos.x + x].explored = true;
+		}
+	}
+}
+
 function initStartingAreaGrid() {
 	grid = [];
 	gridWidth = 50;
@@ -215,13 +226,14 @@ function initStartingAreaGrid() {
 	for(var y = 0; y < gridHeight; y++) {
 		grid.push([]);
 		for(var x = 0; x < gridWidth; x++) {
-			grid[y].push({char: obstacleChar});
+			grid[y].push({char: obstacleChar, explored: false});
 		}
 	}
 	playerPos.x = Math.floor(gridWidth / 2);
 	playerPos.y = Math.floor(gridHeight / 2);
 	lastPlayerPos.x = playerPos.x;
 	lastPlayerPos.y = playerPos.y;
+	setVisibleToExplored();
 
 	// clear the player's position
 	grid[playerPos.y][playerPos.x].char = emptyChar;
@@ -304,7 +316,7 @@ function initHubWorldGrid(width, height) {
 		for(var x = 0; x < gridWidth; x++) {
 			var chance = Math.random();
 			if(chance < 0.01) {
-				grid[y].push({char: houseChar});
+				grid[y].push({char: houseChar, explored: false});
 				//-EDIT BY KRON: Creates loot bags in random houses on Grid upon Hub Creation-
 				var lootChance = Math.random();
 				if (lootChance < .40) {
@@ -324,9 +336,9 @@ function initHubWorldGrid(width, height) {
 			} else if(chance < 0.05) {
 				// TODO: randomize the enemy names and stories
 				// TODO: clear this tile onDeath
-				grid[y].push({char: hiddenEnemyChar, battle: true});
+				grid[y].push({char: hiddenEnemyChar, battle: true, explored: false});
 			} else {
-				grid[y].push({char: emptyChar});
+				grid[y].push({char: emptyChar, explored: false});
 			}
 		}
 	}
@@ -335,6 +347,7 @@ function initHubWorldGrid(width, height) {
 	playerPos.y = Math.floor(gridHeight / 2);
 	lastPlayerPos.x = playerPos.x;
 	lastPlayerPos.y = playerPos.y;
+	setVisibleToExplored();
 }
 
 function displayGrid() {
@@ -342,7 +355,10 @@ function displayGrid() {
 	var gridString = "";
 	for(var y = 0; y < gridHeight; y++) {
 		for(var x = 0; x < gridWidth; x++) {
-			if(x == playerPos.x && y == playerPos.y) {
+			if(!grid[y][x].explored) {
+				gridString += unexploredChar;
+			}
+			else if(x == playerPos.x && y == playerPos.y) {
 				gridString += playerChar;
 			} else if(grid[y][x].char == hiddenEnemyChar) {
 				gridString += emptyChar;
@@ -382,6 +398,7 @@ function onPlayerMove() {
 		playerPos.y = lastPlayerPos.y;
 		return;
 	}
+	setVisibleToExplored();
 
 	// display generic defaults
 	if(grid[playerPos.y][playerPos.x].char == houseChar) {
